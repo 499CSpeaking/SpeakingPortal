@@ -22,7 +22,7 @@ Hello, I'm Colin Pereira, and I'm the Project Manager for this endeavour. I have
 Short description about yourself/your role
 
 ### <u>Jake Tyerman</u> | <u>Client Liason</u>
-Short description about yourself/your role
+Hello everyone, my name is Jake Tyerman. I am the Client Liason for this project, meaning I manage communication between my team and the client. I also plan points of discussion ahead of meetings and transcribe them such that my team can use these notes later.
 
 <hr>
 
