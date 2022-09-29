@@ -16,7 +16,7 @@ Official project for Speaking Portal
 Short description about yourself/your role
 
 ### <u>Colin Pereira</u> | <u>Project Manager</u>
-Short description about yourself/your role
+Hello, I'm Colin Pereira, and I'm the Project Manager for this endeavour. I have some project management experience due to past projects I've worked on. I also have experience with agile project development due to the work I've done during summer breaks.
 
 ### <u>Harshal Patel</u> | <u>Quality Assurance Lead</u>
 Short description about yourself/your role
