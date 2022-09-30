@@ -19,7 +19,7 @@ Short description about yourself/your role
 Hello, I'm Colin Pereira, and I'm the Project Manager for this endeavour. I have some project management experience due to past projects I've worked on. I also have experience with agile project development due to the work I've done during summer breaks.
 
 ### <u>Harshal Patel</u> | <u>Quality Assurance Lead</u>
-Short description about yourself/your role
+Hello, I'm Harshal Patel. I am the QA Lead for this software engineering capstone project, which holds the responsibilities of making sure the product is being devoleped according to the goals and guidelines and the Quality Control of documentations and over all product. I also plan on holding quick review sessions with the team to go over these quality control checks, to inforce that we have good direction and overall an excellent product delivery. 
 
 ### <u>Jake Tyerman</u> | <u>Client Liason</u>
 Hello everyone, my name is Jake Tyerman. I am the Client Liason for this project, meaning I manage communication between my team and the client. I also plan points of discussion ahead of meetings and transcribe them such that my team can use these notes later.
