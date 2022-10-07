@@ -21,7 +21,7 @@
 
 <HR> Jake:
 
--  Feels that the work load is slowly going to pick up, but is fine right now.
+-  Feels that the work-load is slowly going to pick up, but is fine right now.
 -  Progress on documentation and research for potential paths for the project.
 -  Looking into specifications for the project and creating liaison report for the client.
 -  No issues with team and the work flow.
