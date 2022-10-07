@@ -11,3 +11,10 @@
 Decide on the tools we will use for the project
 
 
+# https://github.com/PaddlePaddle/PaddleGAN
+
+# Wav 2 lip
+
+
+
+

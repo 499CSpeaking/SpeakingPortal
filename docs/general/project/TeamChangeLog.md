@@ -5,3 +5,7 @@
 - Changes to this file should be made in the form of a pull request
 
 - Discord is the primary means of communication for the team
+
+- Decisions are made by consensus
+
+- The team is open change and new ideas
