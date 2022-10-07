@@ -33,5 +33,9 @@
 - A video will then generate at the bottom (hopefully) with the audio and lips synced
 - The results of my test are available on the repo under temp/after.mp4 or below:
 
+### English Audio
 https://user-images.githubusercontent.com/77311787/194429119-dee7bc1d-3396-4097-9a96-4f3534708faf.mp4
+
+### Foreign Audio
+https://user-images.githubusercontent.com/77311787/194644700-9a33676a-1ad1-405d-9427-39f79926fbc2.mp4
 
