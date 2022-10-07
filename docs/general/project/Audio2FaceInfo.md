@@ -3,6 +3,7 @@
 ## links
 - website: https://www.nvidia.com/en-us/omniverse/apps/audio2face/
 - demo: https://www.youtube.com/watch?v=h3xT_F_tEuU&t=45s
+- custom demo: https://cdn.discordapp.com/attachments/1020075953596158060/1028036315100487773/Face.mp4
 
 ## notes
 ### avatar
@@ -14,6 +15,5 @@
 - Have full control over the scene the avatar is rendered in (can change background, etc)
 
 ### technical limitations
-- Unable to demo or benchmark this program due to computational limitations
 - This software is computationally expensive and requires special hardware (RTX graphics card), but we can probably create a simpler version
-- apparently works in "real-time" (demo required to confirm this); can instantly map speech to animation, not sure about the time it takes to record to file
+- with required hardware, can instant convert audio to animation. Actually rendering the video to a file will not be instant.
