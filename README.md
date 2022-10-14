@@ -33,3 +33,8 @@ What the project is about (WIP)
 
 ## Project Goal
 What we want to achieve by the end of the project (WIP)
+
+<hr>
+
+## Requirements Presentation
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XMRiSXsde8I/0.jpg)](https://www.youtube.com/watch?v=XMRiSXsde8I)
