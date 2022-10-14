@@ -37,4 +37,4 @@ What we want to achieve by the end of the project (WIP)
 <hr>
 
 ## Requirements Presentation
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/XMRiSXsde8I/0.jpg)](https://www.youtube.com/watch?v=XMRiSXsde8I)
+[![Our Requirements Presentation Video](https://img.youtube.com/vi/XMRiSXsde8I/0.jpg)](https://www.youtube.com/watch?v=XMRiSXsde8I)
