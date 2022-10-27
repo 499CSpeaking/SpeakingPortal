@@ -1,30 +1,34 @@
 # phoneme matching Libraries
 
-## phoneticmatching
-https://microsoft.github.io/PhoneticMatching/
+https://unalengua.com/ipa-translate?ttsLocale=en-US&voiceId=Salli
 
-A phonetic matching library. Includes text utilities to do string comparisons on phonemes (the sound of the string), as opposed to characters.
+This one seems to run on internet servers... so it's not a local solution
 
+http://tom.brondsted.dk/text2phoneme/
 
-## wav2vec2phoneme
-https://huggingface.co/docs/transformers/model_doc/wav2vec2_phoneme
+This also is a server based solution.
 
-Wav2Vec2Phoneme is a speech model that accepts a float array corresponding to the raw waveform of the speech signal.
+##  Text to ipa
+https://www.npmjs.com/package/text-to-ipa
 
-## vocable
+Or the classic
+https://github.com/surrsurus/text-to-ipa
 
-https://github.com/p59crw/vocable
-
-Angular-based word generator with conlangers in mind.
-
-## Borders
-
-https://github.com/andreazangheri/borders
-
-Starting from semiotic, linguistic, sensorium and mass media topics, Borders is a multimedia project on communicative frontiers
+This does not seem to translate new words, but it is a good start.
 
 
-## phoneme-types
 
-https://www.npmjs.com/package/phoneme-types
+## English to ipa
+https://github.com/sharunspi/English_to_IPA
+
+Hard to use, but may be of use.
+
+
+
+## Other languages
+
+https://github.com/mphilli/English-to-IPA
+Seems good
+https://github.com/jhasegaw/text2ipa
+Not as good but may be of some use.
 
