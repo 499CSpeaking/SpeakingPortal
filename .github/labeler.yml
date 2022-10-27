@@ -1,0 +1,11 @@
+# This file will determine how the auto-labeler functions
+# Uses {key,value} pairs to decide what labels get added to pull requests
+
+# adds the task label to a pull request that changes any file in the repo
+# may need to be updated depending on how we structure our filesystem
+task:
+- any: ['*', '**/*', '**/**/*', '**/**/**/*', '**/**/**/**/*', '**/**/**/**/**/*']
+
+# adds documentation label to pull requests that affect the docs folder
+documentation:
+- any: ['**/docs/*']

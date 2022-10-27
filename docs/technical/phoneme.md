@@ -1,6 +1,5 @@
 # phoneme matching Libraries
 
-## check how these websites work
 https://unalengua.com/ipa-translate?ttsLocale=en-US&voiceId=Salli
 
 This one seems to run on internet servers... so it's not a local solution
@@ -32,3 +31,4 @@ https://github.com/mphilli/English-to-IPA
 Seems good
 https://github.com/jhasegaw/text2ipa
 Not as good but may be of some use.
+
