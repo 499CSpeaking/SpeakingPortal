@@ -37,7 +37,7 @@ The system will have the following major features:
 <hr>
 
 ## Project Goal
-What we want to achieve by the end of the project (WIP)
+Our goal with this project is to create a high quality, high efficiency lip-syncing+animation system that can output an embeddable and downloadable video. In addition to this, we aim to learn more about the processes and practices of software development, as well as learning more about the languages we will be using for this project. Finally, we aim to provide users with an experience that is unique, and provide our client with something that both us and them can be proud of. 
 
 <hr>
 
