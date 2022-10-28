@@ -4,8 +4,10 @@
 # adds the task label to a pull request that changes any file in the repo
 # may need to be updated depending on how we structure our filesystem
 # **/* is required to denote that the autolabeler should check all folders and subfolders in the path
+
+# adds task label to pull requests that change any file in the repo
 task:
-- any: ['*', '*/**/*']
+- any: ['*', 'code/**/*', 'docs/**/*', 'temp/**/*']
 
 # adds documentation label to pull requests that affect the docs folder
 documentation:
