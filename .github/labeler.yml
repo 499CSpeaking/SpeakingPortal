@@ -7,7 +7,10 @@
 
 # adds task label to pull requests that change any file in the repo
 task:
-- any: ['*', 'code/**/*', 'docs/**/*', 'temp/**/*']
+- '*'
+- code/**/*
+- docs/**/*
+- temp/**/*
 
 # adds documentation label to pull requests that affect the docs folder
 documentation:
