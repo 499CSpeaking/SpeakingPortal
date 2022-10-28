@@ -198,3 +198,5 @@ as in cheek or mixture, while the velarized alveolar lateral approximant (IPA ) 
 The velarization does not appear in some European languages that have ⟨l⟩; 
 It is also the cause making This language of ⟨l⟩ challenging for users of languages that miss ⟨l⟩ or have different values for it,
 Japanese or some southern accents of Asian.
+
+This script is for testing if the phoneme works and does not mess up for repeat paragraphs.
