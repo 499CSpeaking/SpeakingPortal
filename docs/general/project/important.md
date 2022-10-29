@@ -58,3 +58,64 @@ A perfect report card, all B's.
 
   
 Very proud.
+
+Ma! I got a thing going here.
+
+  
+- You got lint on your fuzz.
+- Ow! That's me!
+
+  
+- Wave to us! We'll be in row 118,000.
+- Bye!
+
+  
+Barry, I told you,
+stop flying in the house!
+
+  
+- Hey, Adam.
+- Hey, Barry.
+
+  
+- Is that fuzz gel?
+- A little. Special day, graduation.
+
+  
+Never thought I'd make it.
+
+  
+Three days grade school,
+three days high school.
+
+- What does that do?
+- Oatches that little strand of honey
+
+  
+that hangs after you pour it.
+Saves us millions.
+
+  
+Oan anyone work on the Krelman?
+
+  
+Of course. Most bee jobs are
+small ones. But bees know
+
+  
+that every small job,
+if it's done well, means a lot.
+
+  
+But choose carefully
+
+  
+because you'll stay in the job
+you pick for the rest of your life.
+
+  
+The same job the rest of your life?
+I didn't know that.
+
+  
+What's the difference?
