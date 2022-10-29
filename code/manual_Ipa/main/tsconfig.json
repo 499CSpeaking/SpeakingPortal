@@ -2,8 +2,7 @@
     "compilerOptions": {
       "types": [
         "node"
-      ],
-      "lib": ["es2019"]
-    }
+      ]
+    },
   }
   
