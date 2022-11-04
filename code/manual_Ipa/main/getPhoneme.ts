@@ -3,8 +3,7 @@ import * as path from 'path';
 import fetch from "node-fetch";
 
 function getDict() {
-    let dict = fs.readFileSync('./dict.txt', 'utf-8');
-    console.log(dict);
+    let dict = fs.readFileSync('./dict2.txt', 'utf-8');
     return dict;
 }
 
@@ -13,21 +12,23 @@ function getIpa(word) {
     return word;
 }
 
-function genIpa() {
+function getPhoneme(input) {
     // read script and dictionary
-    let script = fs.readFileSync('./script.txt', 'utf-8');
+    let script = input;
     let dict = getDict();
 
-    // make key>value map 
-    let ipaScript = new Map<string, any>;
+    // make key=>value map 
+    let phoScript = new Map<string, any>;
 
     // for each word in the script, generate a key>value pair that has a
     // word from the script with a phoneme related to that word
     for (let i = 0; i < script.length; i++) {
-        if (dict[i].includes(script[i])) {
-            ipaScript.set('ipa' + i, getIpa(script[i]));
+        if (dict[i].includes(script[i]) && !(phoScript.has(script[i]))) {
+            phoScript.set(script[i], getIpa(script[i]));
         }
     }
+
+    return phoScript;
 }
 
-getDict();
+module.exports = getPhoneme;

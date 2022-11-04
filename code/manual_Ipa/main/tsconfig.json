@@ -4,7 +4,8 @@
   },
   "compilerOptions": {
     "lib": [
-      "es2019"
+      "ES2019",
+      "DOM"
     ],
     "forceConsistentCasingInFileNames": true,
     "target": "es5",
@@ -12,6 +13,6 @@
       "node_modules/@types"
     ]
   },
-  "include": ["*.ts"],
+  "include": ["*.ts", "**/*.ts"],
   "exclude": ["node_modules"]
 }
