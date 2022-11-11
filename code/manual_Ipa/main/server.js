@@ -7,9 +7,12 @@ server.use('/', express.static('site'));
 server.post('/api/', function (req, res) {
     var input = req.body.input;
     console.log('input: ', input);
-    var output = getPhoneme(input);
-    console.log('output: ', output);
-    res.json({ output: output });
+    getPhoneme(input)
+        .then(function (output) {
+        console.log('output: ', output);
+        res.json({ output: output });
+        console.log('success');
+    });
 });
 server.listen(4000, function () {
     console.log('server running...');

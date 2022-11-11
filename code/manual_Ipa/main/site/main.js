@@ -10,6 +10,10 @@ function getOut() {
         .then(function (res) { return res.json(); })
         .then(function (data) {
         var respo = data.output;
-        document.getElementById('out').innerHTML = respo;
+        var html$ = '';
+        for (var key in respo) {
+            html$ += "<span>" + key + ", " + respo.get(key) + "</span>";
+        }
+        document.getElementById("out").innerHTML = html$;
     });
 }
