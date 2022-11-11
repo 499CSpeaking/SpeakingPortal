@@ -10,9 +10,12 @@ server.use('/', express.static('site'));
 server.post('/api/', (req, res) => {
     const input = req.body.input;
     console.log('input: ', input);
-    const output = getPhoneme(input);
-    console.log('output: ', output);
-    res.json({output: output});
+    getPhoneme(input)
+    .then(output => {
+        console.log('output: ', output);
+        res.json({output: output});
+        console.log('success');  
+    })
 });
 
 server.listen(4000, () => {
