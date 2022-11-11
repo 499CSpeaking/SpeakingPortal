@@ -1,0 +1,19 @@
+{
+  "ts-node": {
+    "compiler": "typescript"
+  },
+  "compilerOptions": {
+    "lib": [
+      "ES2019",
+      "DOM"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "watch": true
+  },
+  "include": ["*.ts", "**/*.ts"],
+  "exclude": ["node_modules"]
+}
