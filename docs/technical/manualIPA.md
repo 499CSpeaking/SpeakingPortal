@@ -45,8 +45,8 @@
 - as our system will be accessed via Kukarella, we don't really have a need to create a fully working webpage UI
 - we should still create one to ensure client>server and vice versa stability
 - needs:
- - text box
- - avatar selection section
- - voice selection section
- - submit button
- - video displayed after generation
+    - text box
+    - avatar selection section
+    - voice selection section
+    - submit button
+    - video displayed after generation
