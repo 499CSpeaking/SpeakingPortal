@@ -332,3 +332,38 @@ move it around, and you stir it around.
   
 You get yourself into a rhythm.
 It's a beautiful thing.
+
+What is a bee?
+it's a little yellow bug
+that flies
+
+What is a wasp?
+A degenerate piece of filth insect
+that stings for no reason
+
+I like bees
+I hate wasps
+
+wasp wasp awspspsppspdsofsdafsdflkjhdfglkdshfglkjdsgl
+
+You know why bees are good?
+They produce honey
+
+Honey is delicious
+Good for you as well
+
+What do wasps produce?
+Misery
+
+I once got attacked by a small hive of wasps
+It was HELL
+
+Why is god like this
+giving us wasps
+Was it to punish us for our ancestral sin?
+
+Or was it the devil that created wasps?
+To encourage us to sin in our moment of rage?
+
+Ahhhhhh I hate wasps.
+There's a reason why there's a bee movie and not a wasp movie.
