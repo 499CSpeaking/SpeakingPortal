@@ -332,3 +332,16 @@ move it around, and you stir it around.
   
 You get yourself into a rhythm.
 It's a beautiful thing.
+
+What is a bee?
+it's a little yellow bug
+that flies
+
+What is a wasp?
+A degenerate piece of filth insect
+that stings for no reason
+
+I like bees
+I hate wasps
+
+wasp wasp awspspsppspdsofsdafsdflkjhdfglkdshfglkjdsgl
