@@ -345,3 +345,15 @@ I like bees
 I hate wasps
 
 wasp wasp awspspsppspdsofsdafsdflkjhdfglkdshfglkjdsgl
+
+You know why bees are good?
+They produce honey
+
+Honey is delicious
+Good for you as well
+
+What do wasps produce?
+Misery
+
+I once got attacked by a small hive of wasps
+It was HELL
