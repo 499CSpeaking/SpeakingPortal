@@ -367,3 +367,15 @@ To encourage us to sin in our moment of rage?
 
 Ahhhhhh I hate wasps.
 There's a reason why there's a bee movie and not a wasp movie.
+
+
+[the bees go to a jerry seinfield-themed standup comedy show]
+
+what's the deal with gitstats?
+You contribute 10 commits and have them merged, and
+you only get a score of 14.3?
+
+What's up with that?
+
+*laughter*
+
