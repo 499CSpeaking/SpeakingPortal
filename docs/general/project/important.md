@@ -357,3 +357,13 @@ Misery
 
 I once got attacked by a small hive of wasps
 It was HELL
+
+Why is god like this
+giving us wasps
+Was it to punish us for our ancestral sin?
+
+Or was it the devil that created wasps?
+To encourage us to sin in our moment of rage?
+
+Ahhhhhh I hate wasps.
+There's a reason why there's a bee movie and not a wasp movie.
