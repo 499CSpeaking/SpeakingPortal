@@ -379,3 +379,14 @@ What's up with that?
 
 *laughter*
 
+Hey, what's the deal with wasps?
+
+*crowd boos*
+
+Yeah, what do wasps do?
+What do they bring of value?
+
+I hate wasps
+
+*crows cheers in agreement*
+*single "amen" from the crowd*
