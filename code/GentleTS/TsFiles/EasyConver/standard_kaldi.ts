@@ -94,5 +94,18 @@ if __name__=='__main__':
         idx += 160000
 
 
-        // conver the above code to typescript
-        
+// convert the above code to typescript
+
+class Kaldi {
+    private _p: any;
+    private finished: boolean;
+    constructor(nnet_dir: any, hclg_path: any, proto_langdir: any);
+    private _cmd(c: any): void;
+    push_chunk(buf: any): boolean;
+    get_final(): any[];
+    private _reset(): void;
+    stop(): void;
+    __del__(): void;
+}
+export { Kaldi };
+
