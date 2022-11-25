@@ -6,22 +6,10 @@
 // correspond to the text words and audio words to be mapped
 // 2) you have a server running gentle somewhere. The easiest thing is to just install + run a docker container of gentle.
 // this can be done with the command "docker run -P lowerquality/gentle".
-var exec = require('child_process').exec;
+var exec = require('child_process').execSync;
 // ensure this string contains the proper address to your gentle instance. If running a local docker container, just
 // run "docker ps" and find your lowerquality/gentle address mappings. In my case, it is "0.0.0.0:49153"
-var gentle_addr = "0.0.0.0:49153";
-var api_curl_str = "curl -F \"audio=@audio.mp3\" -F \"transcript=@words.txt\" \"" + gentle_addr + "/transcriptions?async=false\"";
-var t1 = process.hrtime();
-exec(api_curl_str, function (err, stdout, stderr) {
-    if (err !== null) {
-        console.log("error: " + err);
-        console.log("stderr: " + stdout);
-    }
-    else {
-        var t2 = process.hrtime(t1);
-        print_output(stdout, t2[0] + t2[1] / 1000000000);
-    }
-});
+var gentle_addr = "0.0.0.0:80";
 function print_output(input, time) {
     var words = JSON.parse(input).words;
     console.log(time.toFixed(2) + " seconds to compute " + words.length + " words");
@@ -44,5 +32,23 @@ function print_output(input, time) {
         catch (error) {
             console.error(error.message);
         }
+    }
+}
+function fetch(audio_filename, text_filename) {
+    var api_curl_str = "curl -F \"audio=@" + audio_filename + "\" -F \"transcript=@" + text_filename + "\" \"" + gentle_addr + "/transcriptions?async=false\"";
+    var output = exec(api_curl_str);
+    return output.toString();
+}
+module.exports = fetch;
+// running the demo directly
+if (require.main == module) {
+    try {
+        var t1 = process.hrtime();
+        var output = fetch("audio.mp3", "words.txt");
+        var t2 = process.hrtime(t1);
+        print_output(output, t2[0] + t2[1] / 1000000000);
+    }
+    catch (e) {
+        console.error("oh no. error: " + e.message);
     }
 }
