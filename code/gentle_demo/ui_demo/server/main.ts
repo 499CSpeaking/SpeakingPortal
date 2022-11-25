@@ -19,13 +19,16 @@ app.post("/", upload.single("audio"), (req, res) => {
     let text: string = req.body.text
     let text_filename: string = audio_filename + "_text"
 
-    fs.writeFileSync("uploads/" + text_filename, text)
-    const output = gentle("uploads/" + audio_filename, "uploads/" + text_filename)
-    
-    res.send(output)
-
-    fs.unlinkSync("uploads/" + audio_filename)
-    fs.unlinkSync("uploads/" + text_filename)
+    try {
+        fs.writeFileSync("uploads/" + text_filename, text)
+        const output = gentle("uploads/" + audio_filename, "uploads/" + text_filename)   
+        res.send(output)
+    } catch(e) {
+        res.status(500).send(e.message)
+    } finally {
+        fs.unlinkSync("uploads/" + audio_filename)
+        fs.unlinkSync("uploads/" + text_filename)
+    }
 })
 
 app.post("/testing", upload.none(), (req, res) => {

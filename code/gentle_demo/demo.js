@@ -34,10 +34,38 @@ function print_output(input, time) {
         }
     }
 }
+function string_output(input, time) {
+    var words = JSON.parse(input).words;
+    var str = ""; //no stringbuilder in javascript? aaarrrgghhhhhhh
+    str += time.toFixed(2) + " seconds to compute " + words.length + " words\n";
+    str += (words.length / time).toFixed(2) + " words per second\n";
+    // for every word, print out the info related to that word
+    for (var _i = 0, words_2 = words; _i < words_2.length; _i++) {
+        var word = words_2[_i];
+        try {
+            // console.log(`${word.start.toFixed(2).padEnd(5)} -> ${word.end.toFixed(2)}: ${word.word}`)
+            str += word.start.toFixed(2).padEnd(5) + " -> " + word.end.toFixed(2).padStart(5) + ": " + word.word + "\n";
+            // print all the phonemes
+            var phonemes = word.phones;
+            var offset = Number(word.start);
+            for (var _a = 0, phonemes_2 = phonemes; _a < phonemes_2.length; _a++) {
+                var phoneme = phonemes_2[_a];
+                str += "   " + offset.toFixed(2).padStart(2) + " " + phoneme.phone.split("_")[0] + "\n";
+                offset += Number(phoneme.duration);
+            }
+        }
+        catch (error) {
+            console.error(error.message);
+        }
+    }
+    return str;
+}
 function fetch(audio_filename, text_filename) {
     var api_curl_str = "curl -F \"audio=@" + audio_filename + "\" -F \"transcript=@" + text_filename + "\" \"" + gentle_addr + "/transcriptions?async=false\"";
+    var t1 = process.hrtime();
     var output = exec(api_curl_str);
-    return output.toString();
+    var t2 = process.hrtime(t1);
+    return string_output(output, t2[0] + t2[1] / 1000000000);
 }
 module.exports = fetch;
 // running the demo directly
