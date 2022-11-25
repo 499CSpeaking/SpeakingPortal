@@ -42,12 +42,42 @@ function print_output(input: string, time: number): void {
     }
 }
 
+function string_output(input: string, time: number): string {
+    const words: any[] = JSON.parse(input).words
+    let str: string = "" //no stringbuilder in javascript? aaarrrgghhhhhhh
+
+    str += `${time.toFixed(2)} seconds to compute ${words.length} words\n`
+    str += `${(words.length/time).toFixed(2)} words per second\n`
+
+    // for every word, print out the info related to that word
+    for(const word of words) {
+        try {
+            // console.log(`${word.start.toFixed(2).padEnd(5)} -> ${word.end.toFixed(2)}: ${word.word}`)
+            str += `${word.start.toFixed(2).padEnd(5)} -> ${word.end.toFixed(2).padStart(5)}: ${word.word}\n`
+            
+            // print all the phonemes
+            const phonemes: any = word.phones
+            let offset: number = Number(word.start)
+            for(const phoneme of phonemes) {
+                 str += `   ${offset.toFixed(2).padStart(2)} ${phoneme.phone.split("_")[0]}\n`
+                offset += Number(phoneme.duration)
+            }
+        } catch(error) {
+            console.error(error.message)
+        }
+    }
+
+    return str
+}
+
 function fetch(audio_filename: string, text_filename: string): string {
     const api_curl_str: string = `curl -F "audio=@${audio_filename}" -F "transcript=@${text_filename}" "${gentle_addr}/transcriptions?async=false"`
 
+    const t1 = process.hrtime()
     const output: any = exec(api_curl_str)
+    const t2: number[] = process.hrtime(t1)
 
-    return output.toString()
+    return string_output(output, t2[0] + t2[1]/1000000000)
 }
 
 module.exports = fetch
