@@ -14,11 +14,18 @@ app.post("/", upload.single("audio"), function (req, res) {
     var audio_filename = req.file.filename;
     var text = req.body.text;
     var text_filename = audio_filename + "_text";
-    fs.writeFileSync("uploads/" + text_filename, text);
-    var output = gentle("uploads/" + audio_filename, "uploads/" + text_filename);
-    res.send(output);
-    fs.unlinkSync("uploads/" + audio_filename);
-    fs.unlinkSync("uploads/" + text_filename);
+    try {
+        fs.writeFileSync("uploads/" + text_filename, text);
+        var output = gentle("uploads/" + audio_filename, "uploads/" + text_filename);
+        res.send(output);
+    }
+    catch (e) {
+        res.status(500).send(e.message);
+    }
+    finally {
+        fs.unlinkSync("uploads/" + audio_filename);
+        fs.unlinkSync("uploads/" + text_filename);
+    }
 });
 app.post("/testing", upload.none(), function (req, res) {
     res.send(req.body.text);
