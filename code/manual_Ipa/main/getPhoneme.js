@@ -132,7 +132,7 @@ function getPhoneme(input) {
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    script = input.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").split(" ");
+                    script = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g, "").split(" ");
                     return [4 /*yield*/, getDict()];
                 case 1:
                     workingDict = _b.sent();

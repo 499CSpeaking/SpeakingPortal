@@ -44,10 +44,16 @@ function getIpa(word) {
 }
 
 async function getPhoneme(input) {
-    // read script and dictionary
-    let script = input.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").split(" ");
+    // read script and dictionary and audio path{temp}
+    let script = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g,"").split(" ");
     workingDict = await getDict();
-
+   
+   // to be done client side
+    //let audio = './audio/Benjamin.mp3';
+    
+    // process audio to get timestamps
+    //getStamps(audio);
+    
     // make key=>value map 
     let phoScript = new Map();
 
