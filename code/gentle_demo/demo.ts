@@ -7,24 +7,15 @@
 // correspond to the text words and audio words to be mapped
 // 2) you have a server running gentle somewhere. The easiest thing is to just install + run a docker container of gentle.
 // this can be done with the command "docker run -P lowerquality/gentle".
-const exec = require('child_process').exec
+const exec: any = require('child_process').execSync;
 
 // ensure this string contains the proper address to your gentle instance. If running a local docker container, just
 // run "docker ps" and find your lowerquality/gentle address mappings. In my case, it is "0.0.0.0:49153"
-const gentle_addr: string = "0.0.0.0:49153"
+const gentle_addr: string = "0.0.0.0:80"
 
-const api_curl_str: string = `curl -F "audio=@audio.mp3" -F "transcript=@words.txt" "${gentle_addr}/transcriptions?async=false"`
 
-const t1 = process.hrtime()
-exec(api_curl_str, (err, stdout, stderr) => {
-    if(err !== null) {
-        console.log(`error: ${err}`)
-        console.log(`stderr: ${stdout}`)
-    } else {
-        const t2: number[] = process.hrtime(t1)
-        print_output(stdout, t2[0] + t2[1]/1000000000)
-    }
-});
+
+
 
 function print_output(input: string, time: number): void {
     const words: any[] = JSON.parse(input).words
@@ -48,5 +39,28 @@ function print_output(input: string, time: number): void {
         } catch(error) {
             console.error(error.message)
         }
+    }
+}
+
+function fetch(audio_filename: string, text_filename: string): string {
+    const api_curl_str: string = `curl -F "audio=@${audio_filename}" -F "transcript=@${text_filename}" "${gentle_addr}/transcriptions?async=false"`
+
+    const output: any = exec(api_curl_str)
+
+    return output.toString()
+}
+
+module.exports = fetch
+
+// running the demo directly
+if(require.main == module) {
+    try {
+        const t1 = process.hrtime()
+        const output = fetch("audio.mp3", "words.txt")
+        const t2: number[] = process.hrtime(t1)
+
+        print_output(output, t2[0] + t2[1]/1000000000)
+    } catch(e) {
+        console.error("oh no. error: " + e.message)
     }
 }
