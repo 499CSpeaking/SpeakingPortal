@@ -12,7 +12,7 @@ var exec = require('child_process').execSync;
 var gentle_addr = "0.0.0.0:80";
 function print_output(input, time) {
     var words = JSON.parse(input).words;
-    console.log(time.toFixed(2) + " seconds to compute " + words.length + " words");
+    console.log(time.toFixed(2) + " seconds to compute just the alignment of " + words.length + " word(s)");
     console.log((words.length / time).toFixed(2) + " words per second\n");
     // for every word, print out the info related to that word
     for (var _i = 0, words_1 = words; _i < words_1.length; _i++) {

@@ -20,7 +20,7 @@ const gentle_addr: string = "0.0.0.0:80"
 function print_output(input: string, time: number): void {
     const words: any[] = JSON.parse(input).words
 
-    console.log(`${time.toFixed(2)} seconds to compute ${words.length} words`)
+    console.log(`${time.toFixed(2)} seconds to compute just the alignment of ${words.length} word(s)`)
     console.log(`${(words.length/time).toFixed(2)} words per second\n`)
 
     // for every word, print out the info related to that word

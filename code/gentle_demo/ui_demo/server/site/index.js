@@ -34,8 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-function display_err(error) {
-    document.getElementById("output").innerHTML = "<i>error: " + error + "</i>";
+var char_limit = 200;
+function log_output(message, error) {
+    if (error === void 0) { error = false; }
+    document.getElementById("output").innerHTML += !error ? message + "<br>" : "<p style=\"color:red;\"> " + message + "<br></p>";
+}
+function clear_output() {
+    document.getElementById("output").innerHTML = '';
 }
 function get_audio_from_kukarella(text) {
     return __awaiter(this, void 0, void 0, function () {
@@ -57,9 +62,11 @@ function get_audio_from_kukarella(text) {
                         })];
                 case 1:
                     api_response = _a.sent();
+                    log_output("requesting text-to-speech transcription of the text from Kukarella...");
                     return [4 /*yield*/, api_response.json()];
                 case 2:
                     audio_url = (_a.sent()).data.url;
+                    log_output("The audio from Kukarella has been processed, you can download it <a href=" + audio_url + ">HERE</a>");
                     return [4 /*yield*/, fetch(audio_url)];
                 case 3:
                     audio_response = _a.sent();
@@ -74,23 +81,37 @@ function get_audio_from_kukarella(text) {
 document.getElementById("button").onclick = function buttonClick() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var text, file, form_data, error;
+        var text, file, e_1, form_data, error;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    clear_output();
                     text = (_a = document.getElementById("text_input")) === null || _a === void 0 ? void 0 : _a.value;
                     if (!text || text == "") {
-                        display_err("invalid input");
+                        log_output("text input must be filled", true);
                         return [2 /*return*/];
                     }
-                    document.getElementById("output").innerHTML = "<i>processing...</i>";
-                    return [4 /*yield*/, get_audio_from_kukarella(text)];
+                    if (text.length > char_limit) {
+                        log_output("text input exceeds the character limit", true);
+                        return [2 /*return*/];
+                    }
+                    log_output("starting");
+                    _b.label = 1;
                 case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, get_audio_from_kukarella(text)];
+                case 2:
                     file = _b.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    e_1 = _b.sent();
+                    log_output("an error occurred while requesting the text-to-speech transcription from Kukarella: " + e_1.message, true);
+                    return [2 /*return*/];
+                case 4:
                     form_data = new FormData();
                     form_data.append("audio", file);
                     form_data.append("text", text);
-                    document.getElementById("output").innerHTML = "<i>processing...</i>";
+                    log_output("sending both the text and audio to the server for alignment...");
                     error = false;
                     fetch("http://localhost:1234", { method: "POST", body: form_data })
                         .then(function (response) {
@@ -101,17 +122,24 @@ document.getElementById("button").onclick = function buttonClick() {
                     })
                         .then(function (response) {
                         if (!error) {
-                            document.getElementById("output").innerHTML = response;
+                            log_output("process completed<br>");
+                            log_output(response);
                         }
                         else {
                             throw new Error(response);
                         }
                     })
                         .catch(function (err) {
-                        display_err("server error: " + err.message);
+                        log_output("an error occured while requesting the text alignment from the server: " + err.message, true);
                     });
                     return [2 /*return*/];
             }
         });
     });
 };
+document.getElementById("char_count").innerHTML = "0/" + char_limit;
+document.getElementById("text_input").addEventListener("input", function () {
+    var _a;
+    var char_count = (_a = document.getElementById("text_input")) === null || _a === void 0 ? void 0 : _a.value.length;
+    document.getElementById("char_count").innerHTML = (char_count <= char_limit ? char_count + "/" + char_limit : "<p style=\"color:red;\"> " + char_count + "/" + char_limit + " </p>");
+});
