@@ -2,13 +2,40 @@ function display_err(error: string): void {
     document.getElementById("output").innerHTML = `<i>error: ${error}</i>`
 }
 
-document.getElementById("button").onclick =  function buttonClick(): void {
+async function get_audio_from_kukarella(text: string): Promise<File> {
+    const kukarella_api_url = "https://api.kukarella.com/texttospeech/convertTTSPreview"
+
+    const payload = {
+        text: text,
+        voiceKey: 'en-US_AllisonV3Voice',
+    };
+
+    const api_response: any = await fetch(kukarella_api_url, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+
+    const audio_url: string = (await api_response.json()).data.url
+    const audio_response: any = await fetch(audio_url)
+
+    const audio_response_blob: Blob = await audio_response.blob()
+
+    return new File([audio_response_blob], "arbitrary_filename")
+}
+
+document.getElementById("button").onclick =  async function buttonClick(): Promise<void> {
     const text: string = (document.getElementById("text_input") as HTMLInputElement | null)?.value;
-    const file: File = (document.getElementById("file_input") as HTMLInputElement | null)?.files[0];
-    if(!text || text == "" || !file) {
+    if(!text || text == "") {
         display_err("invalid input")
         return
     }
+
+    document.getElementById("output").innerHTML = "<i>processing...</i>"
+
+    const file: File = await get_audio_from_kukarella(text)
 
     const form_data: FormData = new FormData();
     form_data.append("audio", file)
