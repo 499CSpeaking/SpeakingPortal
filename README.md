@@ -43,3 +43,13 @@ Our goal with this project is to create a high quality, high efficiency lip-sync
 
 ## Requirements Presentation
 [![Our Requirements Presentation Video](https://img.youtube.com/vi/XMRiSXsde8I/0.jpg)](https://www.youtube.com/watch?v=XMRiSXsde8I)
+
+<hr>
+
+## Current System Representation - Manual System
+![image](https://user-images.githubusercontent.com/77311787/205389196-afd933c9-23f0-42cd-ab1b-0e3241c783bb.png)
+![image](https://user-images.githubusercontent.com/77311787/205389453-0f437e97-d5ae-43b5-a1f1-a59116682ba5.png)
+
+## Current System Representation - Demo System via Gentle
+![image](https://user-images.githubusercontent.com/77311787/205390000-b01f5ffc-d4d9-4dfc-9c3d-c585cdfc3399.png)
+
