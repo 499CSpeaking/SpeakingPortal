@@ -8,12 +8,14 @@
 </head>
 
 <body>
-    <input type="text" placeholder="Text here..." id="userInput" required>
-    <button type="button" id="send" onclick="getOut()">Generate</button>
+    <textarea placeholder="Text here..." id="userInput" rows="5" cols="50" required></textarea>
+    <a id="char_count"></a>
     <br>
-    <p id="out"></p>
-    <script src="main.js"></script>
-    <script src="../getStamps.js"></script>
+    <button id="send">Generate</button>
+    <br><br>
+    Output Here:
+    <pre><p id="out"></p></pre>
 </body>
+<script src="main.js"></script>
 
 </html>
