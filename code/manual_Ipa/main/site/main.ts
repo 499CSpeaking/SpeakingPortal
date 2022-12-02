@@ -76,7 +76,7 @@ async function get_kuk_aud(text) {
     });
 
     log_status("Getting Audio from Kukarella...");
-    const audio_url = (await api_respo.json()).data.url;
+    const audio_url = (await api_respo.json()).data.json().url;
     log_status("Audio has been processed. You can download it <a href=${audio_url}>HERE</a>");
 
     const audio_resp = await fetch(audio_url);
