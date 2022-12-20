@@ -64,20 +64,21 @@ async function get_kuk_aud(text) {
 
     const payload = {
         text: text,
-        voiceKey: 'en-US_AllisonV3Voice',
+        voiceKey: "en-US_AllisonV3Voice",
     };
 
     const api_respo = await fetch(api_url, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
-            'Content-Tye': 'application/json',
+            'Content-Type': 'application/json',
         },
     });
 
     log_status("Getting Audio from Kukarella...");
-    const audio_url = (await api_respo.json()).data.json().url;
-    log_status("Audio has been processed. You can download it <a href=${audio_url}>HERE</a>");
+    const audio_url = (await api_respo.json()).data.url;
+    let url_message = 'Audio has been processed. You can download it <a href='+audio_url+'>HERE</a>';
+    log_status(url_message);
 
     const audio_resp = await fetch(audio_url);
     const audio_resp_blob = await audio_resp.blob();
