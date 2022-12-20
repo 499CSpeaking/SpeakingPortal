@@ -101,20 +101,20 @@ function getPhones(input) {
 // function to retrieve audio from kukarella's api based on user inputted text
 function get_kuk_aud(text) {
     return __awaiter(this, void 0, void 0, function () {
-        var api_url, payload, api_respo, audio_url, audio_resp, audio_resp_blob;
+        var api_url, payload, api_respo, audio_url, url_message, audio_resp, audio_resp_blob;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     api_url = "https://api.kukarella.com/texttospeech/convertTTSPreview";
                     payload = {
                         text: text,
-                        voiceKey: 'en-US_AllisonV3Voice',
+                        voiceKey: "en-US_AllisonV3Voice",
                     };
                     return [4 /*yield*/, fetch(api_url, {
                             method: 'POST',
                             body: JSON.stringify(payload),
                             headers: {
-                                'Content-Tye': 'application/json',
+                                'Content-Type': 'application/json',
                             },
                         })];
                 case 1:
@@ -123,7 +123,8 @@ function get_kuk_aud(text) {
                     return [4 /*yield*/, api_respo.json()];
                 case 2:
                     audio_url = (_a.sent()).data.url;
-                    log_status("Audio has been processed. You can download it <a href=${audio_url}>HERE</a>");
+                    url_message = 'Audio has been processed. You can download it <a href=' + audio_url + '>HERE</a>';
+                    log_status(url_message);
                     return [4 /*yield*/, fetch(audio_url)];
                 case 3:
                     audio_resp = _a.sent();
