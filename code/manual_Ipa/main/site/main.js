@@ -40,17 +40,17 @@ function log_status(message) {
     document.getElementById("out").innerHTML += "".concat(message, "<br>");
 }
 function clear_output() {
-    document.getElementById("out").innerHTML = '';
+    document.getElementById("out").innerHTML = "";
 }
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var input, phonemes, file, e_1;
+        var input, phonemes, file, e_1, stamps;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     clear_output();
-                    input = (_a = document.getElementById('userInput')) === null || _a === void 0 ? void 0 : _a.value;
+                    input = (_a = document.getElementById("userInput")) === null || _a === void 0 ? void 0 : _a.value;
                     if (!input || input == "") {
                         log_status("text input cannot be empty!");
                         return [2 /*return*/];
@@ -61,7 +61,10 @@ button.onclick = function getOut() {
                     }
                     // generate phonemes
                     log_status("Starting...");
+                    log_status("Getting Phonemes...");
+                    phonemes = new Map();
                     phonemes = getPhones(input);
+                    log_status("Phoneme Detection Complete!");
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -73,7 +76,18 @@ button.onclick = function getOut() {
                     e_1 = _b.sent();
                     log_status("An error occurred while getting the audio from Kukarella! Error Message: ".concat(e_1.message));
                     return [2 /*return*/];
-                case 4: return [2 /*return*/];
+                case 4:
+                    // send audio to server for processing
+                    log_status("Sending audio to the server for further processing...");
+                    stamps = new Map();
+                    try {
+                        // send audio file to server and get result of timestamps
+                        getTime(file);
+                    }
+                    catch (e) {
+                        log_status("An error occurred while sending the audio to server or while processing! Error Message: ".concat(e.message));
+                    }
+                    return [2 /*return*/];
             }
         });
     });
@@ -82,15 +96,15 @@ button.onclick = function getOut() {
 function getPhones(input) {
     var userInput = input.toLowerCase();
     // send string to server and get response
-    fetch('http://localhost:4000/api', {
-        method: 'POST',
+    fetch("http://localhost:4000/api", {
+        method: "POST",
         body: JSON.stringify({ input: userInput }),
-        headers: { 'Content-type': 'application/json; charset=UTF-8' }
+        headers: { "Content-type": "application/json; charset=UTF-8" },
     })
         .then(function (res) { return res.json(); })
         .then(function (data) {
         var respo = data.output;
-        var html$ = '';
+        var html$ = "";
         for (var key in respo) {
             html$ += "<p>" + key + ", " + respo.get(key) + "</p>";
         }
@@ -111,10 +125,10 @@ function get_kuk_aud(text) {
                         voiceKey: "en-US_AllisonV3Voice",
                     };
                     return [4 /*yield*/, fetch(api_url, {
-                            method: 'POST',
+                            method: "POST",
                             body: JSON.stringify(payload),
                             headers: {
-                                'Content-Type': 'application/json',
+                                "Content-Type": "application/json",
                             },
                         })];
                 case 1:
@@ -123,7 +137,9 @@ function get_kuk_aud(text) {
                     return [4 /*yield*/, api_respo.json()];
                 case 2:
                     audio_url = (_a.sent()).data.url;
-                    url_message = 'Audio has been processed. You can download it <a href=' + audio_url + '>HERE</a>';
+                    url_message = "Audio has been retrieved. You can download it <a href=" +
+                        audio_url +
+                        ">HERE</a>";
                     log_status(url_message);
                     return [4 /*yield*/, fetch(audio_url)];
                 case 3:
@@ -136,10 +152,41 @@ function get_kuk_aud(text) {
         });
     });
 }
+// function to send audio to server and get timestamps for each word
+function getTime(audio) {
+    var form_data = new FormData();
+    form_data.append("file", audio);
+    var err = false;
+    fetch("http://localhost:4000/api/time", {
+        method: "POST",
+        body: form_data,
+        headers: { enctype: "multipart/form-data" },
+    })
+        .then(function (res) {
+        if (res.status != 200) {
+            err = true;
+        }
+        return res.text();
+    })
+        .then(function (res) {
+        if (!err) {
+            log_status("Processing Complete!<br>");
+        }
+        else {
+            throw new Error(res);
+        }
+    })
+        .catch(function (err) {
+        log_status("An error occurred while processing! Error Message: ".concat(err.message));
+    });
+}
 // check and display the number of characters the user has typed
 document.getElementById("char_count").innerHTML = "0/".concat(char_lim);
 document.getElementById("userInput").addEventListener("input", function () {
     var _a;
     var char_count = (_a = document.getElementById("userInput")) === null || _a === void 0 ? void 0 : _a.value.length;
-    document.getElementById("char_count").innerHTML = (char_count <= char_lim ? "".concat(char_count, "/").concat(char_lim) : "<p style=\"color:red;\"> ".concat(char_count, "/").concat(char_lim, " </p>"));
+    document.getElementById("char_count").innerHTML =
+        char_count <= char_lim
+            ? "".concat(char_count, "/").concat(char_lim)
+            : "<p style=\"color:red;\"> ".concat(char_count, "/").concat(char_lim, " </p>");
 });

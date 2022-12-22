@@ -4,48 +4,33 @@ import fetch from "node-fetch";
 import * as readline from 'readline';
 
 let workingDict = new Map();
-let audioCtx = new AudioContext();
-let source = new AudioBufferSourceNode(audioCtx);
-let analyzer = audioCtx.createAnalyser();
-let buffSz = analyzer.frequencyBinCount;
-let freqData = new Uint8Array(buffSz);
-let start = true;
-let rAF;
 
+// TODO 
 // Audio processing helper
 function getStampData(){
-    const ts = audioCtx.currentTime;
-    analyzer.getByteTimeDomainData(freqData);
-    if (freqData[0] < 1){
-        if (start){
-            console.log('Stamp Start: '+ts);
-            start = false;
-        }
-        else{
-            console.log('Stamp End: '+ts);
-            start = true;
-        }
-    }
-    rAF = requestAnimationFrame(getStampData);
+
 }
 
+// TODO
 // Audio Processing and Timestamping
 // src is the path to the audio file
 function getStamps(src){
-    console.log("Getting audio");
-    fetch(src)
-    .then((response) => response.arrayBuffer())
-    .then((downloadedBuffer) => audioCtx.decodeAudioData(downloadedBuffer))
-    .then((decodedBuffer) => {
-        source.buffer = decodedBuffer;
-        source.connect(analyzer);
-        //source.connect(audioCtx.destination);
-        source.loop = false;
-        console.log("Audio ready");
-    })
-    .catch((e) => {
-        console.error('Error reading audio data: ${e.error}');
-    });
-    source.start();
-    rAF = requestAnimationFrame(getStampData);
+    // read in audio file
+    
+    // get each sample value in the file
+    
+    // for each value, convert to uint8
+
+    // initialize start boolean to false
+
+    // if the new value is > 0, mark the timestamp, set start to true if false
+
+    // if new value is == 0 and start is true, mark the timestamp, set start to false
+
+    // keep looping above until eof
+
+    // return array values that correspond to each word in sequence of appearance as an integer
+    return src;
 }
+
+module.exports = getStamps;
