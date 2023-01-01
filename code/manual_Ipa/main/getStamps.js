@@ -35,34 +35,71 @@ function getStamps(src) {
     var stamps = new Map();
     var start = false;
     var start_t, end_t;
-    var silence = [0];
-    var thresh = 128;
+    var thresh = 250;
     var freqs = wav.getSamples(false, Uint8Array);
-    while (i < freqs.length) {
+    var sz = freqs.length;
+    var sampleTime = ((sz / wav.fmt.sampleRate) * 1000) / sz;
+    // noise filtering
+    var filterFreqs = new Uint8Array(sz);
+    // 2 values either side of pivot
+    var neighSz = 5;
+    var neighVals = new Uint8Array(neighSz);
+    for (var i_1 = 0; i_1 < sz; i_1++) {
+        var pivot = freqs[i_1];
+        neighVals[2] = pivot;
+        var iL2 = i_1 - 2 < sz, iL1 = i_1 - 1 < sz, iR1 = i_1 + 1 > sz, iR2 = i_1 + 2 > sz;
+        neighVals[0] = freqs[i_1 - 2];
+        neighVals[1] = freqs[i_1 - 1];
+        neighVals[3] = freqs[i_1 + 1];
+        neighVals[4] = freqs[i_1 + 2];
+        // handle out of bounds values
+        if (iL2) {
+            neighVals[0] = 0;
+        }
+        if (iL1) {
+            neighVals[1] = 0;
+        }
+        if (iR1) {
+            neighVals[3] = 0;
+        }
+        if (iR2) {
+            neighVals[4] = 0;
+        }
+        // filter out pepper noise (extra low values)
+        filterFreqs[i_1] = Math.max(neighVals[0], neighVals[1], neighVals[2], neighVals[3], neighVals[4]);
+        // filter out general noise
+        filterFreqs[i_1] =
+            (neighVals[0] / 5) * neighVals[2] +
+                (neighVals[1] / 5) * neighVals[2] +
+                (neighVals[3] / 5) * neighVals[2] +
+                (neighVals[4] / 5) * neighVals[2] +
+                neighVals[2] / 5;
+    }
+    // timestamp generation algo
+    while (i < filterFreqs.length) {
         try {
             // get the value of a single sample from the wave file
             // range: -32768 to 32767 for 16 bit audio
-            //   let samVal = wav.getSample(i);
-            //   let nextVal = wav.getSample(i + 1);
-            var samVal = freqs[i];
-            var trueEnd = freqs[i + 1] == thresh &&
-                freqs[i + 2] == thresh;
-            // freqs[i + 3] == thresh &&
-            // freqs[i + 4] == thresh &&
-            // freqs[i + 5] == thresh;
-            if (samVal >= 250 && start == false) {
+            var samVal = filterFreqs[i];
+            var trueEnd = (filterFreqs[i + 1] < 100 &&
+                filterFreqs[i + 2] < 50 &&
+                filterFreqs[i + 3] < 10 &&
+                filterFreqs[i + 4] < 5 &&
+                filterFreqs[i + 5] < 1) ||
+                i + 1 > filterFreqs.length;
+            if (samVal > thresh && start == false) {
                 // start is set to true when a word hasn't been already started
                 start = true;
                 // 48 is used here since one sample is roughly equivalent to 48ms of audio
-                start_t = 48 * i;
+                start_t = sampleTime * i;
             }
-            else if (samVal == 0 &&
+            else if (samVal < thresh &&
                 /*nextVal == samVal &&*/
                 trueEnd == true &&
                 start == true) {
-                // start i set to false when the last audible portion of the word is spoken
+                // start is set to false when the last audible portion of the word is spoken
                 start = false;
-                end_t = 48 * i;
+                end_t = sampleTime * i;
                 stamps.set(word, { start: start_t, end: end_t });
                 // word is incremented only if the current word is done being spoken
                 word++;
@@ -70,7 +107,7 @@ function getStamps(src) {
             i++;
         }
         catch (e) {
-            console.log("Out of values, or failed to get stample data at index: " + i);
+            console.log("Out of values, or failed to get sample data at index: " + i);
             break;
         }
     }
