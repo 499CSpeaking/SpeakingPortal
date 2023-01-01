@@ -31,7 +31,10 @@ server.post("/api/", (req, res) => {
 
 server.post("/api/time", upload.single("file"), (req, res) => {
   let audio_filename = req.file.filename;
+  const start = performance.now();
   let output = getStamps("uploads/" + audio_filename);
+  const end = performance.now();
+  console.log("Execution Time: "+(end-start)+" ms");
   console.log("timestamps: ", output);
   res.json({ timestamps: output });
   console.log("success");
