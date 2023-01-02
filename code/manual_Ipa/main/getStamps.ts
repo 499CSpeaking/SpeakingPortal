@@ -41,6 +41,8 @@ function getStamps(src) {
   let thresh = 250;
   let freqs = wav.getSamples(false, Uint8Array);
   let sz = freqs.length;
+  // number of samples/sampleRate = audio length * 1000 for audio length in ms / number of samples
+  // estimates number of ms each sample holds
   let sampleTime = ((sz / wav.fmt.sampleRate) * 1000) / sz;
   // noise filtering
   let filterFreqs = new Uint8Array(sz);
@@ -103,7 +105,7 @@ function getStamps(src) {
       if (samVal > thresh && start == false) {
         // start is set to true when a word hasn't been already started
         start = true;
-        // 48 is used here since one sample is roughly equivalent to 48ms of audio
+        // see sampleTime declaration for math
         start_t = sampleTime * i;
       } else if (
         samVal < thresh &&

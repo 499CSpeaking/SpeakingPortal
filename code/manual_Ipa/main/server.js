@@ -16,7 +16,10 @@ server.use("/", express.static("site"));
 server.post("/api/", function (req, res) {
     var input = req.body.input;
     console.log("input: ", input);
+    var start = performance.now();
     getPhoneme(input).then(function (output) {
+        var end = performance.now();
+        console.log("Execution Time: " + (end - start) + " ms");
         console.log("output: ", output);
         res.json({ output: output });
         console.log("success");

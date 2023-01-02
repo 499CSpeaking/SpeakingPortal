@@ -22,7 +22,10 @@ server.use("/", express.static("site"));
 server.post("/api/", (req, res) => {
   const input = req.body.input;
   console.log("input: ", input);
+  const start = performance.now();
   getPhoneme(input).then((output) => {
+    const end = performance.now();
+    console.log("Execution Time: " + (end - start) + " ms");
     console.log("output: ", output);
     res.json({ output: output });
     console.log("success");
@@ -34,7 +37,7 @@ server.post("/api/time", upload.single("file"), (req, res) => {
   const start = performance.now();
   let output = getStamps("uploads/" + audio_filename);
   const end = performance.now();
-  console.log("Execution Time: "+(end-start)+" ms");
+  console.log("Execution Time: " + (end - start) + " ms");
   console.log("timestamps: ", output);
   res.json({ timestamps: output });
   console.log("success");
