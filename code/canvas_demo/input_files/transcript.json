@@ -1,0 +1,228 @@
+{
+    "transcript": "The quick, brown fox jumps over the lazy dog.",
+    "words": [
+      {
+        "alignedWord": "the",
+        "case": "success",
+        "end": 0.22,
+        "endOffset": 3,
+        "phones": [
+          {
+            "duration": 0.05,
+            "phone": "dh_B"
+          },
+          {
+            "duration": 0.04,
+            "phone": "ah_E"
+          }
+        ],
+        "start": 0.13,
+        "startOffset": 0,
+        "word": "The"
+      },
+      {
+        "alignedWord": "quick",
+        "case": "success",
+        "end": 0.62,
+        "endOffset": 9,
+        "phones": [
+          {
+            "duration": 0.07,
+            "phone": "k_B"
+          },
+          {
+            "duration": 0.07,
+            "phone": "w_I"
+          },
+          {
+            "duration": 0.09,
+            "phone": "ih_I"
+          },
+          {
+            "duration": 0.17,
+            "phone": "k_E"
+          }
+        ],
+        "start": 0.22,
+        "startOffset": 4,
+        "word": "quick"
+      },
+      {
+        "alignedWord": "brown",
+        "case": "success",
+        "end": 1.16,
+        "endOffset": 16,
+        "phones": [
+          {
+            "duration": 0.09,
+            "phone": "b_B"
+          },
+          {
+            "duration": 0.06,
+            "phone": "r_I"
+          },
+          {
+            "duration": 0.1,
+            "phone": "aw_I"
+          },
+          {
+            "duration": 0.07,
+            "phone": "n_E"
+          }
+        ],
+        "start": 0.84,
+        "startOffset": 11,
+        "word": "brown"
+      },
+      {
+        "alignedWord": "fox",
+        "case": "success",
+        "end": 1.5,
+        "endOffset": 20,
+        "phones": [
+          {
+            "duration": 0.09,
+            "phone": "f_B"
+          },
+          {
+            "duration": 0.09,
+            "phone": "aa_I"
+          },
+          {
+            "duration": 0.08,
+            "phone": "k_I"
+          },
+          {
+            "duration": 0.08,
+            "phone": "s_E"
+          }
+        ],
+        "start": 1.16,
+        "startOffset": 17,
+        "word": "fox"
+      },
+      {
+        "alignedWord": "jumps",
+        "case": "success",
+        "end": 1.81,
+        "endOffset": 26,
+        "phones": [
+          {
+            "duration": 0.05,
+            "phone": "jh_B"
+          },
+          {
+            "duration": 0.1,
+            "phone": "ah_I"
+          },
+          {
+            "duration": 0.01,
+            "phone": "m_I"
+          },
+          {
+            "duration": 0.09,
+            "phone": "p_I"
+          },
+          {
+            "duration": 0.06,
+            "phone": "s_E"
+          }
+        ],
+        "start": 1.5,
+        "startOffset": 21,
+        "word": "jumps"
+      },
+      {
+        "alignedWord": "over",
+        "case": "success",
+        "end": 2.0300000000000002,
+        "endOffset": 31,
+        "phones": [
+          {
+            "duration": 0.08,
+            "phone": "ow_B"
+          },
+          {
+            "duration": 0.07,
+            "phone": "v_I"
+          },
+          {
+            "duration": 0.07,
+            "phone": "er_E"
+          }
+        ],
+        "start": 1.81,
+        "startOffset": 27,
+        "word": "over"
+      },
+      {
+        "alignedWord": "the",
+        "case": "success",
+        "end": 2.13,
+        "endOffset": 35,
+        "phones": [
+          {
+            "duration": 0.04,
+            "phone": "dh_B"
+          },
+          {
+            "duration": 0.06,
+            "phone": "ah_E"
+          }
+        ],
+        "start": 2.03,
+        "startOffset": 32,
+        "word": "the"
+      },
+      {
+        "alignedWord": "lazy",
+        "case": "success",
+        "end": 2.4299999999999997,
+        "endOffset": 40,
+        "phones": [
+          {
+            "duration": 0.08,
+            "phone": "l_B"
+          },
+          {
+            "duration": 0.06,
+            "phone": "ey_I"
+          },
+          {
+            "duration": 0.09,
+            "phone": "z_I"
+          },
+          {
+            "duration": 0.07,
+            "phone": "iy_E"
+          }
+        ],
+        "start": 2.13,
+        "startOffset": 36,
+        "word": "lazy"
+      },
+      {
+        "alignedWord": "dog",
+        "case": "success",
+        "end": 2.74,
+        "endOffset": 44,
+        "phones": [
+          {
+            "duration": 0.07,
+            "phone": "d_B"
+          },
+          {
+            "duration": 0.14,
+            "phone": "ao_I"
+          },
+          {
+            "duration": 0.1,
+            "phone": "g_E"
+          }
+        ],
+        "start": 2.43,
+        "startOffset": 41,
+        "word": "dog"
+      }
+    ]
+}
