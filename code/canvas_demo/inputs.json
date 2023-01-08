@@ -4,5 +4,7 @@
 
     "input_transcript": "input_files/transcript.json",
     "input_audio": "input_files/audio.mp3",
-    "output_frame_rate": 27
+    "input_mouth_mappings": "input_files/mouth_mappings.json",
+    "input_mouth_mappings_textures": "input_files/mouths",
+    "output_frame_rate": 25
 }

@@ -5,12 +5,13 @@
     The parameters to configure the output are located in inputs.json
 */
 
-import { Canvas, CanvasRenderingContext2D, createCanvas } from "canvas"
+import { Canvas, CanvasRenderingContext2D, Image, createCanvas, loadImage } from "canvas"
 import fs from "fs"
 import { exit } from "process"
 import {getVideoDurationInSeconds} from "get-video-duration"
 import ffmpeg from "fluent-ffmpeg"
 import ffmpegStatic from "ffmpeg-static"
+import { readFileSync } from "fs"
 ffmpeg.setFfmpegPath(ffmpegStatic!)
 
 async function main() {
@@ -19,6 +20,8 @@ async function main() {
     let WIDTH: number
     let HEIGHT: number
     let TRANSCRIPT_PATH: string
+    let PHONEME_MAPPINGS_PATH: string
+    let MOUTH_TEXTURES_PATH: string
     let AUDIO_PATH: string
     let FRAME_RATE: number
 
@@ -27,16 +30,22 @@ async function main() {
     let num_frames: number
     let transcript: any
 
+    // hashmap with key = phoneme (string) and value = image
+    let mouths: Map<string, Image> = new Map()
+
+    // parsing of input values into program
     try{
         const parameters: any = JSON.parse(fs.readFileSync('./inputs.json').toString())
 
         WIDTH = parameters.width
         HEIGHT = parameters.height
-        TRANSCRIPT_PATH = parameters.input_transcript   
+        TRANSCRIPT_PATH = parameters.input_transcript
+        PHONEME_MAPPINGS_PATH = parameters.input_mouth_mappings
+        MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures
         AUDIO_PATH = parameters.input_audio
         FRAME_RATE = parameters.output_frame_rate
 
-        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && AUDIO_PATH && FRAME_RATE)) {
+        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE)) {
             throw new Error(`missing parameters in inputs.json?`)
         }
 
@@ -52,6 +61,22 @@ async function main() {
             throw new Error(`couldn't parse the transcript located at ${TRANSCRIPT_PATH}: ${(e as Error).message}`)
         }
 
+        try {
+
+            // loop over the pairs in this json file and store them in the mouths map
+            const mouth_mappings_file = JSON.parse(fs.readFileSync(PHONEME_MAPPINGS_PATH).toString())
+            for(let phoneme in mouth_mappings_file) {
+                mouths.set(phoneme, await loadImage(`${MOUTH_TEXTURES_PATH}/${mouth_mappings_file[phoneme]}`))
+            }
+
+            if(!mouths.get('idle')) {
+                throw new Error(`you are missing an "idle" entry in ${PHONEME_MAPPINGS_PATH} that represents the mouth's non-speaking texture`)
+            }
+
+        } catch(e) {
+            throw new Error(`couldn't parse the phoneme-to-mouth mappings located at ${PHONEME_MAPPINGS_PATH}: ${(e as Error).message}`)
+        }
+
         num_frames = FRAME_RATE * video_length
 
     } catch(e) {
@@ -62,10 +87,16 @@ async function main() {
     const canvas: Canvas = createCanvas(WIDTH, HEIGHT)
     const ctx: CanvasRenderingContext2D = canvas.getContext('2d')
 
-    if(!fs.existsSync('./out_frames/')) {
-        fs.mkdirSync('out_frames')
-    }
+    // delete the old frames (if they exist) from the last run of this program
+    fs.readdirSync('out_frames/').forEach(f => fs.rmSync(`out_frames/${f}`)); //node version 14 and above required for this line
 
+
+    /*
+        The following code does this for every frame:
+        determine what word in the transcript is currently being spoken at this frame if a word is being spoken
+        determine what phoneme is being pronounced in the current word at the current frame
+        embed this info into the frame as either just words or a talking avatar, depends on what's been implemented
+    */
     let current_word_idx: number = 0
     let current_phoneme_idx: number = 0
     let current_phoneme_offset: number = 0
@@ -101,6 +132,9 @@ async function main() {
 
             if(current_phoneme_idx < num_phonemes) {
                 active_phoneme = transcript.words[current_word_idx].phones[current_phoneme_idx].phone
+
+                // remove the unnecessary underscore and postfix at the end of the phoneme
+                active_phoneme = active_phoneme.split('_')[0]
             }
         }
 
@@ -114,6 +148,10 @@ async function main() {
 
         ctx.font = '15px Arial'
         ctx.fillText(`frame ${frame}/${num_frames} @ ${FRAME_RATE}fps`, 5, HEIGHT-15)
+
+        // if there's a phoneme, embed it into the image
+        const mouth: Image = active_phoneme != '' ? mouths.get(active_phoneme)! : mouths.get('idle')!
+        ctx.drawImage(mouth, WIDTH/2, HEIGHT/2)
 
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }

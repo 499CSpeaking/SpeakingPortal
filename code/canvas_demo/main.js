@@ -54,50 +54,84 @@ var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var WIDTH, HEIGHT, TRANSCRIPT_PATH, AUDIO_PATH, FRAME_RATE, video_length, num_frames, transcript, parameters, e_1, e_2, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, AUDIO_PATH, FRAME_RATE, video_length, num_frames, transcript, mouths, parameters, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, mouth;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
-                    _a.trys.push([0, 5, , 6]);
+                    mouths = new Map();
+                    _f.label = 1;
+                case 1:
+                    _f.trys.push([1, 13, , 14]);
                     parameters = JSON.parse(fs_1.default.readFileSync('./inputs.json').toString());
                     WIDTH = parameters.width;
                     HEIGHT = parameters.height;
                     TRANSCRIPT_PATH = parameters.input_transcript;
+                    PHONEME_MAPPINGS_PATH = parameters.input_mouth_mappings;
+                    MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures;
                     AUDIO_PATH = parameters.input_audio;
                     FRAME_RATE = parameters.output_frame_rate;
-                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && AUDIO_PATH && FRAME_RATE)) {
+                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE)) {
                         throw new Error("missing parameters in inputs.json?");
                     }
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, get_video_duration_1.getVideoDurationInSeconds(AUDIO_PATH)];
+                    _f.label = 2;
                 case 2:
-                    video_length = _a.sent();
-                    return [3 /*break*/, 4];
+                    _f.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, get_video_duration_1.getVideoDurationInSeconds(AUDIO_PATH)];
                 case 3:
-                    e_1 = _a.sent();
-                    throw new Error("couldn't extract video length from " + AUDIO_PATH + ": " + e_1.message);
+                    video_length = _f.sent();
+                    return [3 /*break*/, 5];
                 case 4:
+                    e_1 = _f.sent();
+                    throw new Error("couldn't extract video length from " + AUDIO_PATH + ": " + e_1.message);
+                case 5:
                     try {
                         transcript = JSON.parse(fs_1.default.readFileSync(TRANSCRIPT_PATH).toString());
                     }
                     catch (e) {
                         throw new Error("couldn't parse the transcript located at " + TRANSCRIPT_PATH + ": " + e.message);
                     }
-                    num_frames = FRAME_RATE * video_length;
-                    return [3 /*break*/, 6];
-                case 5:
-                    e_2 = _a.sent();
-                    console.error('error obtaining input parameters: ' + e_2.message);
-                    process_1.exit();
-                    return [3 /*break*/, 6];
+                    _f.label = 6;
                 case 6:
+                    _f.trys.push([6, 11, , 12]);
+                    mouth_mappings_file = JSON.parse(fs_1.default.readFileSync(PHONEME_MAPPINGS_PATH).toString());
+                    _a = [];
+                    for (_b in mouth_mappings_file)
+                        _a.push(_b);
+                    _i = 0;
+                    _f.label = 7;
+                case 7:
+                    if (!(_i < _a.length)) return [3 /*break*/, 10];
+                    phoneme = _a[_i];
+                    _d = (_c = mouths).set;
+                    _e = [phoneme];
+                    return [4 /*yield*/, canvas_1.loadImage(MOUTH_TEXTURES_PATH + "/" + mouth_mappings_file[phoneme])];
+                case 8:
+                    _d.apply(_c, _e.concat([_f.sent()]));
+                    _f.label = 9;
+                case 9:
+                    _i++;
+                    return [3 /*break*/, 7];
+                case 10:
+                    if (!mouths.get('idle')) {
+                        throw new Error("you are missing an \"idle\" entry in " + PHONEME_MAPPINGS_PATH + " that represents the mouth's non-speaking texture");
+                    }
+                    return [3 /*break*/, 12];
+                case 11:
+                    e_2 = _f.sent();
+                    throw new Error("couldn't parse the phoneme-to-mouth mappings located at " + PHONEME_MAPPINGS_PATH + ": " + e_2.message);
+                case 12:
+                    num_frames = FRAME_RATE * video_length;
+                    return [3 /*break*/, 14];
+                case 13:
+                    e_3 = _f.sent();
+                    console.error('error obtaining input parameters: ' + e_3.message);
+                    process_1.exit();
+                    return [3 /*break*/, 14];
+                case 14:
                     canvas = canvas_1.createCanvas(WIDTH, HEIGHT);
                     ctx = canvas.getContext('2d');
-                    if (!fs_1.default.existsSync('./out_frames/')) {
-                        fs_1.default.mkdirSync('out_frames');
-                    }
+                    // delete the old frames (if they exist) from the last run of this program
+                    fs_1.default.readdirSync('out_frames/').forEach(function (f) { return fs_1.default.rmSync("out_frames/" + f); }); //node version 14 and above required for this line
                     current_word_idx = 0;
                     current_phoneme_idx = 0;
                     current_phoneme_offset = 0;
@@ -125,6 +159,8 @@ function main() {
                             }
                             if (current_phoneme_idx < num_phonemes) {
                                 active_phoneme = transcript.words[current_word_idx].phones[current_phoneme_idx].phone;
+                                // remove the unnecessary underscore and postfix at the end of the phoneme
+                                active_phoneme = active_phoneme.split('_')[0];
                             }
                         }
                         ctx.font = '40px Arial';
@@ -135,6 +171,8 @@ function main() {
                         ctx.fillText(active_phoneme, 5, 70);
                         ctx.font = '15px Arial';
                         ctx.fillText("frame " + frame + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
+                        mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
+                        ctx.drawImage(mouth, WIDTH / 2, HEIGHT / 2);
                         fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
                     }
                     fluent_ffmpeg_1.default()

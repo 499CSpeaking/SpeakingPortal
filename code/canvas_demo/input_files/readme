@@ -1,0 +1,10 @@
+mouths: folder to contain all the lip textures
+audio.mp3: audio to speak out
+transcript.json: speech-to-text mapping recieved from Gentle
+mouth_mappings.json: relates each phoneme spoken in the words in transcript.json to an image file in mouths/ folder
+
+note about mouth_mappings.json: the program ignores the underscore and postfix of each phoneme produced by gentle
+
+another note about mouth_mappings.json: I added the bare necessary amount of phoneme-mouth pairs to it to get the "the quick brown fox jumps over the lazy dog" to work. If you use a different transcript, you may have to add more phoneme-mouth pairs for phonemes that are in your transcript but weren't in the original transcript.
+
+another another note aboue mouth_mappings.json: gentle produces a LOT of phonemes so we will probably need functionality to map the set of gentle phonemes to a smaller, more generic set of phonemes. It's a pain to map each specific gentle phoneme to a mouth texture.
