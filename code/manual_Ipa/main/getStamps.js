@@ -13,6 +13,71 @@ function wordEnd(freqs, j) {
     }
     return true;
 }
+// Max Filter
+function maxFilter(freqs, filterFreqs, sz) {
+    var neighSz = 5;
+    var neighVals = new Uint8Array(neighSz);
+    for (var i = 0; i < sz; i++) {
+        var pivot = freqs[i];
+        neighVals[2] = pivot;
+        var iL2 = i - 2 < sz, iL1 = i - 1 < sz, iR1 = i + 1 > sz, iR2 = i + 2 > sz;
+        neighVals[0] = freqs[i - 2];
+        neighVals[1] = freqs[i - 1];
+        neighVals[3] = freqs[i + 1];
+        neighVals[4] = freqs[i + 2];
+        // handle out of bounds values
+        if (iL2) {
+            neighVals[0] = 0;
+        }
+        if (iL1) {
+            neighVals[1] = 0;
+        }
+        if (iR1) {
+            neighVals[3] = 0;
+        }
+        if (iR2) {
+            neighVals[4] = 0;
+        }
+        // filter out pepper noise (extra low values)
+        filterFreqs[i] = Math.max(neighVals[0], neighVals[1], neighVals[2], neighVals[3], neighVals[4]);
+    }
+    return filterFreqs;
+}
+// Mean Filter
+function meanFilter(freqs, filterFreqs, sz) {
+    var neighSz = 5;
+    var neighVals = new Uint8Array(neighSz);
+    for (var i = 0; i < sz; i++) {
+        var pivot = freqs[i];
+        neighVals[2] = pivot;
+        var iL2 = i - 2 < sz, iL1 = i - 1 < sz, iR1 = i + 1 > sz, iR2 = i + 2 > sz;
+        neighVals[0] = freqs[i - 2];
+        neighVals[1] = freqs[i - 1];
+        neighVals[3] = freqs[i + 1];
+        neighVals[4] = freqs[i + 2];
+        // handle out of bounds values
+        if (iL2) {
+            neighVals[0] = 0;
+        }
+        if (iL1) {
+            neighVals[1] = 0;
+        }
+        if (iR1) {
+            neighVals[3] = 0;
+        }
+        if (iR2) {
+            neighVals[4] = 0;
+        }
+        // filter out general noise
+        filterFreqs[i] =
+            (neighVals[0] / 5) * neighVals[2] +
+                (neighVals[1] / 5) * neighVals[2] +
+                (neighVals[3] / 5) * neighVals[2] +
+                (neighVals[4] / 5) * neighVals[2] +
+                neighVals[2] / 5;
+    }
+    return filterFreqs;
+}
 // TODO
 // Audio Processing and Timestamping
 // src is the path to the audio file
@@ -44,39 +109,51 @@ function getStamps(src) {
     // noise filtering
     var filterFreqs = new Uint8Array(sz);
     // 2 values either side of pivot
-    var neighSz = 5;
-    var neighVals = new Uint8Array(neighSz);
-    for (var i_1 = 0; i_1 < sz; i_1++) {
-        var pivot = freqs[i_1];
-        neighVals[2] = pivot;
-        var iL2 = i_1 - 2 < sz, iL1 = i_1 - 1 < sz, iR1 = i_1 + 1 > sz, iR2 = i_1 + 2 > sz;
-        neighVals[0] = freqs[i_1 - 2];
-        neighVals[1] = freqs[i_1 - 1];
-        neighVals[3] = freqs[i_1 + 1];
-        neighVals[4] = freqs[i_1 + 2];
-        // handle out of bounds values
-        if (iL2) {
-            neighVals[0] = 0;
-        }
-        if (iL1) {
-            neighVals[1] = 0;
-        }
-        if (iR1) {
-            neighVals[3] = 0;
-        }
-        if (iR2) {
-            neighVals[4] = 0;
-        }
-        // filter out pepper noise (extra low values)
-        filterFreqs[i_1] = Math.max(neighVals[0], neighVals[1], neighVals[2], neighVals[3], neighVals[4]);
-        // filter out general noise
-        filterFreqs[i_1] =
-            (neighVals[0] / 5) * neighVals[2] +
-                (neighVals[1] / 5) * neighVals[2] +
-                (neighVals[3] / 5) * neighVals[2] +
-                (neighVals[4] / 5) * neighVals[2] +
-                neighVals[2] / 5;
-    }
+    // let neighSz = 5;
+    // let neighVals = new Uint8Array(neighSz);
+    // for (let i = 0; i < sz; i++) {
+    //   let pivot = freqs[i];
+    //   neighVals[2] = pivot;
+    //   let iL2 = i - 2 < sz,
+    //     iL1 = i - 1 < sz,
+    //     iR1 = i + 1 > sz,
+    //     iR2 = i + 2 > sz;
+    //   neighVals[0] = freqs[i - 2];
+    //   neighVals[1] = freqs[i - 1];
+    //   neighVals[3] = freqs[i + 1];
+    //   neighVals[4] = freqs[i + 2];
+    //   // handle out of bounds values
+    //   if (iL2) {
+    //     neighVals[0] = 0;
+    //   }
+    //   if (iL1) {
+    //     neighVals[1] = 0;
+    //   }
+    //   if (iR1) {
+    //     neighVals[3] = 0;
+    //   }
+    //   if (iR2) {
+    //     neighVals[4] = 0;
+    //   }
+    //   // filter out pepper noise (extra low values)
+    //   filterFreqs[i] = Math.max(
+    //     neighVals[0],
+    //     neighVals[1],
+    //     neighVals[2],
+    //     neighVals[3],
+    //     neighVals[4]
+    //   );
+    //   // filter out general noise
+    //   filterFreqs[i] =
+    //     (neighVals[0] / 5) * neighVals[2] +
+    //     (neighVals[1] / 5) * neighVals[2] +
+    //     (neighVals[3] / 5) * neighVals[2] +
+    //     (neighVals[4] / 5) * neighVals[2] +
+    //     neighVals[2] / 5;
+    // }
+    // apply filters
+    filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
     // timestamp generation algo
     while (i < filterFreqs.length) {
         try {
