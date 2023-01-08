@@ -24,6 +24,7 @@ async function main() {
     let MOUTH_TEXTURES_PATH: string
     let AUDIO_PATH: string
     let FRAME_RATE: number
+    let PHONEME_OCCURRENCE_CONVOLUTION: number[]
 
     // variables parsed from input transcript
     let video_length: number // in seconds
@@ -32,6 +33,10 @@ async function main() {
 
     // hashmap with key = phoneme (string) and value = image
     let mouths: Map<string, Image> = new Map()
+
+    // same as mouths variable except value is an array of num_frames length, consisting of 1 or 0 
+    // 1 means the phoneme is being spoken during this frame and 0 means otherwise
+    let phoneme_occurrences: Map<string, Array<number>> = new Map()
 
     // parsing of input values into program
     try{
@@ -44,9 +49,23 @@ async function main() {
         MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures
         AUDIO_PATH = parameters.input_audio
         FRAME_RATE = parameters.output_frame_rate
+        PHONEME_OCCURRENCE_CONVOLUTION = parameters.phoneme_occurrence_convolution_filter
 
-        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE)) {
+        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
             throw new Error(`missing parameters in inputs.json?`)
+        }
+
+        // verifying this filter is correct
+        try {
+            if(PHONEME_OCCURRENCE_CONVOLUTION.length % 2 == 0) {
+                throw new Error(`phoneme_occurrence_convolution_filter length of ${PHONEME_OCCURRENCE_CONVOLUTION.length} must be an odd number`)
+            }
+            const filterSum: number = PHONEME_OCCURRENCE_CONVOLUTION.reduce((a, b) => a + b, 0)
+            if(Math.abs(filterSum - 1) > 0.1) {
+                throw new Error(`phoneme_occurrence_convolution_filter must sum to 1, not ${filterSum}`)
+            }   
+        } catch(e) {
+            throw new Error(`invalid phoneme_occurrence_convolution_filter: ${(e as Error).message}`)
         }
 
         try {
@@ -54,6 +73,8 @@ async function main() {
         } catch(e) {
             throw new Error(`couldn't extract video length from ${AUDIO_PATH}: ${(e as Error).message}`)
         }
+
+        num_frames = FRAME_RATE * video_length
 
         try {
             transcript = JSON.parse(fs.readFileSync(TRANSCRIPT_PATH).toString())
@@ -67,6 +88,8 @@ async function main() {
             const mouth_mappings_file = JSON.parse(fs.readFileSync(PHONEME_MAPPINGS_PATH).toString())
             for(let phoneme in mouth_mappings_file) {
                 mouths.set(phoneme, await loadImage(`${MOUTH_TEXTURES_PATH}/${mouth_mappings_file[phoneme]}`))
+
+                phoneme_occurrences.set(phoneme, new Array<number>(Math.floor(num_frames)).fill(0))
             }
 
             if(!mouths.get('idle')) {
@@ -76,8 +99,6 @@ async function main() {
         } catch(e) {
             throw new Error(`couldn't parse the phoneme-to-mouth mappings located at ${PHONEME_MAPPINGS_PATH}: ${(e as Error).message}`)
         }
-
-        num_frames = FRAME_RATE * video_length
 
     } catch(e) {
         console.error('error obtaining input parameters: ' + (e as Error).message)
@@ -95,7 +116,6 @@ async function main() {
         The following code does this for every frame:
         determine what word in the transcript is currently being spoken at this frame if a word is being spoken
         determine what phoneme is being pronounced in the current word at the current frame
-        embed this info into the frame as either just words or a talking avatar, depends on what's been implemented
     */
     let current_word_idx: number = 0
     let current_phoneme_idx: number = 0
@@ -104,11 +124,7 @@ async function main() {
 
     for(let frame: number = 0; frame < num_frames; frame += 1) {
         let active_word: string = ''
-        let active_phoneme: string = ''
-
-        // fill background
-        ctx.fillStyle = '#FFFFFF'
-        ctx.fillRect(0, 0, WIDTH, HEIGHT)
+        let active_phoneme: string = 'idle'
 
         const current_time = frame / FRAME_RATE
         if(current_word_idx < num_words && current_time > transcript.words[current_word_idx].end) {
@@ -138,15 +154,75 @@ async function main() {
             }
         }
 
-        ctx.font = '40px Arial'
-        ctx.fillStyle = '#000000'
-        ctx.fillText(active_word, 5, 30)
+        (phoneme_occurrences.get(active_phoneme)!)[frame] = 1;
+    }
+
+    // perform a low-pass filter operation on each occurrence array to smooth it out
+    phoneme_occurrences.forEach((arr, phoneme, _) => {
+        const filterLen = PHONEME_OCCURRENCE_CONVOLUTION.length
+        const copyArr: number[] = new Array<number>(arr.length)
+
+        for(let i: number = 0; i < arr.length; i += 1) {
+            let localSum: number = 0
+            for(let j: number = -(filterLen - 1)/2; j < filterLen/2; j += 1) {
+                const di: number = i + j
+                localSum += di < 0 || di >= arr.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen/2)] * arr[di]
+            }
+            copyArr[i] = localSum
+        }
+
+        for(let i: number = 0; i < arr.length; i += 1) {
+            arr[i] = copyArr[i]
+        }
+    })
+
+    // draw the frames
+    for(let frame: number = 0; frame < num_frames; frame += 1) {
+        // get the current phoneme (the one with the maximum value in it's occurrence array at index frame)
+        let active_phoneme: string = ''
+        let globalMax: number = -1e10
+        phoneme_occurrences.forEach((arr, phoneme, _) => {
+            if(phoneme == 'idle') {
+                return
+            }
+
+            if(arr[frame] > globalMax) {
+                active_phoneme = phoneme
+                globalMax = arr[frame]
+            }
+        })
+
+        if(globalMax < 0.1) {
+            active_phoneme = 'idle'
+        }
+
+        // fill background
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(0, 0, WIDTH, HEIGHT)
+
+        // ctx.font = '40px Arial'
+        // ctx.fillStyle = '#000000'
+        // ctx.fillText(active_word, 5, 30)
 
         ctx.font = '30px Arial'
         ctx.fillStyle = '#555555'
-        ctx.fillText(active_phoneme, 5, 70)
+        ctx.fillText(active_phoneme, 20, 40)
+
+        // display phoneme occurrence levels
+        let count: number = 0;
+        phoneme_occurrences.forEach((arr, phoneme) => {
+            if(count > 30) {
+                return
+            }
+            ctx.font = '12px Arial'
+            ctx.fillStyle = '#555555'
+            ctx.fillText(phoneme, 10, 90 + count*13)
+            ctx.fillRect(40, 94 + (count - 1)*13, arr[frame]*30, 8)
+            count += 1
+        })
 
         ctx.font = '15px Arial'
+        ctx.fillStyle = '#555555'
         ctx.fillText(`frame ${frame}/${num_frames} @ ${FRAME_RATE}fps`, 5, HEIGHT-15)
 
         // if there's a phoneme, embed it into the image

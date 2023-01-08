@@ -1,3 +1,5 @@
+// small script to figure out which phonemes need to be defined in mouth_mappings.json for the given transcript to work
+
 const fs = require('fs')
 
 const mappings = new Set()

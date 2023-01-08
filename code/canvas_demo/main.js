@@ -54,11 +54,12 @@ var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, AUDIO_PATH, FRAME_RATE, video_length, num_frames, transcript, mouths, parameters, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, mouth;
+        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, video_length, num_frames, transcript, mouths, phoneme_occurrences, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
                     mouths = new Map();
+                    phoneme_occurrences = new Map();
                     _f.label = 1;
                 case 1:
                     _f.trys.push([1, 13, , 14]);
@@ -70,8 +71,22 @@ function main() {
                     MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures;
                     AUDIO_PATH = parameters.input_audio;
                     FRAME_RATE = parameters.output_frame_rate;
-                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE)) {
+                    PHONEME_OCCURRENCE_CONVOLUTION = parameters.phoneme_occurrence_convolution_filter;
+                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
                         throw new Error("missing parameters in inputs.json?");
+                    }
+                    // verifying this filter is correct
+                    try {
+                        if (PHONEME_OCCURRENCE_CONVOLUTION.length % 2 == 0) {
+                            throw new Error("phoneme_occurrence_convolution_filter length of " + PHONEME_OCCURRENCE_CONVOLUTION.length + " must be an odd number");
+                        }
+                        filterSum = PHONEME_OCCURRENCE_CONVOLUTION.reduce(function (a, b) { return a + b; }, 0);
+                        if (Math.abs(filterSum - 1) > 0.1) {
+                            throw new Error("phoneme_occurrence_convolution_filter must sum to 1, not " + filterSum);
+                        }
+                    }
+                    catch (e) {
+                        throw new Error("invalid phoneme_occurrence_convolution_filter: " + e.message);
                     }
                     _f.label = 2;
                 case 2:
@@ -84,6 +99,7 @@ function main() {
                     e_1 = _f.sent();
                     throw new Error("couldn't extract video length from " + AUDIO_PATH + ": " + e_1.message);
                 case 5:
+                    num_frames = FRAME_RATE * video_length;
                     try {
                         transcript = JSON.parse(fs_1.default.readFileSync(TRANSCRIPT_PATH).toString());
                     }
@@ -107,6 +123,7 @@ function main() {
                     return [4 /*yield*/, canvas_1.loadImage(MOUTH_TEXTURES_PATH + "/" + mouth_mappings_file[phoneme])];
                 case 8:
                     _d.apply(_c, _e.concat([_f.sent()]));
+                    phoneme_occurrences.set(phoneme, new Array(Math.floor(num_frames)).fill(0));
                     _f.label = 9;
                 case 9:
                     _i++;
@@ -119,9 +136,7 @@ function main() {
                 case 11:
                     e_2 = _f.sent();
                     throw new Error("couldn't parse the phoneme-to-mouth mappings located at " + PHONEME_MAPPINGS_PATH + ": " + e_2.message);
-                case 12:
-                    num_frames = FRAME_RATE * video_length;
-                    return [3 /*break*/, 14];
+                case 12: return [3 /*break*/, 14];
                 case 13:
                     e_3 = _f.sent();
                     console.error('error obtaining input parameters: ' + e_3.message);
@@ -138,10 +153,7 @@ function main() {
                     num_words = transcript.words.length;
                     for (frame = 0; frame < num_frames; frame += 1) {
                         active_word = '';
-                        active_phoneme = '';
-                        // fill background
-                        ctx.fillStyle = '#FFFFFF';
-                        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+                        active_phoneme = 'idle';
                         current_time = frame / FRAME_RATE;
                         if (current_word_idx < num_words && current_time > transcript.words[current_word_idx].end) {
                             current_word_idx += 1;
@@ -163,17 +175,72 @@ function main() {
                                 active_phoneme = active_phoneme.split('_')[0];
                             }
                         }
-                        ctx.font = '40px Arial';
-                        ctx.fillStyle = '#000000';
-                        ctx.fillText(active_word, 5, 30);
+                        (phoneme_occurrences.get(active_phoneme))[frame] = 1;
+                    }
+                    // perform a low-pass filter operation on each occurrence array to smooth it out
+                    phoneme_occurrences.forEach(function (arr, phoneme, _) {
+                        var filterLen = PHONEME_OCCURRENCE_CONVOLUTION.length;
+                        var copyArr = new Array(arr.length);
+                        for (var i = 0; i < arr.length; i += 1) {
+                            var localSum = 0;
+                            for (var j = -(filterLen - 1) / 2; j < filterLen / 2; j += 1) {
+                                var di = i + j;
+                                localSum += di < 0 || di >= arr.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen / 2)] * arr[di];
+                            }
+                            copyArr[i] = localSum;
+                        }
+                        for (var i = 0; i < arr.length; i += 1) {
+                            arr[i] = copyArr[i];
+                        }
+                    });
+                    _loop_1 = function (frame) {
+                        // get the current phoneme (the one with the maximum value in it's occurrence array at index frame)
+                        var active_phoneme = '';
+                        var globalMax = -1e10;
+                        phoneme_occurrences.forEach(function (arr, phoneme, _) {
+                            if (phoneme == 'idle') {
+                                return;
+                            }
+                            if (arr[frame] > globalMax) {
+                                active_phoneme = phoneme;
+                                globalMax = arr[frame];
+                            }
+                        });
+                        if (globalMax < 0.1) {
+                            active_phoneme = 'idle';
+                        }
+                        // fill background
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+                        // ctx.font = '40px Arial'
+                        // ctx.fillStyle = '#000000'
+                        // ctx.fillText(active_word, 5, 30)
                         ctx.font = '30px Arial';
                         ctx.fillStyle = '#555555';
-                        ctx.fillText(active_phoneme, 5, 70);
+                        ctx.fillText(active_phoneme, 20, 40);
+                        // display phoneme occurrence levels
+                        var count = 0;
+                        phoneme_occurrences.forEach(function (arr, phoneme) {
+                            if (count > 30) {
+                                return;
+                            }
+                            ctx.font = '12px Arial';
+                            ctx.fillStyle = '#555555';
+                            ctx.fillText(phoneme, 10, 90 + count * 13);
+                            ctx.fillRect(40, 94 + (count - 1) * 13, arr[frame] * 30, 8);
+                            count += 1;
+                        });
                         ctx.font = '15px Arial';
+                        ctx.fillStyle = '#555555';
                         ctx.fillText("frame " + frame + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
-                        mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
+                        // if there's a phoneme, embed it into the image
+                        var mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
                         ctx.drawImage(mouth, WIDTH / 2, HEIGHT / 2);
                         fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
+                    };
+                    // draw the frames
+                    for (frame = 0; frame < num_frames; frame += 1) {
+                        _loop_1(frame);
                     }
                     fluent_ffmpeg_1.default()
                         .input('./out_frames/frame_%9d.png')
