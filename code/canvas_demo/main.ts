@@ -227,7 +227,11 @@ async function main() {
 
         // if there's a phoneme, embed it into the image
         const mouth: Image = active_phoneme != '' ? mouths.get(active_phoneme)! : mouths.get('idle')!
-        ctx.drawImage(mouth, WIDTH/2, HEIGHT/2)
+        const mouthOpenAmount: number = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)![frame] : 1
+
+        const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
+        const stretchAmount: number = lerp(0.7, 1.2, mouthOpenAmount)
+        ctx.drawImage(mouth, WIDTH/2, HEIGHT/2, mouth.width, mouth.height * lerp(0.5, 1, mouthOpenAmount))
 
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }

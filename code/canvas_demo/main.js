@@ -235,7 +235,10 @@ function main() {
                         ctx.fillText("frame " + frame + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
                         // if there's a phoneme, embed it into the image
                         var mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
-                        ctx.drawImage(mouth, WIDTH / 2, HEIGHT / 2);
+                        var mouthOpenAmount = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)[frame] : 1;
+                        var lerp = function (x, y, a) { return x * (1 - a) + y * a; };
+                        var stretchAmount = lerp(0.7, 1.2, mouthOpenAmount);
+                        ctx.drawImage(mouth, WIDTH / 2, HEIGHT / 2, mouth.width, mouth.height * lerp(0.5, 1, mouthOpenAmount));
                         fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
                     };
                     // draw the frames
