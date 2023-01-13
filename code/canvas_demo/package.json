@@ -1,0 +1,19 @@
+{
+  "name": "canvas_demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
+    "@types/node": "^18.11.18",
+    "canvas": "^2.11.0",
+    "ffmpeg-static": "^5.1.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "get-video-duration": "^4.1.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "width": 500,
+    "height": 500,
+
+    "input_transcript": "input_files/transcript.json",
+    "input_audio": "input_files/audio.mp3",
+    "input_mouth_mappings": "input_files/mouth_mappings.json",
+    "input_mouth_mappings_textures": "input_files/mouths",
+    "output_frame_rate": 25,
+
+    "phoneme_occurrence_convolution_filter": [0.028, 0.066, 0.124, 0.180, 0.204, 0.180, 0.124, 0.066, 0.028]
+}
