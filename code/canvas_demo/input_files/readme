@@ -8,3 +8,5 @@ note about mouth_mappings.json: the program ignores the underscore and postfix o
 another note about mouth_mappings.json: I added the bare necessary amount of phoneme-mouth pairs to it to get the "the quick brown fox jumps over the lazy dog" to work. If you use a different transcript, you may have to add more phoneme-mouth pairs for phonemes that are in your transcript but weren't in the original transcript.
 
 another another note aboue mouth_mappings.json: gentle produces a LOT of phonemes so we will probably need functionality to map the set of gentle phonemes to a smaller, more generic set of phonemes. It's a pain to map each specific gentle phoneme to a mouth texture.
+
+(added this part for gitstats) WUBBA WUBBA DUBBA DUB MORTY I TURNED MYSELF INTO A PICKER IM PICKLE RICK
