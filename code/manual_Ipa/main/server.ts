@@ -1,3 +1,4 @@
+// library requirements
 const express = require("express");
 const getPhoneme = require("./getPhoneme");
 const getStamps = require("./getStamps");
@@ -14,11 +15,14 @@ server.use(
   })
 );
 
+// configure and start express
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
+// default site url
 server.use("/", express.static("site"));
 
+// main phoneme and audio file generation system
 server.post("/api/", (req, res) => {
   const input = req.body.input;
   console.log("input: ", input);
@@ -32,6 +36,7 @@ server.post("/api/", (req, res) => {
   });
 });
 
+// audio analysis system
 server.post("/api/time", upload.single("file"), (req, res) => {
   let audio_filename = req.file.filename;
   const start = performance.now();
@@ -43,6 +48,7 @@ server.post("/api/time", upload.single("file"), (req, res) => {
   console.log("success");
 });
 
+// post server start
 server.listen(4000, () => {
   console.log("server running...");
 });

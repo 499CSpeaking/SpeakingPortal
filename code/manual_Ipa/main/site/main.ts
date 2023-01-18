@@ -1,14 +1,18 @@
+// max character limit checking
 const char_lim = 300;
 let button = document.getElementById("send");
 
+// print messages to user on the web
 function log_status(message) {
   document.getElementById("out").innerHTML += `${message}<br>`;
 }
 
+// clear the message board
 function clear_output() {
   document.getElementById("out").innerHTML = "";
 }
 
+// main function to get final output to user
 button.onclick = async function getOut() {
   clear_output();
   // input error checking
@@ -18,18 +22,20 @@ button.onclick = async function getOut() {
     log_status("text input cannot be empty!");
     return;
   }
-
   if (input.length > char_lim) {
     log_status("text input exceeds the character limit!");
     return;
   }
+
   // generate phonemes
   log_status("Starting...");
   log_status("Getting Phonemes...");
   let phonemes = new Map();
   phonemes = getPhones(input);
   log_status("Phoneme Detection Complete!");
+
   // get audio from kukarella
+  log_status("Getting Audio from Kukarella...");
   let file;
   try {
     file = await get_kuk_aud(input);
@@ -56,7 +62,7 @@ button.onclick = async function getOut() {
 // function to send user input to the server for phoneme generation, and to retrieve the phoneme data
 function getPhones(input): any {
   let userInput = input.toLowerCase();
-  // send string to server and get response
+  // send input to server and get response
   fetch("http://localhost:4000/api", {
     method: "POST",
     body: JSON.stringify({ input: userInput }),
@@ -91,7 +97,6 @@ async function get_kuk_aud(text) {
     },
   });
 
-  log_status("Getting Audio from Kukarella...");
   const audio_url = (await api_respo.json()).data.url;
   let url_message =
     "Audio has been retrieved. You can download it <a href=" +
