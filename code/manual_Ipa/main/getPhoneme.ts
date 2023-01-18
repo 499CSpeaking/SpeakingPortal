@@ -1,12 +1,11 @@
+// library requirements
 import * as fs from 'fs';
-import * as path from 'path';
-import fetch from "node-fetch";
 import * as readline from 'readline';
 
 let workingDict = new Map();
 
 // reads files line by line and returns an array of lines
-async function readByLine(path){
+async function readByLine(path) {
     let out = ['empty'];
     let i = 0;
     let fin = readline.createInterface({
@@ -28,11 +27,11 @@ async function readByLine(path){
 async function getDict() {
     let dict = await readByLine('./dict2.txt');
     let dictF = new Map();
-    for (let i = 0; i < dict.length; i++){
+    for (let i = 0; i < dict.length; i++) {
         let line = dict[i].split("\t");
         let key = line[0].toLowerCase();
         let values = line[1].split(" ");
-        dictF.set(key,values);
+        dictF.set(key, values);
     }
     console.log('success');
     return dictF;
@@ -44,10 +43,10 @@ function getIpa(word) {
 }
 
 async function getPhoneme(input) {
-    // read script and dictionary and audio path{temp}
-    let script = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g,"").split(" ");
+    // read script and dictionary
+    let script = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g, "").split(" ");
     workingDict = await getDict();
-    
+
     // make key=>value map 
     let phoScript = new Map();
 

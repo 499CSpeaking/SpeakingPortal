@@ -43,6 +43,7 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// library requirements
 var fs = require("fs");
 var readline = require("readline");
 var workingDict = new Map();

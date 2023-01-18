@@ -34,14 +34,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+// max character limit checking
 var char_lim = 300;
 var button = document.getElementById("send");
+// print messages to user on the web
 function log_status(message) {
     document.getElementById("out").innerHTML += "".concat(message, "<br>");
 }
+// clear the message board
 function clear_output() {
     document.getElementById("out").innerHTML = "";
 }
+// main function to get final output to user
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
@@ -65,6 +69,8 @@ button.onclick = function getOut() {
                     phonemes = new Map();
                     phonemes = getPhones(input);
                     log_status("Phoneme Detection Complete!");
+                    // get audio from kukarella
+                    log_status("Getting Audio from Kukarella...");
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 4]);
@@ -95,7 +101,7 @@ button.onclick = function getOut() {
 // function to send user input to the server for phoneme generation, and to retrieve the phoneme data
 function getPhones(input) {
     var userInput = input.toLowerCase();
-    // send string to server and get response
+    // send input to server and get response
     fetch("http://localhost:4000/api", {
         method: "POST",
         body: JSON.stringify({ input: userInput }),
@@ -133,7 +139,6 @@ function get_kuk_aud(text) {
                         })];
                 case 1:
                     api_respo = _a.sent();
-                    log_status("Getting Audio from Kukarella...");
                     return [4 /*yield*/, api_respo.json()];
                 case 2:
                     audio_url = (_a.sent()).data.url;
