@@ -54,7 +54,7 @@ var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, video_length, num_frames, transcript, mouths, phoneme_occurrences, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
+        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, MOUTH_ON_BODY_OFFSET, BODY_TEXTURE_PATH, BODY_SCALE, MOUTH_SCALE, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, video_length, num_frames, transcript, mouths, body, phoneme_occurrences, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, e_4, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
         return __generator(this, function (_f) {
             switch (_f.label) {
                 case 0:
@@ -62,17 +62,21 @@ function main() {
                     phoneme_occurrences = new Map();
                     _f.label = 1;
                 case 1:
-                    _f.trys.push([1, 13, , 14]);
+                    _f.trys.push([1, 17, , 18]);
                     parameters = JSON.parse(fs_1.default.readFileSync('./inputs.json').toString());
                     WIDTH = parameters.width;
                     HEIGHT = parameters.height;
                     TRANSCRIPT_PATH = parameters.input_transcript;
                     PHONEME_MAPPINGS_PATH = parameters.input_mouth_mappings;
                     MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures;
+                    MOUTH_ON_BODY_OFFSET = parameters.input_mouth_on_body_offset_from_center;
+                    BODY_TEXTURE_PATH = parameters.input_body_texture;
+                    BODY_SCALE = parameters.input_body_scale;
+                    MOUTH_SCALE = parameters.input_mouth_scale;
                     AUDIO_PATH = parameters.input_audio;
                     FRAME_RATE = parameters.output_frame_rate;
                     PHONEME_OCCURRENCE_CONVOLUTION = parameters.phoneme_occurrence_convolution_filter;
-                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
+                    if (!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && MOUTH_ON_BODY_OFFSET && BODY_TEXTURE_PATH && BODY_SCALE && MOUTH_SCALE && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
                         throw new Error("missing parameters in inputs.json?");
                     }
                     // verifying this filter is correct
@@ -136,13 +140,38 @@ function main() {
                 case 11:
                     e_2 = _f.sent();
                     throw new Error("couldn't parse the phoneme-to-mouth mappings located at " + PHONEME_MAPPINGS_PATH + ": " + e_2.message);
-                case 12: return [3 /*break*/, 14];
+                case 12:
+                    // mouth on body position
+                    if (MOUTH_ON_BODY_OFFSET.length != 2 || typeof MOUTH_ON_BODY_OFFSET[0] != "number") {
+                        throw new Error("input_mouth_on_pody_position \"" + MOUTH_ON_BODY_OFFSET + "\" must be an array of number of length 2");
+                    }
+                    _f.label = 13;
                 case 13:
-                    e_3 = _f.sent();
-                    console.error('error obtaining input parameters: ' + e_3.message);
-                    process_1.exit();
-                    return [3 /*break*/, 14];
+                    _f.trys.push([13, 15, , 16]);
+                    return [4 /*yield*/, canvas_1.loadImage(BODY_TEXTURE_PATH)];
                 case 14:
+                    //body texture
+                    body = _f.sent();
+                    return [3 /*break*/, 16];
+                case 15:
+                    e_3 = _f.sent();
+                    throw new Error("couldn't load the body texture located at " + BODY_TEXTURE_PATH + ": " + e_3.message);
+                case 16:
+                    // body scale
+                    if (BODY_SCALE <= 0) {
+                        throw new Error("invalid body scale " + BODY_SCALE);
+                    }
+                    // mouth scale
+                    if (MOUTH_SCALE <= 0) {
+                        throw new Error("invalid mouth scale " + MOUTH_SCALE);
+                    }
+                    return [3 /*break*/, 18];
+                case 17:
+                    e_4 = _f.sent();
+                    console.error('error obtaining input parameters: ' + e_4.message);
+                    process_1.exit();
+                    return [3 /*break*/, 18];
+                case 18:
                     canvas = canvas_1.createCanvas(WIDTH, HEIGHT);
                     ctx = canvas.getContext('2d');
                     // delete the old frames (if they exist) from the last run of this program
@@ -236,9 +265,18 @@ function main() {
                         // if there's a phoneme, embed it into the image
                         var mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
                         var mouthOpenAmount = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)[frame] : 1;
+                        // draw the body
+                        /*
+                            TODO: this drawImage call is incredibly unoptimized as the body image is always drawn at max
+                            resolution no matter how shrunken the image is. I can fix this by bitmapping the body texture
+                            later
+                        */
+                        ctx.drawImage(body, WIDTH / 2 - body.width * BODY_SCALE / 2, HEIGHT / 2 - body.height * BODY_SCALE / 2, body.width * BODY_SCALE, body.height * BODY_SCALE);
+                        // draw the mouth
                         var lerp = function (x, y, a) { return x * (1 - a) + y * a; };
                         var stretchAmount = lerp(0.7, 1.2, mouthOpenAmount);
-                        ctx.drawImage(mouth, WIDTH / 2, HEIGHT / 2, mouth.width, mouth.height * lerp(0.5, 1, mouthOpenAmount));
+                        //ctx.drawImage(mouth, WIDTH/2 - body.width*BODY_SCALE/2 - mouth.width/2 + MOUTH_ON_BODY_POSITION[0]*BODY_SCALE, HEIGHT/2 - body.height*BODY_SCALE/2 - 0 + MOUTH_ON_BODY_POSITION[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
+                        ctx.drawImage(mouth, WIDTH / 2 - mouth.width * MOUTH_SCALE / 2 + MOUTH_ON_BODY_OFFSET[0] * BODY_SCALE, HEIGHT / 2 + MOUTH_ON_BODY_OFFSET[1] * BODY_SCALE, mouth.width * MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE);
                         fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
                     };
                     // draw the frames

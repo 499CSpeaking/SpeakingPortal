@@ -22,6 +22,10 @@ async function main() {
     let TRANSCRIPT_PATH: string
     let PHONEME_MAPPINGS_PATH: string
     let MOUTH_TEXTURES_PATH: string
+    let MOUTH_ON_BODY_OFFSET: number[]
+    let BODY_TEXTURE_PATH: string
+    let BODY_SCALE:number
+    let MOUTH_SCALE: number
     let AUDIO_PATH: string
     let FRAME_RATE: number
     let PHONEME_OCCURRENCE_CONVOLUTION: number[]
@@ -33,6 +37,8 @@ async function main() {
 
     // hashmap with key = phoneme (string) and value = image
     let mouths: Map<string, Image> = new Map()
+
+    let body: Image
 
     // same as mouths variable except value is an array of num_frames length, consisting of 1 or 0 
     // 1 means the phoneme is being spoken during this frame and 0 means otherwise
@@ -47,11 +53,15 @@ async function main() {
         TRANSCRIPT_PATH = parameters.input_transcript
         PHONEME_MAPPINGS_PATH = parameters.input_mouth_mappings
         MOUTH_TEXTURES_PATH = parameters.input_mouth_mappings_textures
+        MOUTH_ON_BODY_OFFSET = parameters.input_mouth_on_body_offset_from_center
+        BODY_TEXTURE_PATH = parameters.input_body_texture
+        BODY_SCALE = parameters.input_body_scale
+        MOUTH_SCALE = parameters.input_mouth_scale
         AUDIO_PATH = parameters.input_audio
         FRAME_RATE = parameters.output_frame_rate
         PHONEME_OCCURRENCE_CONVOLUTION = parameters.phoneme_occurrence_convolution_filter
 
-        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
+        if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && MOUTH_ON_BODY_OFFSET && BODY_TEXTURE_PATH && BODY_SCALE && MOUTH_SCALE && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
             throw new Error(`missing parameters in inputs.json?`)
         }
 
@@ -98,6 +108,28 @@ async function main() {
 
         } catch(e) {
             throw new Error(`couldn't parse the phoneme-to-mouth mappings located at ${PHONEME_MAPPINGS_PATH}: ${(e as Error).message}`)
+        }
+
+        // mouth on body position
+        if(MOUTH_ON_BODY_OFFSET.length != 2 || typeof MOUTH_ON_BODY_OFFSET[0] != "number") {
+            throw new Error(`input_mouth_on_pody_position "${MOUTH_ON_BODY_OFFSET}" must be an array of number of length 2`)
+        }
+
+        try {
+            //body texture
+            body = await loadImage(BODY_TEXTURE_PATH)
+        } catch(e) {
+            throw new Error(`couldn't load the body texture located at ${BODY_TEXTURE_PATH}: ${(e as Error).message}`)
+        }
+
+        // body scale
+        if(BODY_SCALE <= 0) {
+            throw new Error(`invalid body scale ${BODY_SCALE}`)
+        }
+
+        // mouth scale
+        if(MOUTH_SCALE <= 0) {
+            throw new Error(`invalid mouth scale ${MOUTH_SCALE}`)
         }
 
     } catch(e) {
@@ -229,9 +261,19 @@ async function main() {
         const mouth: Image = active_phoneme != '' ? mouths.get(active_phoneme)! : mouths.get('idle')!
         const mouthOpenAmount: number = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)![frame] : 1
 
+        // draw the body
+        /*
+            TODO: this drawImage call is incredibly unoptimized as the body image is always drawn at max
+            resolution no matter how shrunken the image is. I can fix this by bitmapping the body texture
+            later
+        */
+        ctx.drawImage(body, WIDTH/2 - body.width*BODY_SCALE/2, HEIGHT/2 - body.height*BODY_SCALE/2, body.width * BODY_SCALE, body.height * BODY_SCALE)
+
+        // draw the mouth
         const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
         const stretchAmount: number = lerp(0.7, 1.2, mouthOpenAmount)
-        ctx.drawImage(mouth, WIDTH/2, HEIGHT/2, mouth.width, mouth.height * lerp(0.5, 1, mouthOpenAmount))
+        //ctx.drawImage(mouth, WIDTH/2 - body.width*BODY_SCALE/2 - mouth.width/2 + MOUTH_ON_BODY_POSITION[0]*BODY_SCALE, HEIGHT/2 - body.height*BODY_SCALE/2 - 0 + MOUTH_ON_BODY_POSITION[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
+        ctx.drawImage(mouth, WIDTH/2 - mouth.width*MOUTH_SCALE/2 + MOUTH_ON_BODY_OFFSET[0]*BODY_SCALE, HEIGHT/2 + MOUTH_ON_BODY_OFFSET[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
 
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }
