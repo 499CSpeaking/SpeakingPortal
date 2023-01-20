@@ -30,6 +30,8 @@ async function main() {
     let FRAME_RATE: number
     let PHONEME_OCCURRENCE_CONVOLUTION: number[]
 
+    ImageBitmap
+
     // variables parsed from input transcript
     let video_length: number // in seconds
     let num_frames: number
@@ -68,11 +70,12 @@ async function main() {
         // verifying this filter is correct
         try {
             if(PHONEME_OCCURRENCE_CONVOLUTION.length % 2 == 0) {
-                throw new Error(`phoneme_occurrence_convolution_filter length of ${PHONEME_OCCURRENCE_CONVOLUTION.length} must be an odd number`)
+                throw new Error(`phoneme_occurrence_convolution_filter length of ${PHONEME_OCCURRENCE_CONVOLUTION.length} must be an odd number length`)
             }
             const filterSum: number = PHONEME_OCCURRENCE_CONVOLUTION.reduce((a, b) => a + b, 0)
             if(Math.abs(filterSum - 1) > 0.1) {
-                throw new Error(`phoneme_occurrence_convolution_filter must sum to 1, not ${filterSum}`)
+                //don't need to do this check
+                //throw new Error(`phoneme_occurrence_convolution_filter must sum to 1, not ${filterSum}`)
             }   
         } catch(e) {
             throw new Error(`invalid phoneme_occurrence_convolution_filter: ${(e as Error).message}`)
