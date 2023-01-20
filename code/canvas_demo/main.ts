@@ -12,6 +12,9 @@ import {getVideoDurationInSeconds} from "get-video-duration"
 import ffmpeg from "fluent-ffmpeg"
 import ffmpegStatic from "ffmpeg-static"
 import { readFileSync } from "fs"
+import { isNullOrUndefined } from "util"
+import { assert } from "console"
+import { type } from "os"
 ffmpeg.setFfmpegPath(ffmpegStatic!)
 
 async function main() {
@@ -30,7 +33,12 @@ async function main() {
     let FRAME_RATE: number
     let PHONEME_OCCURRENCE_CONVOLUTION: number[]
 
-    ImageBitmap
+    let DYNAMIC_EYES: boolean
+    let EYES_SPACING: number
+    let EYE_SCALE: number
+    let EYE_TEXTURES_PATH: string
+    let EYE_MAPPINGS_PATH: string
+    let EYES_ON_BODY_OFFSET: number[]
 
     // variables parsed from input transcript
     let video_length: number // in seconds
@@ -39,6 +47,10 @@ async function main() {
 
     // hashmap with key = phoneme (string) and value = image
     let mouths: Map<string, Image> = new Map()
+
+    // left and right eye texture
+    let left_eye:Image | undefined
+    let right_eye:Image | undefined
 
     let body: Image
 
@@ -63,8 +75,24 @@ async function main() {
         FRAME_RATE = parameters.output_frame_rate
         PHONEME_OCCURRENCE_CONVOLUTION = parameters.phoneme_occurrence_convolution_filter
 
+        DYNAMIC_EYES = parameters.use_custom_eyes
+        EYES_SPACING = parameters.input_eye_spacing
+        EYE_SCALE = parameters.input_eye_scale
+        EYE_TEXTURES_PATH = parameters.input_eyes_textures
+        EYE_MAPPINGS_PATH = parameters.input_eye_mappings
+        EYES_ON_BODY_OFFSET = parameters.input_eyes_on_body_offset_from_center
+
         if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && MOUTH_ON_BODY_OFFSET && BODY_TEXTURE_PATH && BODY_SCALE && MOUTH_SCALE && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
             throw new Error(`missing parameters in inputs.json?`)
+        }
+
+        if(typeof DYNAMIC_EYES == 'undefined') {
+            DYNAMIC_EYES = false
+        }
+
+        // eyes are optional
+        if(DYNAMIC_EYES && !(EYES_SPACING && EYE_TEXTURES_PATH && EYES_ON_BODY_OFFSET)) {
+            throw new Error(`use_custom_eyes is set to true but some eyes-related parameters are missing in inputs.json, it seems`)
         }
 
         // verifying this filter is correct
@@ -115,7 +143,7 @@ async function main() {
 
         // mouth on body position
         if(MOUTH_ON_BODY_OFFSET.length != 2 || typeof MOUTH_ON_BODY_OFFSET[0] != "number") {
-            throw new Error(`input_mouth_on_pody_position "${MOUTH_ON_BODY_OFFSET}" must be an array of number of length 2`)
+            throw new Error(`input_mouth_on_body_offset_from_center "${MOUTH_ON_BODY_OFFSET}" must be an array of numbers of length 2`)
         }
 
         try {
@@ -133,6 +161,28 @@ async function main() {
         // mouth scale
         if(MOUTH_SCALE <= 0) {
             throw new Error(`invalid mouth scale ${MOUTH_SCALE}`)
+        }
+
+        // eye stuff
+
+        if(DYNAMIC_EYES) {
+            // eyes on body position
+            if(EYES_ON_BODY_OFFSET.length != 2 || typeof EYES_ON_BODY_OFFSET[0] != "number") {
+                throw new Error(`input_eyes_on_body_offset_from_center "${EYES_ON_BODY_OFFSET}" must be an array of numbers of length 2`)
+            }
+
+            // eye textures
+            try {
+                let eye_mapping: any = JSON.parse(fs.readFileSync(EYE_MAPPINGS_PATH).toString())
+
+                if(!(eye_mapping.left && eye_mapping.right)) {
+                    throw new Error(`${EYE_MAPPINGS_PATH} needs both a "left" and "right" item`)
+                }
+                left_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.left}`)
+                right_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.right}`)
+            } catch(e) {
+                throw new Error(`couldn't parse the mouth mappings located at ${EYE_MAPPINGS_PATH}: ${(e as Error).message}`)
+            }
         }
 
     } catch(e) {
@@ -270,13 +320,37 @@ async function main() {
             resolution no matter how shrunken the image is. I can fix this by bitmapping the body texture
             later
         */
-        ctx.drawImage(body, WIDTH/2 - body.width*BODY_SCALE/2, HEIGHT/2 - body.height*BODY_SCALE/2, body.width * BODY_SCALE, body.height * BODY_SCALE)
+        ctx.drawImage(body,
+            WIDTH/2 - body.width*BODY_SCALE/2, HEIGHT/2 - body.height*BODY_SCALE/2,
+            body.width * BODY_SCALE, body.height * BODY_SCALE
+            )
 
         // draw the mouth
         const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
         const stretchAmount: number = lerp(0.7, 1.2, mouthOpenAmount)
         //ctx.drawImage(mouth, WIDTH/2 - body.width*BODY_SCALE/2 - mouth.width/2 + MOUTH_ON_BODY_POSITION[0]*BODY_SCALE, HEIGHT/2 - body.height*BODY_SCALE/2 - 0 + MOUTH_ON_BODY_POSITION[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
-        ctx.drawImage(mouth, WIDTH/2 - mouth.width*MOUTH_SCALE/2 + MOUTH_ON_BODY_OFFSET[0]*BODY_SCALE, HEIGHT/2 + MOUTH_ON_BODY_OFFSET[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
+        ctx.drawImage(mouth,
+            WIDTH/2 - mouth.width*MOUTH_SCALE/2 + MOUTH_ON_BODY_OFFSET[0]*BODY_SCALE,
+            HEIGHT/2 + MOUTH_ON_BODY_OFFSET[1]*BODY_SCALE,
+            mouth.width*MOUTH_SCALE,
+            mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE
+            )
+
+        // draw the eyes
+        if(DYNAMIC_EYES) {
+            ctx.drawImage(left_eye!,
+                WIDTH/2 - left_eye!.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING,
+                HEIGHT/2 - left_eye!.height*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[1],
+                left_eye!.width*EYE_SCALE,
+                left_eye!.height*EYE_SCALE
+            )
+            ctx.drawImage(right_eye!,
+                WIDTH/2 - right_eye!.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING,
+                HEIGHT/2 - right_eye!.height*EYE_SCALE/2+ EYES_ON_BODY_OFFSET[1],
+                right_eye!.width*EYE_SCALE,
+                right_eye!.height*EYE_SCALE
+            )
+        }
 
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }
