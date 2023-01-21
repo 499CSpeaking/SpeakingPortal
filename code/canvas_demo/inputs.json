@@ -20,6 +20,7 @@
     "input_eye_scale": 0.2,
     "input_eye_spacing": 40,
     "input_eyes_on_body_offset_from_center": [0, -60],
+    "input_blink_interval": 0.5,
 
     "phoneme_occurrence_convolution_filter": [0.028, 0.066, 0.124, 0.180, 0.204, 0.180, 0.124, 0.066, 0.028]
 }

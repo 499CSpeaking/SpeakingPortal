@@ -1,4 +1,4 @@
 {
-    "left": "Left Eye (Open).svg",
-    "right": "Right Eye (Open).svg"
+    "left": ["Left Eye (Open).svg", "Left Eye (Half-closed).svg", "Left Eye (Closed).svg"],
+    "right": ["Right Eye (Open).svg", "Right Eye (Half-closed).svg", "Left Eye (Closed).svg"]
 }

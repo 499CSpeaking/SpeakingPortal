@@ -39,6 +39,7 @@ async function main() {
     let EYE_TEXTURES_PATH: string
     let EYE_MAPPINGS_PATH: string
     let EYES_ON_BODY_OFFSET: number[]
+    let BLINK_INTERVAL: number // seconds per blink
 
     // variables parsed from input transcript
     let video_length: number // in seconds
@@ -49,14 +50,17 @@ async function main() {
     let mouths: Map<string, Image> = new Map()
 
     // left and right eye texture
-    let left_eye:Image | undefined
-    let right_eye:Image | undefined
+    let left_eye:Image[] | undefined
+    let right_eye:Image[] | undefined
 
     let body: Image
 
     // same as mouths variable except value is an array of num_frames length, consisting of 1 or 0 
     // 1 means the phoneme is being spoken during this frame and 0 means otherwise
     let phoneme_occurrences: Map<string, Array<number>> = new Map()
+
+    // similar to phoneme_occurrences, although this is for occurrences of the avatar blinking
+    let blink_occurrences: Array<number> | undefined
 
     // parsing of input values into program
     try{
@@ -81,6 +85,7 @@ async function main() {
         EYE_TEXTURES_PATH = parameters.input_eyes_textures
         EYE_MAPPINGS_PATH = parameters.input_eye_mappings
         EYES_ON_BODY_OFFSET = parameters.input_eyes_on_body_offset_from_center
+        BLINK_INTERVAL = parameters.input_blink_interval
 
         if(!(WIDTH && HEIGHT && TRANSCRIPT_PATH && PHONEME_MAPPINGS_PATH && MOUTH_TEXTURES_PATH && MOUTH_ON_BODY_OFFSET && BODY_TEXTURE_PATH && BODY_SCALE && MOUTH_SCALE && AUDIO_PATH && FRAME_RATE && PHONEME_OCCURRENCE_CONVOLUTION)) {
             throw new Error(`missing parameters in inputs.json?`)
@@ -91,7 +96,7 @@ async function main() {
         }
 
         // eyes are optional
-        if(DYNAMIC_EYES && !(EYES_SPACING && EYE_TEXTURES_PATH && EYES_ON_BODY_OFFSET)) {
+        if(DYNAMIC_EYES && !(EYES_SPACING && EYE_TEXTURES_PATH && EYES_ON_BODY_OFFSET && BLINK_INTERVAL)) {
             throw new Error(`use_custom_eyes is set to true but some eyes-related parameters are missing in inputs.json, it seems`)
         }
 
@@ -178,10 +183,35 @@ async function main() {
                 if(!(eye_mapping.left && eye_mapping.right)) {
                     throw new Error(`${EYE_MAPPINGS_PATH} needs both a "left" and "right" item`)
                 }
-                left_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.left}`)
-                right_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.right}`)
+                //left_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.left}`)
+                //right_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.right}`)
+                if(eye_mapping.left.length != eye_mapping.right.length) {
+                    throw new Error(`left and right eye mapping lists must be the same in length`)
+                }
+
+                const length: number = eye_mapping.left.length
+                left_eye = new Array<Image>(length)
+                right_eye = new Array<Image>(length)
+
+                for(let i = 0; i < length; i += 1) {
+                    // potential for asnyc concurrency optimization here?
+                    left_eye[i] = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.left[i]}`)
+                    right_eye[i] = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.right[i]}`)
+                }
             } catch(e) {
                 throw new Error(`couldn't parse the mouth mappings located at ${EYE_MAPPINGS_PATH}: ${(e as Error).message}`)
+            }
+
+            // blinking
+            try {
+                blink_occurrences = new Array<number>(Math.floor(num_frames)).fill(0);
+                const step_size: number = FRAME_RATE * 1/BLINK_INTERVAL
+                
+                for(let i: number = 0; i += step_size; i += 1) {
+                    blink_occurrences[i] = 1
+                }
+            } catch(e) {
+                throw new Error(`error creating blink timeline: ${(e as Error).message}`)
             }
         }
 
@@ -216,7 +246,7 @@ async function main() {
             current_word_idx += 1
             current_phoneme_idx = 0
             current_phoneme_offset = 0
-        }
+    
 
         if(current_word_idx < num_words 
             && current_time >= transcript.words[current_word_idx].start
@@ -338,17 +368,23 @@ async function main() {
 
         // draw the eyes
         if(DYNAMIC_EYES) {
-            ctx.drawImage(left_eye!,
-                WIDTH/2 - left_eye!.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING,
-                HEIGHT/2 - left_eye!.height*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[1],
-                left_eye!.width*EYE_SCALE,
-                left_eye!.height*EYE_SCALE
+            // testing code 
+            const blink_phase: number = Math.round(blink_occurrences![frame])
+            const left: Image = left_eye![blink_phase]
+            const right: Image = right_eye![blink_phase]
+
+
+            ctx.drawImage(left,
+                WIDTH/2 - left.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING,
+                HEIGHT/2 - left.height*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[1],
+                left.width*EYE_SCALE,
+                left.height*EYE_SCALE
             )
-            ctx.drawImage(right_eye!,
-                WIDTH/2 - right_eye!.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING,
-                HEIGHT/2 - right_eye!.height*EYE_SCALE/2+ EYES_ON_BODY_OFFSET[1],
-                right_eye!.width*EYE_SCALE,
-                right_eye!.height*EYE_SCALE
+            ctx.drawImage(right,
+                WIDTH/2 - right.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING,
+                HEIGHT/2 - right.height*EYE_SCALE/2+ EYES_ON_BODY_OFFSET[1],
+                right.width*EYE_SCALE,
+                right.height*EYE_SCALE
             )
         }
 
