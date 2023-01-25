@@ -54,12 +54,13 @@ var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, MOUTH_ON_BODY_OFFSET, BODY_TEXTURE_PATH, BODY_SCALE, MOUTH_SCALE, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, DYNAMIC_EYES, EYES_SPACING, EYE_SCALE, EYE_TEXTURES_PATH, EYE_MAPPINGS_PATH, EYES_ON_BODY_OFFSET, BLINK_INTERVAL, video_length, num_frames, transcript, mouths, left_eye, right_eye, body, phoneme_occurrences, blink_occurrences, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, eye_mapping, length_1, i, _f, _g, _h, _j, e_4, step_size, i, e_5, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame_1;
+        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, MOUTH_ON_BODY_OFFSET, BODY_TEXTURE_PATH, BODY_SCALE, MOUTH_SCALE, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, DYNAMIC_EYES, EYES_SPACING, EYE_SCALE, EYE_TEXTURES_PATH, EYE_MAPPINGS_PATH, EYES_ON_BODY_OFFSET, BLINK_INTERVAL, video_length, num_frames, transcript, mouths, left_eye, right_eye, body, phoneme_occurrences, blink_occurrences, blink_max_amount, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, eye_mapping, length_1, i, _f, _g, _h, _j, e_4, step_size, i, filterLen, blink_occurrences_copy, i, localSum, j, di, i, e_5, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
         return __generator(this, function (_k) {
             switch (_k.label) {
                 case 0:
                     mouths = new Map();
                     phoneme_occurrences = new Map();
+                    blink_max_amount = 1e-10;
                     _k.label = 1;
                 case 1:
                     _k.trys.push([1, 26, , 27]);
@@ -227,11 +228,29 @@ function main() {
                 case 24:
                     // blinking
                     try {
-                        blink_occurrences = new Array(Math.floor(num_frames)).fill(0);
+                        blink_occurrences = new Array(Math.ceil(num_frames)).fill(0);
                         step_size = FRAME_RATE * 1 / BLINK_INTERVAL;
-                        for (i = 0; i += step_size; i += 1) {
+                        // blink once every set period of time
+                        for (i = 0; i < blink_occurrences.length; i += step_size) {
                             blink_occurrences[i] = 1;
                         }
+                        filterLen = PHONEME_OCCURRENCE_CONVOLUTION.length;
+                        blink_occurrences_copy = new Array(blink_occurrences.length);
+                        for (i = 0; i < blink_occurrences.length; i += 1) {
+                            localSum = 0;
+                            for (j = -(filterLen - 1) / 2; j < filterLen / 2; j += 1) {
+                                di = i + j;
+                                localSum += di < 0 || di >= blink_occurrences.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen / 2)] * blink_occurrences[di];
+                            }
+                            blink_occurrences_copy[i] = localSum;
+                        }
+                        blink_occurrences = blink_occurrences_copy;
+                        console.log(blink_occurrences);
+                        // get the max blink amount
+                        for (i = 0; i < blink_occurrences.length; i += 1) {
+                            blink_max_amount = Math.max(blink_max_amount, blink_occurrences[i]);
+                        }
+                        console.log();
                     }
                     catch (e) {
                         throw new Error("error creating blink timeline: " + e.message);
@@ -260,121 +279,122 @@ function main() {
                             current_word_idx += 1;
                             current_phoneme_idx = 0;
                             current_phoneme_offset = 0;
-                            if (current_word_idx < num_words
-                                && current_time >= transcript.words[current_word_idx].start
-                                && current_time < transcript.words[current_word_idx].end) {
-                                active_word = transcript.words[current_word_idx].word;
-                                num_phonemes = transcript.words[current_word_idx].phones.length;
-                                if (current_phoneme_idx < num_phonemes && current_time >= transcript.words[current_word_idx].phones[current_phoneme_idx].duration + current_phoneme_offset) {
-                                    current_phoneme_offset += transcript.words[current_word_idx].phones[current_phoneme_idx].duration;
-                                    current_phoneme_idx += 1;
-                                }
-                                if (current_phoneme_idx < num_phonemes) {
-                                    active_phoneme = transcript.words[current_word_idx].phones[current_phoneme_idx].phone;
-                                    // remove the unnecessary underscore and postfix at the end of the phoneme
-                                    active_phoneme = active_phoneme.split('_')[0];
-                                }
-                            }
-                            (phoneme_occurrences.get(active_phoneme))[frame] = 1;
                         }
-                        // perform a low-pass filter operation on each occurrence array to smooth it out
-                        phoneme_occurrences.forEach(function (arr, phoneme, _) {
-                            var filterLen = PHONEME_OCCURRENCE_CONVOLUTION.length;
-                            var copyArr = new Array(arr.length);
-                            for (var i = 0; i < arr.length; i += 1) {
-                                var localSum = 0;
-                                for (var j = -(filterLen - 1) / 2; j < filterLen / 2; j += 1) {
-                                    var di = i + j;
-                                    localSum += di < 0 || di >= arr.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen / 2)] * arr[di];
-                                }
-                                copyArr[i] = localSum;
+                        if (current_word_idx < num_words
+                            && current_time >= transcript.words[current_word_idx].start
+                            && current_time < transcript.words[current_word_idx].end) {
+                            active_word = transcript.words[current_word_idx].word;
+                            num_phonemes = transcript.words[current_word_idx].phones.length;
+                            if (current_phoneme_idx < num_phonemes && current_time >= transcript.words[current_word_idx].phones[current_phoneme_idx].duration + current_phoneme_offset) {
+                                current_phoneme_offset += transcript.words[current_word_idx].phones[current_phoneme_idx].duration;
+                                current_phoneme_idx += 1;
                             }
-                            for (var i = 0; i < arr.length; i += 1) {
-                                arr[i] = copyArr[i];
+                            if (current_phoneme_idx < num_phonemes) {
+                                active_phoneme = transcript.words[current_word_idx].phones[current_phoneme_idx].phone;
+                                // remove the unnecessary underscore and postfix at the end of the phoneme
+                                active_phoneme = active_phoneme.split('_')[0];
+                            }
+                        }
+                        (phoneme_occurrences.get(active_phoneme))[frame] = 1;
+                    }
+                    // perform a low-pass filter operation on each occurrence array to smooth it out
+                    phoneme_occurrences.forEach(function (arr, phoneme, _) {
+                        var filterLen = PHONEME_OCCURRENCE_CONVOLUTION.length;
+                        var copyArr = new Array(arr.length);
+                        for (var i = 0; i < arr.length; i += 1) {
+                            var localSum = 0;
+                            for (var j = -(filterLen - 1) / 2; j < filterLen / 2; j += 1) {
+                                var di = i + j;
+                                localSum += di < 0 || di >= arr.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen / 2)] * arr[di];
+                            }
+                            copyArr[i] = localSum;
+                        }
+                        for (var i = 0; i < arr.length; i += 1) {
+                            arr[i] = copyArr[i];
+                        }
+                    });
+                    _loop_1 = function (frame) {
+                        // get the current phoneme (the one with the maximum value in it's occurrence array at index frame)
+                        var active_phoneme = '';
+                        var globalMax = -1e10;
+                        phoneme_occurrences.forEach(function (arr, phoneme, _) {
+                            if (phoneme == 'idle') {
+                                return;
+                            }
+                            if (arr[frame] > globalMax) {
+                                active_phoneme = phoneme;
+                                globalMax = arr[frame];
                             }
                         });
-                        _loop_1 = function (frame_1) {
-                            // get the current phoneme (the one with the maximum value in it's occurrence array at index frame)
-                            var active_phoneme_1 = '';
-                            var globalMax = -1e10;
-                            phoneme_occurrences.forEach(function (arr, phoneme, _) {
-                                if (phoneme == 'idle') {
-                                    return;
-                                }
-                                if (arr[frame_1] > globalMax) {
-                                    active_phoneme_1 = phoneme;
-                                    globalMax = arr[frame_1];
-                                }
-                            });
-                            if (globalMax < 0.1) {
-                                active_phoneme_1 = 'idle';
-                            }
-                            // fill background
-                            ctx.fillStyle = '#FFFFFF';
-                            ctx.fillRect(0, 0, WIDTH, HEIGHT);
-                            // ctx.font = '40px Arial'
-                            // ctx.fillStyle = '#000000'
-                            // ctx.fillText(active_word, 5, 30)
-                            ctx.font = '30px Arial';
-                            ctx.fillStyle = '#555555';
-                            ctx.fillText(active_phoneme_1, 20, 40);
-                            // display phoneme occurrence levels
-                            var count = 0;
-                            phoneme_occurrences.forEach(function (arr, phoneme) {
-                                if (count > 30) {
-                                    return;
-                                }
-                                ctx.font = '12px Arial';
-                                ctx.fillStyle = '#555555';
-                                ctx.fillText(phoneme, 10, 90 + count * 13);
-                                ctx.fillRect(40, 94 + (count - 1) * 13, arr[frame_1] * 30, 8);
-                                count += 1;
-                            });
-                            ctx.font = '15px Arial';
-                            ctx.fillStyle = '#555555';
-                            ctx.fillText("frame " + frame_1 + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
-                            // if there's a phoneme, embed it into the image
-                            var mouth = active_phoneme_1 != '' ? mouths.get(active_phoneme_1) : mouths.get('idle');
-                            var mouthOpenAmount = active_phoneme_1 != '' ? phoneme_occurrences.get(active_phoneme_1)[frame_1] : 1;
-                            // draw the body
-                            /*
-                                TODO: this drawImage call is incredibly unoptimized as the body image is always drawn at max
-                                resolution no matter how shrunken the image is. I can fix this by bitmapping the body texture
-                                later
-                            */
-                            ctx.drawImage(body, WIDTH / 2 - body.width * BODY_SCALE / 2, HEIGHT / 2 - body.height * BODY_SCALE / 2, body.width * BODY_SCALE, body.height * BODY_SCALE);
-                            // draw the mouth
-                            var lerp = function (x, y, a) { return x * (1 - a) + y * a; };
-                            var stretchAmount = lerp(0.7, 1.2, mouthOpenAmount);
-                            //ctx.drawImage(mouth, WIDTH/2 - body.width*BODY_SCALE/2 - mouth.width/2 + MOUTH_ON_BODY_POSITION[0]*BODY_SCALE, HEIGHT/2 - body.height*BODY_SCALE/2 - 0 + MOUTH_ON_BODY_POSITION[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
-                            ctx.drawImage(mouth, WIDTH / 2 - mouth.width * MOUTH_SCALE / 2 + MOUTH_ON_BODY_OFFSET[0] * BODY_SCALE, HEIGHT / 2 + MOUTH_ON_BODY_OFFSET[1] * BODY_SCALE, mouth.width * MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE);
-                            // draw the eyes
-                            if (DYNAMIC_EYES) {
-                                // testing code 
-                                var blink_phase = Math.round(blink_occurrences[frame_1]);
-                                var left = left_eye[blink_phase];
-                                var right = right_eye[blink_phase];
-                                ctx.drawImage(left, WIDTH / 2 - left.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING, HEIGHT / 2 - left.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], left.width * EYE_SCALE, left.height * EYE_SCALE);
-                                ctx.drawImage(right, WIDTH / 2 - right.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING, HEIGHT / 2 - right.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], right.width * EYE_SCALE, right.height * EYE_SCALE);
-                            }
-                            fs_1.default.writeFileSync("out_frames/frame_" + frame_1.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
-                        };
-                        // draw the frames
-                        for (frame_1 = 0; frame_1 < num_frames; frame_1 += 1) {
-                            _loop_1(frame_1);
+                        if (globalMax < 0.1) {
+                            active_phoneme = 'idle';
                         }
-                        fluent_ffmpeg_1.default()
-                            .input('./out_frames/frame_%9d.png')
-                            .inputOptions([
-                            // Set input frame rate
-                            "-framerate " + FRAME_RATE,
-                        ])
-                            .output('./out.mp4')
-                            .run();
+                        // fill background
+                        ctx.fillStyle = '#FFFFFF';
+                        ctx.fillRect(0, 0, WIDTH, HEIGHT);
+                        // ctx.font = '40px Arial'
+                        // ctx.fillStyle = '#000000'
+                        // ctx.fillText(active_word, 5, 30)
+                        ctx.font = '30px Arial';
+                        ctx.fillStyle = '#555555';
+                        ctx.fillText(active_phoneme, 20, 40);
+                        // display phoneme occurrence levels
+                        var count = 0;
+                        phoneme_occurrences.forEach(function (arr, phoneme) {
+                            if (count > 30) {
+                                return;
+                            }
+                            ctx.font = '12px Arial';
+                            ctx.fillStyle = '#555555';
+                            ctx.fillText(phoneme, 10, 90 + count * 13);
+                            ctx.fillRect(40, 94 + (count - 1) * 13, arr[frame] * 30, 8);
+                            count += 1;
+                        });
+                        ctx.font = '15px Arial';
+                        ctx.fillStyle = '#555555';
+                        ctx.fillText("frame " + frame + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
+                        // if there's a phoneme, embed it into the image
+                        var mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
+                        var mouthOpenAmount = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)[frame] : 1;
+                        // draw the body
+                        /*
+                            TODO: this drawImage call is incredibly unoptimized as the body image is always drawn at max
+                            resolution no matter how shrunken the image is. I can fix this by bitmapping the body texture
+                            later
+                        */
+                        ctx.drawImage(body, WIDTH / 2 - body.width * BODY_SCALE / 2, HEIGHT / 2 - body.height * BODY_SCALE / 2, body.width * BODY_SCALE, body.height * BODY_SCALE);
+                        // draw the mouth
+                        var lerp = function (x, y, a) { return x * (1 - a) + y * a; };
+                        var stretchAmount = lerp(0.7, 1.2, mouthOpenAmount);
+                        //ctx.drawImage(mouth, WIDTH/2 - body.width*BODY_SCALE/2 - mouth.width/2 + MOUTH_ON_BODY_POSITION[0]*BODY_SCALE, HEIGHT/2 - body.height*BODY_SCALE/2 - 0 + MOUTH_ON_BODY_POSITION[1]*BODY_SCALE, mouth.width*MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE)
+                        ctx.drawImage(mouth, WIDTH / 2 - mouth.width * MOUTH_SCALE / 2 + MOUTH_ON_BODY_OFFSET[0] * BODY_SCALE, HEIGHT / 2 + MOUTH_ON_BODY_OFFSET[1] * BODY_SCALE, mouth.width * MOUTH_SCALE, mouth.height * lerp(0.5, 1, mouthOpenAmount) * MOUTH_SCALE);
+                        // draw the eyes
+                        if (DYNAMIC_EYES) {
+                            // testing code 
+                            var blink_phase = Math.round(2 * blink_occurrences[frame] / blink_max_amount);
+                            var left = left_eye[blink_phase];
+                            var right = right_eye[blink_phase];
+                            console.log(frame + "/" + num_frames + ": " + blink_phase);
+                            ctx.drawImage(left, WIDTH / 2 - left.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING, HEIGHT / 2 - left.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], left.width * EYE_SCALE, left.height * EYE_SCALE);
+                            ctx.drawImage(right, WIDTH / 2 - right.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING, HEIGHT / 2 - right.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], right.width * EYE_SCALE, right.height * EYE_SCALE);
+                        }
+                        fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
+                    };
+                    // draw the frames
+                    for (frame = 0; frame < num_frames; frame += 1) {
+                        _loop_1(frame);
                     }
-                    main();
+                    fluent_ffmpeg_1.default()
+                        .input('./out_frames/frame_%9d.png')
+                        .inputOptions([
+                        // Set input frame rate
+                        "-framerate " + FRAME_RATE,
+                    ])
+                        .output('./out.mp4')
+                        .run();
                     return [2 /*return*/];
             }
         });
     });
 }
+main();

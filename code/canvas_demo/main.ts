@@ -61,6 +61,7 @@ async function main() {
 
     // similar to phoneme_occurrences, although this is for occurrences of the avatar blinking
     let blink_occurrences: Array<number> | undefined
+    let blink_max_amount = 1e-10
 
     // parsing of input values into program
     try{
@@ -204,12 +205,33 @@ async function main() {
 
             // blinking
             try {
-                blink_occurrences = new Array<number>(Math.floor(num_frames)).fill(0);
+                blink_occurrences = new Array<number>(Math.ceil(num_frames)).fill(0);
                 const step_size: number = FRAME_RATE * 1/BLINK_INTERVAL
                 
-                for(let i: number = 0; i += step_size; i += 1) {
+                // blink once every set period of time
+                for(let i: number = 0; i < blink_occurrences.length; i += step_size) {
                     blink_occurrences[i] = 1
                 }
+
+                // apply filter
+                const filterLen: number = PHONEME_OCCURRENCE_CONVOLUTION.length
+                const blink_occurrences_copy: Array<number> = new Array<number>(blink_occurrences.length)
+                for(let i: number = 0; i < blink_occurrences.length; i += 1) {
+                    let localSum: number = 0
+                    for(let j: number = -(filterLen - 1)/2; j < filterLen/2; j += 1) {
+                        const di: number = i + j
+                        localSum += di < 0 || di >= blink_occurrences.length ? 0 : PHONEME_OCCURRENCE_CONVOLUTION[j + Math.floor(filterLen/2)] * blink_occurrences[di]
+                    }
+                    blink_occurrences_copy[i] = localSum
+                }
+                blink_occurrences = blink_occurrences_copy
+                console.log(blink_occurrences)
+
+                // get the max blink amount
+                for(let i: number = 0; i < blink_occurrences.length; i += 1) {
+                    blink_max_amount = Math.max(blink_max_amount, blink_occurrences[i])
+                }
+                console.log()
             } catch(e) {
                 throw new Error(`error creating blink timeline: ${(e as Error).message}`)
             }
@@ -246,7 +268,7 @@ async function main() {
             current_word_idx += 1
             current_phoneme_idx = 0
             current_phoneme_offset = 0
-    
+        }
 
         if(current_word_idx < num_words 
             && current_time >= transcript.words[current_word_idx].start
@@ -369,10 +391,11 @@ async function main() {
         // draw the eyes
         if(DYNAMIC_EYES) {
             // testing code 
-            const blink_phase: number = Math.round(blink_occurrences![frame])
+            const blink_phase: number = Math.round(2 * blink_occurrences![frame]/blink_max_amount)
             const left: Image = left_eye![blink_phase]
             const right: Image = right_eye![blink_phase]
 
+            console.log(`${frame}/${num_frames}: ${blink_phase}`)
 
             ctx.drawImage(left,
                 WIDTH/2 - left.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING,
