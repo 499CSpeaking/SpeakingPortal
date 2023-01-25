@@ -10,3 +10,6 @@ another note about mouth_mappings.json: I added the bare necessary amount of pho
 another another note aboue mouth_mappings.json: gentle produces a LOT of phonemes so we will probably need functionality to map the set of gentle phonemes to a smaller, more generic set of phonemes. It's a pain to map each specific gentle phoneme to a mouth texture.
 
 (added this part for gitstats) WUBBA WUBBA DUBBA DUB MORTY I TURNED MYSELF INTO A PICKER IM PICKLE RICK
+
+EYES:
+set use_custom_eyes to true if you have custom eye textures that you wish to impose onto the avatar. If your avatar's texture already has eyes, than set it to false
