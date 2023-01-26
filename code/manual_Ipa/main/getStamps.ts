@@ -104,6 +104,8 @@ function getStamps(src) {
   let stamps = new Map();
   let start = false;
   let start_t, end_t;
+  // bug fixing values
+  let stampDiff = new Map();
   // threshold to determine if there is substantial enough sound to count as a word
   let thresh = 250;
   // get the samples present in audio
@@ -143,11 +145,23 @@ function getStamps(src) {
       start = false;
       end_t = sampleTime * i;
       stamps.set(word, { start: start_t, end: end_t });
+      // bug investigation
+      if (end_t-start_t > 178){
+        stampDiff.set(word, {diff: end_t-start_t});
+      }
       // word is incremented only if the current word is done being spoken
       word++;
     }
     i++;
   }
+  // bug investigation
+  let diffAvg = 0;
+  stampDiff.forEach(word => {
+    diffAvg += word.diff;
+  });
+  diffAvg = diffAvg/stampDiff.size;
+  console.log('Timestamp Differences: '+stampDiff.size);
+  console.log('Timestamp Diff Average: '+diffAvg);
   return stamps;
 }
 
