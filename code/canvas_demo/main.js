@@ -64,7 +64,7 @@ function main() {
                     _o.label = 1;
                 case 1:
                     _o.trys.push([1, 35, , 36]);
-                    parameters = JSON.parse(fs_1.default.readFileSync('./inputs.json').toString());
+                    parameters = JSON.parse(fs_1.default.readFileSync('./inputs_barb.json').toString());
                     WIDTH = parameters.width;
                     HEIGHT = parameters.height;
                     TRANSCRIPT_PATH = parameters.input_transcript;

@@ -8,7 +8,7 @@
     "input_mouth_mappings": "input_files/mouth_mappings.json",
     "input_mouth_mappings_textures": "input_files/mouths",
     "input_mouth_on_body_offset_from_center": [0, -50],
-    "input_body_texture": "input_files/Boy.svg",
+    "input_body_texture": "input_files/Boy_fixed.png",
     "input_body_scale": 0.3,
     "input_mouth_scale": 0.55,
 

@@ -76,7 +76,7 @@ async function main() {
 
     // parsing of input values into program
     try{
-        const parameters: any = JSON.parse(fs.readFileSync('./inputs.json').toString())
+        const parameters: any = JSON.parse(fs.readFileSync('./inputs_barb.json').toString())
 
         WIDTH = parameters.width
         HEIGHT = parameters.height

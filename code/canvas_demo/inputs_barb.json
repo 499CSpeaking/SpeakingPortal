@@ -1,0 +1,34 @@
+{
+    "width": 500,
+    "height": 500,
+
+    "input_transcript": "input_files/transcript_barb.json",
+    "input_audio": "input_files/audio_barb.mp3",
+
+    "input_mouth_mappings": "input_files/mouth_mappings_barb.json",
+    "input_mouth_mappings_textures": "input_files/mouths_barb",
+    "input_mouth_on_body_offset_from_center": [0, -135],
+    "input_body_texture": "input_files/Barb_fixed.png",
+    "input_body_scale": 0.5,
+    "input_mouth_scale": 0.75,
+
+    "output_frame_rate": 25,
+
+    "use_custom_eyes": true,
+    "input_eye_mappings": "input_files/eye_mappings_barb.json",
+    "input_eyes_textures": "input_files/eyes_barb",
+    "input_eye_scale": 0.5,
+    "input_eye_spacing": 40,
+    "input_eyes_on_body_offset_from_center": [0, -120],
+    "input_blink_interval": 0.5,
+
+    "phoneme_occurrence_convolution_filter": [0.028, 0.066, 0.124, 0.180, 0.204, 0.180, 0.124, 0.066, 0.028],
+
+    "static_assets": [
+        {
+            "texture": "input_files/static_assets_barb/Glasses.svg",
+            "position_offset_from_center": [0, -105],
+            "scale": 0.5
+        }
+    ]
+}
