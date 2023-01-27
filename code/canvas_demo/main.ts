@@ -41,6 +41,17 @@ async function main() {
     let EYES_ON_BODY_OFFSET: number[]
     let BLINK_INTERVAL: number // seconds per blink
 
+
+    // static assets
+    // this struct allows us to hold static assets
+    interface StaticAsset {
+        texture: Image,
+        x: number,
+        y: number,
+        scale: number
+    }
+    let static_assets: StaticAsset[]
+
     // variables parsed from input transcript
     let video_length: number // in seconds
     let num_frames: number
@@ -169,8 +180,30 @@ async function main() {
             throw new Error(`invalid mouth scale ${MOUTH_SCALE}`)
         }
 
-        // eye stuff
+        // static assets
+        try {
+            const parsed: any = parameters.static_assets ? parameters.static_assets : []
+            static_assets = new Array<StaticAsset>(parsed.length)
 
+            for(let i: number = 0; i < parsed.length; i += 1) {
+                try {
+                    const parsed_asset = parsed[i]
+                    static_assets[i] = {
+                        texture: await loadImage(parsed_asset.texture),
+                        x: parsed_asset.position_offset_from_center[0],
+                        y: parsed_asset.position_offset_from_center[1],
+                        scale: parsed_asset.scale
+                    }
+                } catch(e) {
+                    throw new Error(`error processing static asset #${i}: ${(e as Error).message}`)
+                }
+            }
+
+        } catch(e) {
+            throw new Error(`error while parsing static assets: ${(e as Error).message}`)
+        }
+
+        // eye stuff
         if(DYNAMIC_EYES) {
             // eyes on body position
             if(EYES_ON_BODY_OFFSET.length != 2 || typeof EYES_ON_BODY_OFFSET[0] != "number") {
@@ -225,13 +258,11 @@ async function main() {
                     blink_occurrences_copy[i] = localSum
                 }
                 blink_occurrences = blink_occurrences_copy
-                console.log(blink_occurrences)
 
                 // get the max blink amount
                 for(let i: number = 0; i < blink_occurrences.length; i += 1) {
                     blink_max_amount = Math.max(blink_max_amount, blink_occurrences[i])
                 }
-                console.log()
             } catch(e) {
                 throw new Error(`error creating blink timeline: ${(e as Error).message}`)
             }
@@ -377,6 +408,16 @@ async function main() {
             body.width * BODY_SCALE, body.height * BODY_SCALE
             )
 
+        // draw any static assets
+        static_assets.forEach((a) => {
+            ctx.drawImage(a.texture,
+                WIDTH/2 - a.texture.width*a.scale/2 + a.x,
+                HEIGHT/2 - a.texture.height*a.scale/2 +  a.y,
+                a.texture.width * a.scale,
+                a.texture.height * a.scale
+            )
+        })
+
         // draw the mouth
         const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
         const stretchAmount: number = lerp(0.7, 1.2, mouthOpenAmount)
@@ -391,11 +432,9 @@ async function main() {
         // draw the eyes
         if(DYNAMIC_EYES) {
             // testing code 
-            const blink_phase: number = Math.round(2 * blink_occurrences![frame]/blink_max_amount)
+            const blink_phase: number = Math.round((left_eye!.length - 1) * blink_occurrences![frame]/blink_max_amount)
             const left: Image = left_eye![blink_phase]
             const right: Image = right_eye![blink_phase]
-
-            console.log(`${frame}/${num_frames}: ${blink_phase}`)
 
             ctx.drawImage(left,
                 WIDTH/2 - left.width*EYE_SCALE/2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING,
