@@ -31,9 +31,9 @@ server.post("/api/", function (req, res) {
 });
 // audio analysis system
 server.post("/api/time", upload.single("file"), function (req, res) {
-    // load testing filename
-    var audio_filename = "longobama.wav";
-    //let audio_filename = req.file.filename;
+    // load testing filename - uncomment below
+    // let audio_filename = "longobama.wav"
+    var audio_filename = req.file.filename;
     var start = performance.now();
     var output = getStamps("uploads/" + audio_filename);
     var end = performance.now();
