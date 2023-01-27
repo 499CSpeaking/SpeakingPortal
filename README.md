@@ -13,7 +13,7 @@ Official project for Speaking Portal
 ## Meet the Team
 
 ### <u>John Elder</u> | <u>Technical Lead</u>
-Short description about yourself/your role
+Hello, I am the Techinical lead responcible for the database implementation and the backend of the project. I have experience with the languages we are using for this project, and I have experience with agile project development due to the work I've done during summer breaks.
 
 ### <u>Colin Pereira</u> | <u>Project Manager</u>
 Hello, I'm Colin Pereira, and I'm the Project Manager for this endeavour. I have some project management experience due to past projects I've worked on. I also have experience with agile project development due to the work I've done during summer breaks.

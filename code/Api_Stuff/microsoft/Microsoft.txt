@@ -1,0 +1,3 @@
+dotnet tool install --global Microsoft.CognitiveServices.Speech.CLI
+
+spx synthesize --text "Testing synthesis using the Speech CLI" --speakers
