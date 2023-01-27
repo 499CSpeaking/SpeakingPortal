@@ -22,5 +22,13 @@
     "input_eyes_on_body_offset_from_center": [0, -60],
     "input_blink_interval": 0.5,
 
-    "phoneme_occurrence_convolution_filter": [0.028, 0.066, 0.124, 0.180, 0.204, 0.180, 0.124, 0.066, 0.028]
+    "phoneme_occurrence_convolution_filter": [0.028, 0.066, 0.124, 0.180, 0.204, 0.180, 0.124, 0.066, 0.028],
+
+    "static_assets": [
+        {
+            "texture": "input_files/static_assets/Nose.svg",
+            "position_offset_from_center": [0, 0],
+            "scale": 1
+        }
+    ]
 }
