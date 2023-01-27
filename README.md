@@ -47,8 +47,18 @@ Our goal with this project is to create a high quality, high efficiency lip-sync
 <hr>
 
 ## Current System Representation - Manual System
+UI View:
+<img width="387" alt="image" src="https://user-images.githubusercontent.com/77311787/215165125-3e7a8747-f64a-4129-995a-dc55ca6d136e.png">
+Console View:
+<img width="421" alt="image" src="https://user-images.githubusercontent.com/77311787/215165332-3add0e36-bbc5-43d4-ba2b-279027a41b29.png">
+
+<hr>
+
+## Old System Representation - Manual System
 ![image](https://user-images.githubusercontent.com/77311787/205389196-afd933c9-23f0-42cd-ab1b-0e3241c783bb.png)
 ![image](https://user-images.githubusercontent.com/77311787/205389453-0f437e97-d5ae-43b5-a1f1-a59116682ba5.png)
+
+<hr>
 
 ## Current System Representation - Demo System via Gentle
 ![image](https://user-images.githubusercontent.com/77311787/205390000-b01f5ffc-d4d9-4dfc-9c3d-c585cdfc3399.png)
