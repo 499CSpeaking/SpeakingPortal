@@ -51,7 +51,7 @@ button.onclick = async function getOut() {
   let stamps = new Map();
   try {
     // send audio file to server and get result of timestamps
-    getTime(file);
+    stamps = getTime(file);
   } catch (e) {
     log_status(
       `An error occurred while sending the audio to server or while processing! Error Message: ${e.message}`

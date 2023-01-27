@@ -74,12 +74,19 @@ function meanFilter(freqs, filterFreqs, sz) {
       neighVals[4] = 0;
     }
     // filter out general noise
-    filterFreqs[i] =
-      (neighVals[0] / 5) * neighVals[2] +
-      (neighVals[1] / 5) * neighVals[2] +
-      (neighVals[3] / 5) * neighVals[2] +
-      (neighVals[4] / 5) * neighVals[2] +
-      neighVals[2] / 5;
+    // old algo seems to have been a wrong implementation
+    // filterFreqs[i] = Math.round(
+    //   (neighVals[0] / 5) * neighVals[2] +
+    //   (neighVals[1] / 5) * neighVals[2] +
+    //   (neighVals[3] / 5) * neighVals[2] +
+    //   (neighVals[4] / 5) * neighVals[2] +
+    //   neighVals[2] / 5);
+
+    // new mean filtering algo
+    // currently produces better results than old algo
+    filterFreqs[i] = Math.round(
+      (neighVals[0] + neighVals[1] + neighVals[2] + neighVals[3] + neighVals[4]) / neighSz
+    );
   }
   return filterFreqs;
 }
@@ -104,8 +111,10 @@ function getStamps(src) {
   let stamps = new Map();
   let start = false;
   let start_t, end_t;
+  // bug fixing values
+  let stampDiff = new Map();
   // threshold to determine if there is substantial enough sound to count as a word
-  let thresh = 250;
+  let thresh = 12;
   // get the samples present in audio
   let freqs = wav.getSamples(false, Uint8Array);
   let sz = freqs.length;
@@ -115,7 +124,18 @@ function getStamps(src) {
   // noise filtering
   let filterFreqs = new Uint8Array(sz);
   // apply filters
+  // multiple calls to each filter is needed to decrease noise and smooth the values
+  // multiple max filter calls decreases variance
   filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  // mean filter calls serve to smooth random large jumps
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
   // timestamp generation algo
   while (i < filterFreqs.length) {
@@ -123,13 +143,15 @@ function getStamps(src) {
     // range: -32768 to 32767 for 16 bit audio, but I'm mapping to 0-255 range
     let samVal = filterFreqs[i];
     let trueEnd =
-      (filterFreqs[i + 1] < 100 &&
-        filterFreqs[i + 2] < 50 &&
-        filterFreqs[i + 3] < 10 &&
-        filterFreqs[i + 4] < 5 &&
-        filterFreqs[i + 5] < 1) ||
+      (filterFreqs[i + 1] < 10 &&
+        filterFreqs[i + 2] < 5 &&
+        filterFreqs[i + 3] < 1) ||
       i + 1 > filterFreqs.length;
-    if (samVal > thresh && start == false) {
+    let trueStart =
+      (filterFreqs[i + 1] > 8 &&
+        filterFreqs[i + 2] > 10 &&
+        filterFreqs[i + 3] > 12);
+    if (samVal > thresh /*&& trueStart*/ && start == false) {
       // start is set to true when a word hasn't been found yet
       start = true;
       // see sampleTime declaration for math
@@ -143,11 +165,29 @@ function getStamps(src) {
       start = false;
       end_t = sampleTime * i;
       stamps.set(word, { start: start_t, end: end_t });
+      // bug investigation
+      if (end_t - start_t > 35) {
+        stampDiff.set(word, { diff: end_t - start_t });
+      }
       // word is incremented only if the current word is done being spoken
       word++;
     }
     i++;
   }
+  // bug investigation
+  let diffAvg = 0;
+  stampDiff.forEach(word => {
+    diffAvg += word.diff;
+  });
+  diffAvg = diffAvg / stampDiff.size;
+  console.log('Timestamp Differences: ' + stampDiff.size);
+  console.log('Timestamp Diff Average: ' + diffAvg);
+  // so far it seems like after fixing the mean filter implementation, stamp accuracy is better
+  // currently, using the difference between start and end seems too extreme, as it limits the
+  // amount of stamps by a very large amount
+  // currently, number of stamps has been reduced to 41-58, on a 42 word input
+  // i am unsure of how to increase accuracy from here on
+
   return stamps;
 }
 
