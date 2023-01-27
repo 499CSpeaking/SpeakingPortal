@@ -59,13 +59,6 @@ function meanFilter(freqs, filterFreqs, sz) {
             neighVals[4] = 0;
         }
         // filter out general noise
-        // old algo seems to have been a wrong implementation
-        // filterFreqs[i] = Math.round(
-        //   (neighVals[0] / 5) * neighVals[2] +
-        //   (neighVals[1] / 5) * neighVals[2] +
-        //   (neighVals[3] / 5) * neighVals[2] +
-        //   (neighVals[4] / 5) * neighVals[2] +
-        //   neighVals[2] / 5);
         // new mean filtering algo
         // currently produces better results than old algo
         filterFreqs[i] = Math.round((neighVals[0] + neighVals[1] + neighVals[2] + neighVals[3] + neighVals[4]) / neighSz);
@@ -128,9 +121,12 @@ function getStamps(src) {
             filterFreqs[i + 2] < 5 &&
             filterFreqs[i + 3] < 1) ||
             i + 1 > filterFreqs.length;
-        var trueStart = (filterFreqs[i + 1] > 8 &&
-            filterFreqs[i + 2] > 10 &&
-            filterFreqs[i + 3] > 12);
+        // let trueStart =
+        //   (filterFreqs[i + 1] > 8 &&
+        //     filterFreqs[i + 2] > 10 &&
+        //     filterFreqs[i + 3] > 12);
+        // trueStart was introduced to help reduce false positives, but 
+        // current implementation seems the be ineffective so it will remain scrapped for now
         if (samVal > thresh /*&& trueStart*/ && start == false) {
             // start is set to true when a word hasn't been found yet
             start = true;
