@@ -74,14 +74,6 @@ function meanFilter(freqs, filterFreqs, sz) {
       neighVals[4] = 0;
     }
     // filter out general noise
-    // old algo seems to have been a wrong implementation
-    // filterFreqs[i] = Math.round(
-    //   (neighVals[0] / 5) * neighVals[2] +
-    //   (neighVals[1] / 5) * neighVals[2] +
-    //   (neighVals[3] / 5) * neighVals[2] +
-    //   (neighVals[4] / 5) * neighVals[2] +
-    //   neighVals[2] / 5);
-
     // new mean filtering algo
     // currently produces better results than old algo
     filterFreqs[i] = Math.round(
@@ -101,18 +93,22 @@ function getStamps(src) {
   } catch (e) {
     throw e;
   }
+  
   // get each sample value in the file
   // counter to track sample number
   let i = 0;
   // counter to hold which word is currently being spoken
   // each word should be separated by some level of silence
   let word = 0;
+ 
   // data structure to hold wordID, start time of word, and end time of word
   let stamps = new Map();
   let start = false;
   let start_t, end_t;
+
   // bug fixing values
   let stampDiff = new Map();
+
   // threshold to determine if there is substantial enough sound to count as a word
   let thresh = 12;
   // get the samples present in audio
@@ -121,8 +117,9 @@ function getStamps(src) {
   // number of samples/sampleRate = audio length * 1000 for audio length in ms / number of samples
   // estimates number of ms each sample holds
   let sampleTime = ((sz / wav.fmt.sampleRate) * 1000) / sz;
+  
   // noise filtering
-  let filterFreqs = new Uint8Array(sz);
+  let filterFreqs = new Uint8Array(sz);  
   // apply filters
   // multiple calls to each filter is needed to decrease noise and smooth the values
   // multiple max filter calls decreases variance
@@ -137,6 +134,7 @@ function getStamps(src) {
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  
   // timestamp generation algo
   while (i < filterFreqs.length) {
     // get the value of a single sample from the wave file
@@ -147,10 +145,12 @@ function getStamps(src) {
         filterFreqs[i + 2] < 5 &&
         filterFreqs[i + 3] < 1) ||
       i + 1 > filterFreqs.length;
-    let trueStart =
-      (filterFreqs[i + 1] > 8 &&
-        filterFreqs[i + 2] > 10 &&
-        filterFreqs[i + 3] > 12);
+    // let trueStart =
+    //   (filterFreqs[i + 1] > 8 &&
+    //     filterFreqs[i + 2] > 10 &&
+    //     filterFreqs[i + 3] > 12);
+    // trueStart was introduced to help reduce false positives, but 
+    // current implementation seems the be ineffective so it will remain scrapped for now
     if (samVal > thresh /*&& trueStart*/ && start == false) {
       // start is set to true when a word hasn't been found yet
       start = true;
@@ -174,6 +174,7 @@ function getStamps(src) {
     }
     i++;
   }
+  
   // bug investigation
   let diffAvg = 0;
   stampDiff.forEach(word => {
