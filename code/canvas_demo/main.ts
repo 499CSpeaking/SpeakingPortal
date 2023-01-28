@@ -408,16 +408,6 @@ async function main() {
             body.width * BODY_SCALE, body.height * BODY_SCALE
             )
 
-        // draw any static assets
-        static_assets.forEach((a) => {
-            ctx.drawImage(a.texture,
-                WIDTH/2 - a.texture.width*a.scale/2 + a.x,
-                HEIGHT/2 - a.texture.height*a.scale/2 +  a.y,
-                a.texture.width * a.scale,
-                a.texture.height * a.scale
-            )
-        })
-
         // draw the mouth
         const lerp = (x: number, y: number, a: number) => x * (1 - a) + y * a;
         const stretchAmount: number = lerp(0.7, 1.2, mouthOpenAmount)
@@ -449,6 +439,16 @@ async function main() {
                 right.height*EYE_SCALE
             )
         }
+
+        // draw any static assets
+        static_assets.forEach((a) => {
+            ctx.drawImage(a.texture,
+                WIDTH/2 - a.texture.width*a.scale/2 + a.x,
+                HEIGHT/2 - a.texture.height*a.scale/2 +  a.y,
+                a.texture.width * a.scale,
+                a.texture.height * a.scale
+            )
+        })
 
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }
