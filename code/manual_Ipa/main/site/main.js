@@ -49,7 +49,7 @@ function clear_output() {
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var input, phonemes, file, e_1, stamps;
+        var input, wordCount, phonemes, file, e_1, stamps;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -63,6 +63,7 @@ button.onclick = function getOut() {
                         log_status("text input exceeds the character limit!");
                         return [2 /*return*/];
                     }
+                    wordCount = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g, "").split(" ").length;
                     // generate phonemes
                     log_status("Starting...");
                     log_status("Getting Phonemes...");
@@ -89,6 +90,10 @@ button.onclick = function getOut() {
                     try {
                         // send audio file to server and get result of timestamps
                         stamps = getTime(file);
+                        // trim the stamps if there are too many
+                        if (stamps.size > wordCount) {
+                            stamps = getTrimmedStamps(stamps, wordCount);
+                        }
                     }
                     catch (e) {
                         log_status("An error occurred while sending the audio to server or while processing! Error Message: ".concat(e.message));
@@ -183,6 +188,20 @@ function getTime(audio) {
     })
         .catch(function (err) {
         log_status("An error occurred while processing! Error Message: ".concat(err.message));
+    });
+}
+// function to trim extra timestamps
+function getTrimmedStamps(stamps, wordCount) {
+    // send stamps and wordCount to server and get response
+    fetch("http://localhost:4000/api/timeCrunch", {
+        method: "POST",
+        body: JSON.stringify({ stamps: stamps, wordCount: wordCount }),
+        headers: { "Content-type": "application/json; charset=UTF-8" },
+    })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+        var respo = data.timestamps;
+        return respo;
     });
 }
 // check and display the number of characters the user has typed
