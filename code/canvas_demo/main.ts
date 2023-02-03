@@ -15,6 +15,7 @@ import { readFileSync } from "fs"
 import { isNullOrUndefined } from "util"
 import { assert } from "console"
 import { type } from "os"
+import { execSync } from "child_process"
 ffmpeg.setFfmpegPath(ffmpegStatic!)
 
 async function main() {
@@ -453,14 +454,23 @@ async function main() {
         fs.writeFileSync(`out_frames/frame_${frame.toString().padStart(9, '0')}.png`, canvas.toBuffer('image/png'))
     }
 
+    // generate the video
     ffmpeg()
     .input('./out_frames/frame_%9d.png')
+    .input(AUDIO_PATH)
     .inputOptions([
+        // required to append audio to video
+        '-c copy',
+        '-map 0:v', 
+        '-map 1:a',
         // Set input frame rate
         `-framerate ${FRAME_RATE}`,
     ])
     .output('./out.mp4')
     .run()
+
+    // append audio to the video
+    execSync(`ffmpeg -i out.mp4 -i ${AUDIO_PATH} -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4`)
 }
 
 main()
