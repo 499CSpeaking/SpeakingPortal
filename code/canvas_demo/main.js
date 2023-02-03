@@ -68,7 +68,7 @@ function main() {
                     _p.label = 1;
                 case 1:
                     _p.trys.push([1, 35, , 36]);
-                    parameters = JSON.parse(fs_1.default.readFileSync('./inputs_barb.json').toString());
+                    parameters = JSON.parse(fs_1.default.readFileSync('./inputs.json').toString());
                     WIDTH = parameters.width;
                     HEIGHT = parameters.height;
                     TRANSCRIPT_PATH = parameters.input_transcript;
@@ -335,6 +335,16 @@ function main() {
                                 active_phoneme = active_phoneme.split('_')[0];
                             }
                         }
+                        // last minute hack: make sure to warn the user if a phoneme is missing
+                        try {
+                            if (phoneme_occurrences.get(active_phoneme) == null) {
+                                throw Error;
+                            }
+                        }
+                        catch (_) {
+                            console.error("Error: it looks like the phoneme '".concat(active_phoneme, "' is found in the transcript but not in the mappings file... Perhaps you forgot to define it in ").concat(PHONEME_MAPPINGS_PATH, "?"));
+                            (0, process_1.exit)();
+                        }
                         (phoneme_occurrences.get(active_phoneme))[frame] = 1;
                     }
                     // perform a low-pass filter operation on each occurrence array to smooth it out
@@ -428,21 +438,11 @@ function main() {
                         _loop_1(frame);
                     }
                     // generate the video
-                    (0, fluent_ffmpeg_1.default)()
-                        .input('./out_frames/frame_%9d.png')
-                        .input(AUDIO_PATH)
-                        .inputOptions([
-                        // required to append audio to video
-                        '-c copy',
-                        '-map 0:v',
-                        '-map 1:a',
-                        // Set input frame rate
-                        "-framerate ".concat(FRAME_RATE),
-                    ])
-                        .output('./out.mp4')
-                        .run();
+                    (0, child_process_1.execSync)("ffmpeg -y -i ./out_frames/frame_%9d.png -framerate ".concat(FRAME_RATE, " ./out.mp4 -hide_banner -loglevel error"));
+                    console.log('out.mp4 has been generated!');
                     // append audio to the video
-                    (0, child_process_1.execSync)("ffmpeg -i out.mp4 -i ".concat(AUDIO_PATH, " -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4"));
+                    (0, child_process_1.execSync)("ffmpeg -y -i out.mp4 -i ".concat(AUDIO_PATH, " -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4 -hide_banner -loglevel error"));
+                    console.log('out_with_audio.mp4 has been generated!');
                     return [2 /*return*/];
             }
         });
