@@ -20,7 +20,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -51,19 +51,23 @@ var process_1 = require("process");
 var get_video_duration_1 = require("get-video-duration");
 var fluent_ffmpeg_1 = __importDefault(require("fluent-ffmpeg"));
 var ffmpeg_static_1 = __importDefault(require("ffmpeg-static"));
+var child_process_1 = require("child_process");
 fluent_ffmpeg_1.default.setFfmpegPath(ffmpeg_static_1.default);
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, MOUTH_ON_BODY_OFFSET, BODY_TEXTURE_PATH, BODY_SCALE, MOUTH_SCALE, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, DYNAMIC_EYES, EYES_SPACING, EYE_SCALE, EYE_TEXTURES_PATH, EYE_MAPPINGS_PATH, EYES_ON_BODY_OFFSET, BLINK_INTERVAL, static_assets, video_length, num_frames, transcript, mouths, left_eye, right_eye, body, phoneme_occurrences, blink_occurrences, blink_max_amount, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _i, phoneme, _c, _d, _e, e_2, e_3, parsed, i, parsed_asset, _f, _g, _h, e_4, e_5, eye_mapping, length_1, i, _j, _k, _l, _m, e_6, step_size, i, filterLen, blink_occurrences_copy, i, localSum, j, di, i, e_7, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
-        return __generator(this, function (_o) {
-            switch (_o.label) {
+        var WIDTH, HEIGHT, TRANSCRIPT_PATH, PHONEME_MAPPINGS_PATH, MOUTH_TEXTURES_PATH, MOUTH_ON_BODY_OFFSET, BODY_TEXTURE_PATH, BODY_SCALE, MOUTH_SCALE, AUDIO_PATH, FRAME_RATE, PHONEME_OCCURRENCE_CONVOLUTION, DYNAMIC_EYES, EYES_SPACING, EYE_SCALE, EYE_TEXTURES_PATH, EYE_MAPPINGS_PATH, EYES_ON_BODY_OFFSET, BLINK_INTERVAL // seconds per blink
+        , static_assets, video_length // in seconds
+        , num_frames, transcript, mouths, left_eye, right_eye, body, phoneme_occurrences, blink_occurrences, blink_max_amount, parameters, filterSum, e_1, mouth_mappings_file, _a, _b, _c, _i, phoneme, _d, _e, _f, e_2, e_3, parsed, i, parsed_asset, _g, _h, e_4, e_5, eye_mapping, length_1, i, _j, _k, _l, _m, e_6, step_size, i, filterLen, blink_occurrences_copy, i, localSum, j, di, i, e_7, canvas, ctx, current_word_idx, current_phoneme_idx, current_phoneme_offset, num_words, frame, active_word, active_phoneme, current_time, num_phonemes, _loop_1, frame;
+        var _o;
+        return __generator(this, function (_p) {
+            switch (_p.label) {
                 case 0:
                     mouths = new Map();
                     phoneme_occurrences = new Map();
                     blink_max_amount = 1e-10;
-                    _o.label = 1;
+                    _p.label = 1;
                 case 1:
-                    _o.trys.push([1, 35, , 36]);
+                    _p.trys.push([1, 35, , 36]);
                     parameters = JSON.parse(fs_1.default.readFileSync('./inputs_barb.json').toString());
                     WIDTH = parameters.width;
                     HEIGHT = parameters.height;
@@ -97,7 +101,7 @@ function main() {
                     // verifying this filter is correct
                     try {
                         if (PHONEME_OCCURRENCE_CONVOLUTION.length % 2 == 0) {
-                            throw new Error("phoneme_occurrence_convolution_filter length of " + PHONEME_OCCURRENCE_CONVOLUTION.length + " must be an odd number length");
+                            throw new Error("phoneme_occurrence_convolution_filter length of ".concat(PHONEME_OCCURRENCE_CONVOLUTION.length, " must be an odd number length"));
                         }
                         filterSum = PHONEME_OCCURRENCE_CONVOLUTION.reduce(function (a, b) { return a + b; }, 0);
                         if (Math.abs(filterSum - 1) > 0.1) {
@@ -106,127 +110,130 @@ function main() {
                         }
                     }
                     catch (e) {
-                        throw new Error("invalid phoneme_occurrence_convolution_filter: " + e.message);
+                        throw new Error("invalid phoneme_occurrence_convolution_filter: ".concat(e.message));
                     }
-                    _o.label = 2;
+                    _p.label = 2;
                 case 2:
-                    _o.trys.push([2, 4, , 5]);
-                    return [4 /*yield*/, get_video_duration_1.getVideoDurationInSeconds(AUDIO_PATH)];
+                    _p.trys.push([2, 4, , 5]);
+                    return [4 /*yield*/, (0, get_video_duration_1.getVideoDurationInSeconds)(AUDIO_PATH)];
                 case 3:
-                    video_length = _o.sent();
+                    video_length = _p.sent();
                     return [3 /*break*/, 5];
                 case 4:
-                    e_1 = _o.sent();
-                    throw new Error("couldn't extract video length from " + AUDIO_PATH + ": " + e_1.message);
+                    e_1 = _p.sent();
+                    throw new Error("couldn't extract video length from ".concat(AUDIO_PATH, ": ").concat(e_1.message));
                 case 5:
                     num_frames = FRAME_RATE * video_length;
                     try {
                         transcript = JSON.parse(fs_1.default.readFileSync(TRANSCRIPT_PATH).toString());
                     }
                     catch (e) {
-                        throw new Error("couldn't parse the transcript located at " + TRANSCRIPT_PATH + ": " + e.message);
+                        throw new Error("couldn't parse the transcript located at ".concat(TRANSCRIPT_PATH, ": ").concat(e.message));
                     }
-                    _o.label = 6;
+                    _p.label = 6;
                 case 6:
-                    _o.trys.push([6, 11, , 12]);
+                    _p.trys.push([6, 11, , 12]);
                     mouth_mappings_file = JSON.parse(fs_1.default.readFileSync(PHONEME_MAPPINGS_PATH).toString());
-                    _a = [];
-                    for (_b in mouth_mappings_file)
-                        _a.push(_b);
+                    _a = mouth_mappings_file;
+                    _b = [];
+                    for (_c in _a)
+                        _b.push(_c);
                     _i = 0;
-                    _o.label = 7;
+                    _p.label = 7;
                 case 7:
-                    if (!(_i < _a.length)) return [3 /*break*/, 10];
-                    phoneme = _a[_i];
-                    _d = (_c = mouths).set;
-                    _e = [phoneme];
-                    return [4 /*yield*/, canvas_1.loadImage(MOUTH_TEXTURES_PATH + "/" + mouth_mappings_file[phoneme])];
+                    if (!(_i < _b.length)) return [3 /*break*/, 10];
+                    _c = _b[_i];
+                    if (!(_c in _a)) return [3 /*break*/, 9];
+                    phoneme = _c;
+                    _e = (_d = mouths).set;
+                    _f = [phoneme];
+                    return [4 /*yield*/, (0, canvas_1.loadImage)("".concat(MOUTH_TEXTURES_PATH, "/").concat(mouth_mappings_file[phoneme]))];
                 case 8:
-                    _d.apply(_c, _e.concat([_o.sent()]));
+                    _e.apply(_d, _f.concat([_p.sent()]));
                     phoneme_occurrences.set(phoneme, new Array(Math.floor(num_frames)).fill(0));
-                    _o.label = 9;
+                    _p.label = 9;
                 case 9:
                     _i++;
                     return [3 /*break*/, 7];
                 case 10:
                     if (!mouths.get('idle')) {
-                        throw new Error("you are missing an \"idle\" entry in " + PHONEME_MAPPINGS_PATH + " that represents the mouth's non-speaking texture");
+                        throw new Error("you are missing an \"idle\" entry in ".concat(PHONEME_MAPPINGS_PATH, " that represents the mouth's non-speaking texture"));
                     }
                     return [3 /*break*/, 12];
                 case 11:
-                    e_2 = _o.sent();
-                    throw new Error("couldn't parse the phoneme-to-mouth mappings located at " + PHONEME_MAPPINGS_PATH + ": " + e_2.message);
+                    e_2 = _p.sent();
+                    throw new Error("couldn't parse the phoneme-to-mouth mappings located at ".concat(PHONEME_MAPPINGS_PATH, ": ").concat(e_2.message));
                 case 12:
                     // mouth on body position
                     if (MOUTH_ON_BODY_OFFSET.length != 2 || typeof MOUTH_ON_BODY_OFFSET[0] != "number") {
-                        throw new Error("input_mouth_on_body_offset_from_center \"" + MOUTH_ON_BODY_OFFSET + "\" must be an array of numbers of length 2");
+                        throw new Error("input_mouth_on_body_offset_from_center \"".concat(MOUTH_ON_BODY_OFFSET, "\" must be an array of numbers of length 2"));
                     }
-                    _o.label = 13;
+                    _p.label = 13;
                 case 13:
-                    _o.trys.push([13, 15, , 16]);
-                    return [4 /*yield*/, canvas_1.loadImage(BODY_TEXTURE_PATH)];
+                    _p.trys.push([13, 15, , 16]);
+                    return [4 /*yield*/, (0, canvas_1.loadImage)(BODY_TEXTURE_PATH)];
                 case 14:
                     //body texture
-                    body = _o.sent();
+                    body = _p.sent();
                     return [3 /*break*/, 16];
                 case 15:
-                    e_3 = _o.sent();
-                    throw new Error("couldn't load the body texture located at " + BODY_TEXTURE_PATH + ": " + e_3.message);
+                    e_3 = _p.sent();
+                    throw new Error("couldn't load the body texture located at ".concat(BODY_TEXTURE_PATH, ": ").concat(e_3.message));
                 case 16:
                     // body scale
                     if (BODY_SCALE <= 0) {
-                        throw new Error("invalid body scale " + BODY_SCALE);
+                        throw new Error("invalid body scale ".concat(BODY_SCALE));
                     }
                     // mouth scale
                     if (MOUTH_SCALE <= 0) {
-                        throw new Error("invalid mouth scale " + MOUTH_SCALE);
+                        throw new Error("invalid mouth scale ".concat(MOUTH_SCALE));
                     }
-                    _o.label = 17;
+                    _p.label = 17;
                 case 17:
-                    _o.trys.push([17, 24, , 25]);
+                    _p.trys.push([17, 24, , 25]);
                     parsed = parameters.static_assets ? parameters.static_assets : [];
                     static_assets = new Array(parsed.length);
                     i = 0;
-                    _o.label = 18;
+                    _p.label = 18;
                 case 18:
                     if (!(i < parsed.length)) return [3 /*break*/, 23];
-                    _o.label = 19;
+                    _p.label = 19;
                 case 19:
-                    _o.trys.push([19, 21, , 22]);
+                    _p.trys.push([19, 21, , 22]);
                     parsed_asset = parsed[i];
-                    _f = static_assets;
-                    _g = i;
-                    _h = {};
-                    return [4 /*yield*/, canvas_1.loadImage(parsed_asset.texture)];
+                    _g = static_assets;
+                    _h = i;
+                    _o = {};
+                    return [4 /*yield*/, (0, canvas_1.loadImage)(parsed_asset.texture)];
                 case 20:
-                    _f[_g] = (_h.texture = _o.sent(),
-                        _h.x = parsed_asset.position_offset_from_center[0],
-                        _h.y = parsed_asset.position_offset_from_center[1],
-                        _h.scale = parsed_asset.scale,
-                        _h);
+                    _g[_h] = (_o.texture = _p.sent(),
+                        _o.x = parsed_asset.position_offset_from_center[0],
+                        _o.y = parsed_asset.position_offset_from_center[1],
+                        _o.scale = parsed_asset.scale,
+                        _o);
                     return [3 /*break*/, 22];
                 case 21:
-                    e_4 = _o.sent();
-                    throw new Error("error processing static asset #" + i + ": " + e_4.message);
+                    e_4 = _p.sent();
+                    throw new Error("error processing static asset #".concat(i, ": ").concat(e_4.message));
                 case 22:
                     i += 1;
                     return [3 /*break*/, 18];
                 case 23: return [3 /*break*/, 25];
                 case 24:
-                    e_5 = _o.sent();
-                    throw new Error("error while parsing static assets: " + e_5.message);
+                    e_5 = _p.sent();
+                    throw new Error("error while parsing static assets: ".concat(e_5.message));
                 case 25:
                     if (!DYNAMIC_EYES) return [3 /*break*/, 34];
                     // eyes on body position
                     if (EYES_ON_BODY_OFFSET.length != 2 || typeof EYES_ON_BODY_OFFSET[0] != "number") {
-                        throw new Error("input_eyes_on_body_offset_from_center \"" + EYES_ON_BODY_OFFSET + "\" must be an array of numbers of length 2");
+                        throw new Error("input_eyes_on_body_offset_from_center \"".concat(EYES_ON_BODY_OFFSET, "\" must be an array of numbers of length 2"));
                     }
-                    _o.label = 26;
+                    _p.label = 26;
                 case 26:
-                    _o.trys.push([26, 32, , 33]);
+                    _p.trys.push([26, 32, , 33]);
                     eye_mapping = JSON.parse(fs_1.default.readFileSync(EYE_MAPPINGS_PATH).toString());
                     if (!(eye_mapping.left && eye_mapping.right)) {
-                        throw new Error(EYE_MAPPINGS_PATH + " needs both a \"left\" and \"right\" item");
+                        throw new Error("".concat(EYE_MAPPINGS_PATH, " needs both a \"left\" and \"right\" item"));
                     }
                     //left_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.left}`)
                     //right_eye = await loadImage(`${EYE_TEXTURES_PATH}/${eye_mapping.right}`)
@@ -237,29 +244,29 @@ function main() {
                     left_eye = new Array(length_1);
                     right_eye = new Array(length_1);
                     i = 0;
-                    _o.label = 27;
+                    _p.label = 27;
                 case 27:
                     if (!(i < length_1)) return [3 /*break*/, 31];
                     // potential for asnyc concurrency optimization here?
                     _j = left_eye;
                     _k = i;
-                    return [4 /*yield*/, canvas_1.loadImage(EYE_TEXTURES_PATH + "/" + eye_mapping.left[i])];
+                    return [4 /*yield*/, (0, canvas_1.loadImage)("".concat(EYE_TEXTURES_PATH, "/").concat(eye_mapping.left[i]))];
                 case 28:
                     // potential for asnyc concurrency optimization here?
-                    _j[_k] = _o.sent();
+                    _j[_k] = _p.sent();
                     _l = right_eye;
                     _m = i;
-                    return [4 /*yield*/, canvas_1.loadImage(EYE_TEXTURES_PATH + "/" + eye_mapping.right[i])];
+                    return [4 /*yield*/, (0, canvas_1.loadImage)("".concat(EYE_TEXTURES_PATH, "/").concat(eye_mapping.right[i]))];
                 case 29:
-                    _l[_m] = _o.sent();
-                    _o.label = 30;
+                    _l[_m] = _p.sent();
+                    _p.label = 30;
                 case 30:
                     i += 1;
                     return [3 /*break*/, 27];
                 case 31: return [3 /*break*/, 33];
                 case 32:
-                    e_6 = _o.sent();
-                    throw new Error("couldn't parse the mouth mappings located at " + EYE_MAPPINGS_PATH + ": " + e_6.message);
+                    e_6 = _p.sent();
+                    throw new Error("couldn't parse the mouth mappings located at ".concat(EYE_MAPPINGS_PATH, ": ").concat(e_6.message));
                 case 33:
                     // blinking
                     try {
@@ -286,20 +293,20 @@ function main() {
                         }
                     }
                     catch (e) {
-                        throw new Error("error creating blink timeline: " + e.message);
+                        throw new Error("error creating blink timeline: ".concat(e.message));
                     }
-                    _o.label = 34;
+                    _p.label = 34;
                 case 34: return [3 /*break*/, 36];
                 case 35:
-                    e_7 = _o.sent();
+                    e_7 = _p.sent();
                     console.error('error obtaining input parameters: ' + e_7.message);
-                    process_1.exit();
+                    (0, process_1.exit)();
                     return [3 /*break*/, 36];
                 case 36:
-                    canvas = canvas_1.createCanvas(WIDTH, HEIGHT);
+                    canvas = (0, canvas_1.createCanvas)(WIDTH, HEIGHT);
                     ctx = canvas.getContext('2d');
                     // delete the old frames (if they exist) from the last run of this program
-                    fs_1.default.readdirSync('out_frames/').forEach(function (f) { return fs_1.default.rmSync("out_frames/" + f); }); //node version 14 and above required for this line
+                    fs_1.default.readdirSync('out_frames/').forEach(function (f) { return fs_1.default.rmSync("out_frames/".concat(f)); }); //node version 14 and above required for this line
                     current_word_idx = 0;
                     current_phoneme_idx = 0;
                     current_phoneme_offset = 0;
@@ -385,7 +392,7 @@ function main() {
                         });
                         ctx.font = '15px Arial';
                         ctx.fillStyle = '#555555';
-                        ctx.fillText("frame " + frame + "/" + num_frames + " @ " + FRAME_RATE + "fps", 5, HEIGHT - 15);
+                        ctx.fillText("frame ".concat(frame, "/").concat(num_frames, " @ ").concat(FRAME_RATE, "fps"), 5, HEIGHT - 15);
                         // if there's a phoneme, embed it into the image
                         var mouth = active_phoneme != '' ? mouths.get(active_phoneme) : mouths.get('idle');
                         var mouthOpenAmount = active_phoneme != '' ? phoneme_occurrences.get(active_phoneme)[frame] : 1;
@@ -396,10 +403,6 @@ function main() {
                             later
                         */
                         ctx.drawImage(body, WIDTH / 2 - body.width * BODY_SCALE / 2, HEIGHT / 2 - body.height * BODY_SCALE / 2, body.width * BODY_SCALE, body.height * BODY_SCALE);
-                        // draw any static assets
-                        static_assets.forEach(function (a) {
-                            ctx.drawImage(a.texture, WIDTH / 2 - a.texture.width * a.scale / 2 + a.x, HEIGHT / 2 - a.texture.height * a.scale / 2 + a.y, a.texture.width * a.scale, a.texture.height * a.scale);
-                        });
                         // draw the mouth
                         var lerp = function (x, y, a) { return x * (1 - a) + y * a; };
                         var stretchAmount = lerp(0.7, 1.2, mouthOpenAmount);
@@ -414,20 +417,32 @@ function main() {
                             ctx.drawImage(left, WIDTH / 2 - left.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] + EYES_SPACING, HEIGHT / 2 - left.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], left.width * EYE_SCALE, left.height * EYE_SCALE);
                             ctx.drawImage(right, WIDTH / 2 - right.width * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[0] - EYES_SPACING, HEIGHT / 2 - right.height * EYE_SCALE / 2 + EYES_ON_BODY_OFFSET[1], right.width * EYE_SCALE, right.height * EYE_SCALE);
                         }
-                        fs_1.default.writeFileSync("out_frames/frame_" + frame.toString().padStart(9, '0') + ".png", canvas.toBuffer('image/png'));
+                        // draw any static assets
+                        static_assets.forEach(function (a) {
+                            ctx.drawImage(a.texture, WIDTH / 2 - a.texture.width * a.scale / 2 + a.x, HEIGHT / 2 - a.texture.height * a.scale / 2 + a.y, a.texture.width * a.scale, a.texture.height * a.scale);
+                        });
+                        fs_1.default.writeFileSync("out_frames/frame_".concat(frame.toString().padStart(9, '0'), ".png"), canvas.toBuffer('image/png'));
                     };
                     // draw the frames
                     for (frame = 0; frame < num_frames; frame += 1) {
                         _loop_1(frame);
                     }
-                    fluent_ffmpeg_1.default()
+                    // generate the video
+                    (0, fluent_ffmpeg_1.default)()
                         .input('./out_frames/frame_%9d.png')
+                        .input(AUDIO_PATH)
                         .inputOptions([
+                        // required to append audio to video
+                        '-c copy',
+                        '-map 0:v',
+                        '-map 1:a',
                         // Set input frame rate
-                        "-framerate " + FRAME_RATE,
+                        "-framerate ".concat(FRAME_RATE),
                     ])
                         .output('./out.mp4')
                         .run();
+                    // append audio to the video
+                    (0, child_process_1.execSync)("ffmpeg -i out.mp4 -i ".concat(AUDIO_PATH, " -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4"));
                     return [2 /*return*/];
             }
         });
