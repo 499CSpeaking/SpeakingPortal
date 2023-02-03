@@ -1,0 +1,10 @@
+
+To install
+dotnet tool install --global Microsoft.CognitiveServices.Speech.CLI
+
+To update
+dotnet tool update --global Microsoft.CognitiveServices.Speech.CLI
+
+Set key 
+spx config @key --set SPEECH-KEY
+spx config @region --set SPEECH-REGION
