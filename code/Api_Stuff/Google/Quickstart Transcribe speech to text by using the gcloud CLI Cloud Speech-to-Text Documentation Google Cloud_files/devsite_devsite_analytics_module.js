@@ -1,0 +1,1 @@
+(function(_ds){var window=this;var Hga=class extends _ds.FQ{Aa(){(window.dataLayer||[]).push({setupCloudConsent:"true"});super.Aa()}};try{window.customElements.define("devsite-analytics",Hga)}catch(a){console.warn("Unrecognized DevSite custom element - CloudxAnalytics",a)};})(_ds_www);
