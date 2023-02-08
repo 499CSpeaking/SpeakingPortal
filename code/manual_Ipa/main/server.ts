@@ -62,20 +62,6 @@ server.post("/api/time", upload.single("file"), (req, res) => {
   console.log("success");
 });
 
-// timestamp crunching system
-// server.post("/api/timeCrunch", (req, res) => {
-//   const wordCount = req.body.wordCount;
-//   console.log("Word Count: "+wordCount);
-//   let stamps = req.body.stamps;
-//   const start = performance.now();
-//   let trimmedStamps = trimStamps(stamps, wordCount);
-//   const end = performance.now();
-//   console.log("Execution Time: " + (end - start) + " ms");
-//   console.log("Trimmed Timestamps: ", trimmedStamps);
-//   res.json({ timestamps: trimmedStamps });
-//   console.log("success");
-// });
-
 // post server start
 server.listen(4000, () => {
   console.log("server running...");
