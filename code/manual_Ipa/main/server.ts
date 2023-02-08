@@ -2,6 +2,7 @@
 const express = require("express");
 const getPhoneme = require("./getPhoneme");
 const getStamps = require("./getStamps");
+const trimStamps = require("./trimStamps");
 const server = express();
 const body_parser = require("body-parser");
 const multer = require("multer");
@@ -41,28 +42,37 @@ server.post("/api/time", upload.single("file"), (req, res) => {
   // load testing filename - uncomment below
   // let audio_filename = "longobama.wav"
   let audio_filename = req.file.filename;
-  const start = performance.now();
+  let wordCount = req.body.wordCount;
+  console.log("word count: ", wordCount);
+  let start = performance.now();
   let output = getStamps("uploads/" + audio_filename);
-  const end = performance.now();
+  let end = performance.now();
   console.log("Execution Time: " + (end - start) + " ms");
   console.log("timestamps: ", output);
-  res.json({ timestamps: output });
+  if (output.size > wordCount) {
+    console.log("Calling Trimmer, we have "+output.size+" stamps, and need "+wordCount);
+    start = performance.now();
+    output = trimStamps(output, wordCount);
+    end = performance.now();
+    console.log("Extra Execution Time: " + (end - start) + " ms");
+  }
+  res.json({timestamps: output});
   console.log("success");
 });
 
 // timestamp crunching system
-server.post("/api/timeCrunch", (req, res) => {
-  const wordCount = req.body.wordCount;
-  console.log("Word Count: "+wordCount);
-  let stamps = req.body.stamps;
-  const start = performance.now();
-  let trimmedStamps = trimStamps(stamps, wordCount);
-  const end = performance.now();
-  console.log("Execution Time: " + (end - start) + " ms");
-  console.log("Trimmed Timestamps: ", trimmedStamps);
-  res.json({ timestamps: trimmedStamps });
-  console.log("success");
-});
+// server.post("/api/timeCrunch", (req, res) => {
+//   const wordCount = req.body.wordCount;
+//   console.log("Word Count: "+wordCount);
+//   let stamps = req.body.stamps;
+//   const start = performance.now();
+//   let trimmedStamps = trimStamps(stamps, wordCount);
+//   const end = performance.now();
+//   console.log("Execution Time: " + (end - start) + " ms");
+//   console.log("Trimmed Timestamps: ", trimmedStamps);
+//   res.json({ timestamps: trimmedStamps });
+//   console.log("success");
+// });
 
 // post server start
 server.listen(4000, () => {
