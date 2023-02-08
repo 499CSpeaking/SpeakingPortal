@@ -53,10 +53,6 @@ button.onclick = async function getOut() {
   try {
     // send audio file to server and get result of timestamps
     stamps = getTime(file, wordCount);
-    // trim the stamps if there are too many
-    // if (stamps.size > wordCount){
-    //   stamps = getTrimmedStamps(stamps, wordCount);
-    // }
   } catch (e) {
     log_status(
       `An error occurred while sending the audio to server or while processing! Error Message: ${e.message}`
@@ -144,22 +140,7 @@ function getTime(audio, wordCount) {
         `An error occurred while processing! Error Message: ${err.message}`
       );
     });
-}
-
-// function to trim extra timestamps
-// function getTrimmedStamps(stamps, wordCount): any {
-//   // send stamps and wordCount to server and get response
-//   fetch("http://localhost:4000/api/timeCrunch", {
-//     method: "POST",
-//     body: JSON.stringify({ stamps: stamps, wordCount: wordCount }),
-//     headers: { "Content-type": "application/json; charset=UTF-8" },
-//   })
-//     .then((res) => res.json())
-//     .then((data) => {
-//       let respo = data.timestamps;
-//       return respo;
-//     });
-// }
+  }
 
 // check and display the number of characters the user has typed
 document.getElementById("char_count").innerHTML = `0/${char_lim}`;
