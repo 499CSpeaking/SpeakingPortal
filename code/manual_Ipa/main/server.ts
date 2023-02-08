@@ -51,9 +51,12 @@ server.post("/api/time", upload.single("file"), (req, res) => {
   if (output.size > wordCount) {
     console.log("Calling Trimmer, we have "+output.size+" stamps, and need "+wordCount);
     start = performance.now();
+    // call works, not sure why typescript is throwing errors
     output = trimStamps(output, wordCount);
     end = performance.now();
     console.log("Extra Execution Time: " + (end - start) + " ms");
+    console.log("Trimmed Size: ", output.size);
+    console.log("Trimmed Stamps: ", output);
   }
   res.json({timestamps: output});
   console.log("success");
