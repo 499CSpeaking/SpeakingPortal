@@ -36,7 +36,6 @@ server.post("/api/time", upload.single("file"), function (req, res) {
     // let audio_filename = "longobama.wav"
     var audio_filename = req.file.filename;
     var wordCount = req.body.wordCount;
-    console.log("word count: ", wordCount);
     var start = performance.now();
     var output = getStamps("uploads/" + audio_filename);
     var end = performance.now();

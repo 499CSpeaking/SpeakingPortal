@@ -120,7 +120,6 @@ function getTime(audio, wordCount) {
   const form_data = new FormData();
   form_data.append("file", audio);
   form_data.append("wordCount", wordCount);
-  console.log(form_data);
   let err = false;
   fetch("http://localhost:4000/api/time", {
     method: "POST",
