@@ -52,11 +52,11 @@ button.onclick = async function getOut() {
   let stamps = new Map();
   try {
     // send audio file to server and get result of timestamps
-    stamps = getTime(file);
+    stamps = getTime(file, wordCount);
     // trim the stamps if there are too many
-    if (stamps.size > wordCount){
-      stamps = getTrimmedStamps(stamps, wordCount);
-    }
+    // if (stamps.size > wordCount){
+    //   stamps = getTrimmedStamps(stamps, wordCount);
+    // }
   } catch (e) {
     log_status(
       `An error occurred while sending the audio to server or while processing! Error Message: ${e.message}`
@@ -116,9 +116,11 @@ async function get_kuk_aud(text) {
 }
 
 // function to send audio to server and get timestamps for each word
-function getTime(audio) {
+function getTime(audio, wordCount) {
   const form_data = new FormData();
   form_data.append("file", audio);
+  form_data.append("wordCount", wordCount);
+  console.log(form_data);
   let err = false;
   fetch("http://localhost:4000/api/time", {
     method: "POST",
@@ -146,19 +148,19 @@ function getTime(audio) {
 }
 
 // function to trim extra timestamps
-function getTrimmedStamps(stamps, wordCount): any {
-  // send stamps and wordCount to server and get response
-  fetch("http://localhost:4000/api/timeCrunch", {
-    method: "POST",
-    body: JSON.stringify({ stamps: stamps, wordCount: wordCount }),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      let respo = data.timestamps;
-      return respo;
-    });
-}
+// function getTrimmedStamps(stamps, wordCount): any {
+//   // send stamps and wordCount to server and get response
+//   fetch("http://localhost:4000/api/timeCrunch", {
+//     method: "POST",
+//     body: JSON.stringify({ stamps: stamps, wordCount: wordCount }),
+//     headers: { "Content-type": "application/json; charset=UTF-8" },
+//   })
+//     .then((res) => res.json())
+//     .then((data) => {
+//       let respo = data.timestamps;
+//       return respo;
+//     });
+// }
 
 // check and display the number of characters the user has typed
 document.getElementById("char_count").innerHTML = `0/${char_lim}`;
