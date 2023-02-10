@@ -3,6 +3,7 @@ import {InputParser} from './abstract_input'
 import fs from 'fs';
 
 export class FileInputParser extends InputParser {
+
     private readonly parameterValues: any // key-value map to hold parameters
     private readonly filePath: string // path to inputs file
 
@@ -22,6 +23,11 @@ export class FileInputParser extends InputParser {
         throw new Error(`there is no parameter associated with key "${key}"`)
 
     }
+
+    getParameterOptional(key: string): string | undefined {
+        return this.parameterValues[key]
+    }
+
     getImage(path: string): Image {
         throw new Error('Method not implemented.');
     }

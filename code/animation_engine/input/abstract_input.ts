@@ -5,5 +5,7 @@ import { Image } from "canvas";
 
 export abstract class InputParser {
     abstract getParameter(key: string): string
+    abstract getParameterOptional(key: string): string | undefined
+
     abstract getImage(path: string): Image
 }
