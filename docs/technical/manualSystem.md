@@ -45,9 +45,25 @@
   - fix results below
     - max and mean filters are applied multiple times each to reduce noise and increase emphasis on peaks
     - mean filter implementation has been fixed and works better now
-    - true_end criteria has been tweaked to follow a more general descending shape to ensure words aren't missed
-    - debugging code and load testing code is still present
-    - next steps: add a function that uses wordcount to trim the extra values if there are any
+    - ~~true_end criteria has been tweaked to follow a more general descending shape to ensure words aren't missed~~
+    - ~~debugging code and load testing code is still present~~
+    - ~~next steps: add a function that uses wordcount to trim the extra values if there are any~~
+    - true_end is now disabled, but the code is still present in comments
+    - some debugging code is present, but commented out
+  - another timestamp fix has been introduced via trimStamps
+    - this function is supposed to reduce the extra stamps by deleting the smallest stamps upto as many times as the difference between the actual wordcount and number of timestamps is
+    - some tweaking will need to be done, since it currently reduces one stamp less than it should be
+      - fix eta next week (Feb 13)
+    - the added runtime is about 0.2-0.5ms for a 250 word input
+    - by removing the smallest timestamps first, we can ensure that words with maximum visible impact will be deteceted more often
+  - as investigation has concluded, it seems like this system will almost always be more inaccurate compared to using google's speech to text timestamping, but does have potential to be much faster
+  - future: 
+    - reformat data structures, or write an algo to reformat data into an acceptable format for the animation system
+    - look into using a median filter instead of mean and max filter
+      - median filters look in a neighborhood and pick the middle value after sorting
+      - this is designed to remove white and black noise since it picks the middle value
+      - this could potentially fix the noise issue, since it seems like white and black noise is heavily prevalent
+      - this would require tweaks in the thresholding numbers on implementation
 <br>
 
 ### Performance
@@ -61,17 +77,18 @@
 
 ### Algorithm Analysis
 - getPhoneme(): O(Unknown)
-- getStamps(): O(11n)
+- getStamps(): O(11n) [this will need to be recalculated]
+- trimStamps(): O(Unknown)
 
 ## Remaining
 <hr>
 
 ### Video Generation
-- system should take all timestamps and phonemes and generate a video
-- phoneme assets should probably be limited to 10 assets max
-- for fluid animation, transitional assets should be used
-- above isnt a large concern yet, since the system is still under development
-- ffmpeg is probably the best option for video processing
+- ~~system should take all timestamps and phonemes and generate a video~~
+- ~~phoneme assets should probably be limited to 10 assets max~~
+- ~~for fluid animation, transitional assets should be used~~
+- ~~above isnt a large concern yet, since the system is still under development~~
+- ~~ffmpeg is probably the best option for video processing~~
 - [@Jake](https://github.com/jtyrmn) has a working canvas implementation for the video system
 - after processing, video should be sent back to the client for viewing and downloading 
 <br>
