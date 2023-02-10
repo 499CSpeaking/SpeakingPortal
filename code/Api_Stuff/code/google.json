@@ -1,0 +1,93 @@
+{
+    "requestId": "3782651244131086198",
+    "results": [
+      {
+        "alternatives": [
+          {
+            "confidence": 0.98360866,
+            "transcript": "hello how is your day today are you going to school today feeling any better",
+            "words": [
+              {
+                "endTime": "0.400s",
+                "startTime": "0s",
+                "word": "hello"
+              },
+              {
+                "endTime": "1.500s",
+                "startTime": "0.400s",
+                "word": "how"
+              },
+              {
+                "endTime": "1.600s",
+                "startTime": "1.500s",
+                "word": "is"
+              },
+              {
+                "endTime": "2s",
+                "startTime": "1.600s",
+                "word": "your"
+              },
+              {
+                "endTime": "2.200s",
+                "startTime": "2s",
+                "word": "day"
+              },
+              {
+                "endTime": "2.400s",
+                "startTime": "2.200s",
+                "word": "today"
+              },
+              {
+                "endTime": "3.800s",
+                "startTime": "2.400s",
+                "word": "are"
+              },
+              {
+                "endTime": "4.200s",
+                "startTime": "3.800s",
+                "word": "you"
+              },
+              {
+                "endTime": "4.500s",
+                "startTime": "4.200s",
+                "word": "going"
+              },
+              {
+                "endTime": "4.900s",
+                "startTime": "4.500s",
+                "word": "to"
+              },
+              {
+                "endTime": "5.300s",
+                "startTime": "4.900s",
+                "word": "school"
+              },
+              {
+                "endTime": "5.700s",
+                "startTime": "5.300s",
+                "word": "today"
+              },
+              {
+                "endTime": "7.300s",
+                "startTime": "5.700s",
+                "word": "feeling"
+              },
+              {
+                "endTime": "7.400s",
+                "startTime": "7.300s",
+                "word": "any"
+              },
+              {
+                "endTime": "7.900s",
+                "startTime": "7.400s",
+                "word": "better"
+              }
+            ]
+          }
+        ],
+        "languageCode": "en-us",
+        "resultEndTime": "8.640s"
+      }
+    ],
+    "totalBilledTime": "9s"
+  }
