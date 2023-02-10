@@ -19,8 +19,6 @@ function mainf(): void {
       amazon();
     }
   });
-
-
 }
 
 mainf();
