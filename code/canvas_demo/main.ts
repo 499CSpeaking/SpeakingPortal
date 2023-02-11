@@ -11,10 +11,6 @@ import { exit } from "process"
 import {getVideoDurationInSeconds} from "get-video-duration"
 import ffmpeg from "fluent-ffmpeg"
 import ffmpegStatic from "ffmpeg-static"
-import { readFileSync } from "fs"
-import { isNullOrUndefined } from "util"
-import { assert } from "console"
-import { type } from "os"
 import { execSync } from "child_process"
 ffmpeg.setFfmpegPath(ffmpegStatic!)
 
