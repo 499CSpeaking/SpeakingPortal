@@ -2,5 +2,10 @@
     "a": "first",
     "b": "second",
     "c": "third",
-    "d": "forth"
+    "d": "forth",
+
+    "width": 100,
+    "height": 100,
+
+    "frames_path": "./tmp"
 }

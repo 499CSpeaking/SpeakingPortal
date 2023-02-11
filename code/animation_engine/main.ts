@@ -5,25 +5,25 @@ function main() {
     // parse all the inputs
     const inputParser: FileInputParser = new FileInputParser('./testing/inputs.json')
 
-    const inputs: any = new Object();
-    inputs.addParameter = (parameter: string) => {
-        inputs[parameter] = inputParser.getParameter(parameter)
+    const config: any = new Object();
+    config.loadParameter = (parameter: string) => {
+        config[parameter] = inputParser.getParameter(parameter)
     }
-    inputs.addOptionalParameter = (parameter: string) => {
+    config.loadOptionalParameter = (parameter: string) => {
         const value = inputParser.getParameterOptional(parameter)
         if(value) {
-            inputs[parameter] = value
+            config[parameter] = value
         }
     }
 
     try {
-        inputs.addParameter("a")
-        inputs.addParameter("b")
-        inputs.addParameter("c")
-        inputs.addOptionalParameter("d")
-        console.log(inputs)
+        config.loadParameter("a")
+        config.loadParameter("b")
+        config.loadParameter("c")
+        config.loadOptionalParameter("d")
+        console.log(config)
     } catch(e) {
-        console.log(e.toString())
+        console.log((e as Error).toString())
         exit();
     }
 }
