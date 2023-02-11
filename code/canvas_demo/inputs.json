@@ -29,6 +29,11 @@
             "texture": "input_files/static_assets/Nose.svg",
             "position_offset_from_center": [0, 0],
             "scale": 1
+        },
+        {
+            "texture": "input_files/static_assets_barb/Glasses.svg",
+            "position_offset_from_center": [0, -50],
+            "scale": 0.5 
         }
     ]
 }
