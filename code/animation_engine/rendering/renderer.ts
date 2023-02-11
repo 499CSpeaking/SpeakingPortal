@@ -1,5 +1,5 @@
 import { Canvas, createCanvas } from "canvas";
-import fs from 'fs'
+import fs from "fs"
 import path from "path";
 
 // everything to do with drawing frames and creating videos
