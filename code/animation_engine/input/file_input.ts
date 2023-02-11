@@ -1,6 +1,6 @@
-import {Image} from 'canvas';
-import {InputParser} from './abstract_input'
-import fs from 'fs';
+import {Image} from "canvas";
+import {InputParser} from "./abstract_input"
+import fs from "fs";
 
 export class FileInputParser extends InputParser {
 

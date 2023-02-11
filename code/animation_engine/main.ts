@@ -1,5 +1,5 @@
-import { exit } from 'process';
-import { FileInputParser } from './input/file_input';
+import { exit } from "process";
+import { FileInputParser } from "./input/file_input";
 
 function main() {
     // parse all the inputs
