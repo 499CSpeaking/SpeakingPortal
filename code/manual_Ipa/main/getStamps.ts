@@ -8,28 +8,44 @@ import { WaveFile } from "wavefile";
 // median filter
 function medianFilter(freqs, filterFreqs, sz) {
   // define neighborhood
-
+  let neighSz = 5;
   // create temp array for neighborhood values
-
-  // for i to sz
+  let neighVals = new Uint8Array(neighSz);
+  for (let i = 0; i < sz; i++) {
   // set pivot to be value at freqs[i]
-
+  let pivot = freqs[i];
   // set neighborhood center element [2] to pivot
-
+  neighVals[2] = pivot;
   // check for OOB values
-
+  let iL2 = i - 2 < sz,
+      iL1 = i - 1 < sz,
+      iR1 = i + 1 > sz,
+      iR2 = i + 2 > sz;
   // set rest of neighborhood values
-
+  neighVals[0] = freqs[i - 2];
+    neighVals[1] = freqs[i - 1];
+    neighVals[3] = freqs[i + 1];
+    neighVals[4] = freqs[i + 2];
   // handle OOB values
-
+  if (iL2) {
+    neighVals[0] = 0;
+  }
+  if (iL1) {
+    neighVals[1] = 0;
+  }
+  if (iR1) {
+    neighVals[3] = 0;
+  }
+  if (iR2) {
+    neighVals[4] = 0;
+  }
   // sort neighborhood values from smallest to largest
-  // use .sort(function(a, b){return a-b})
-
+  neighVals.sort(function(a, b){return a-b});
   // set output[i] to new center element of neighborhood
-
-  // end for
-
+  filterFreqs[i] = neighVals[2];
+  }
   // return output array
+  return filterFreqs;
 }
 
 // Max Filter
