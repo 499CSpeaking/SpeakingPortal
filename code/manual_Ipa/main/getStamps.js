@@ -138,19 +138,20 @@ function getStamps(src) {
     // noise filtering
     var filterFreqs = new Uint8Array(sz);
     // apply filters
-    // multiple calls to each filter is needed to decrease noise and smooth the values
-    // multiple max filter calls decreases variance
-    filterFreqs = maxFilter(freqs, filterFreqs, sz);
-    filterFreqs = maxFilter(freqs, filterFreqs, sz);
-    filterFreqs = maxFilter(freqs, filterFreqs, sz);
-    filterFreqs = maxFilter(freqs, filterFreqs, sz);
-    filterFreqs = maxFilter(freqs, filterFreqs, sz);
-    // mean filter calls serve to smooth random large jumps
-    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-    filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+    filterFreqs = medianFilter(freqs, filterFreqs, sz);
+    // // multiple calls to each filter is needed to decrease noise and smooth the values
+    // // multiple max filter calls decreases variance
+    // filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    // filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    // filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    // filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    // filterFreqs = maxFilter(freqs, filterFreqs, sz);
+    // // mean filter calls serve to smooth random large jumps
+    // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+    // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+    // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+    // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+    // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
     // timestamp generation algo
     while (i < filterFreqs.length) {
         // get the value of a single sample from the wave file
