@@ -1,0 +1,38 @@
+curl -X POST -u "apikey:{apikey}" --header "Content-Type: audio/wav" --data-binary @audio1.wav "{url}/v1/acoustic_customizations/{customization_id}/audio/audio1"
+
+{
+  "total_minutes_of_audio": 11.45,
+  "audio": [
+    {
+      "duration": 131,
+      "name": "audio1",
+      "details": {
+        "codec": "pcm_s16le",
+        "type": "audio",
+        "frequency": 22050
+      },
+      "status": "ok"
+    },
+    {
+      "duration": 556,
+      "name": "audio2",
+      "details": {
+        "type": "archive",
+        "compression": "zip"
+      },
+      "status": "ok"
+    },
+    {
+      "duration": 0,
+      "name": "audio3",
+      "details": {},
+      "status": "being_processed"
+    }
+  ]
+}
+
+
+
+curl -X GET -u "apikey:{apikey}" "{url}/v1/acoustic_customizations/{customization_id}/audio"
+
+curl -X POST -u "apikey:{apikey}" "{url}/v1/acoustic_customizations/{customization_id}/reset"
