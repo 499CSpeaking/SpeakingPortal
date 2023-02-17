@@ -12,37 +12,37 @@ function medianFilter(freqs, filterFreqs, sz) {
   // create temp array for neighborhood values
   let neighVals = new Uint8Array(neighSz);
   for (let i = 0; i < sz; i++) {
-  // set pivot to be value at freqs[i]
-  let pivot = freqs[i];
-  // set neighborhood center element [2] to pivot
-  neighVals[2] = pivot;
-  // check for OOB values
-  let iL2 = i - 2 < sz,
+    // set pivot to be value at freqs[i]
+    let pivot = freqs[i];
+    // set neighborhood center element [2] to pivot
+    neighVals[2] = pivot;
+    // check for OOB values
+    let iL2 = i - 2 < sz,
       iL1 = i - 1 < sz,
       iR1 = i + 1 > sz,
       iR2 = i + 2 > sz;
-  // set rest of neighborhood values
-  neighVals[0] = freqs[i - 2];
+    // set rest of neighborhood values
+    neighVals[0] = freqs[i - 2];
     neighVals[1] = freqs[i - 1];
     neighVals[3] = freqs[i + 1];
     neighVals[4] = freqs[i + 2];
-  // handle OOB values
-  if (iL2) {
-    neighVals[0] = 0;
-  }
-  if (iL1) {
-    neighVals[1] = 0;
-  }
-  if (iR1) {
-    neighVals[3] = 0;
-  }
-  if (iR2) {
-    neighVals[4] = 0;
-  }
-  // sort neighborhood values from smallest to largest
-  neighVals.sort(function(a, b){return a-b});
-  // set output[i] to new center element of neighborhood
-  filterFreqs[i] = neighVals[2];
+    // handle OOB values
+    if (iL2) {
+      neighVals[0] = 0;
+    }
+    if (iL1) {
+      neighVals[1] = 0;
+    }
+    if (iR1) {
+      neighVals[3] = 0;
+    }
+    if (iR2) {
+      neighVals[4] = 0;
+    }
+    // sort neighborhood values from smallest to largest
+    neighVals.sort(function (a, b) { return a - b });
+    // set output[i] to new center element of neighborhood
+    filterFreqs[i] = neighVals[2];
   }
   // return output array
   return filterFreqs;
@@ -136,14 +136,14 @@ function getStamps(src) {
   } catch (e) {
     throw e;
   }
-  
+
   // get each sample value in the file
   // counter to track sample number
   let i = 0;
   // counter to hold which word is currently being spoken
   // each word should be separated by some level of silence
   let word = 0;
- 
+
   // data structure to hold wordID, start time of word, and end time of word
   let stamps = new Map();
   let start = false;
@@ -160,30 +160,30 @@ function getStamps(src) {
   // number of samples/sampleRate = audio length * 1000 for audio length in ms / number of samples
   // estimates number of ms each sample holds
   let sampleTime = ((sz / wav.fmt.sampleRate) * 1000) / sz;
-  
+
   // noise filtering
-  let filterFreqs = new Uint8Array(sz);  
+  let filterFreqs = new Uint8Array(sz);
   // apply filters
-  filterFreqs = medianFilter(freqs, filterFreqs, sz);
-  // // multiple calls to each filter is needed to decrease noise and smooth the values
-  // // multiple max filter calls decreases variance
-  // filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // // mean filter calls serve to smooth random large jumps
-  // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
-  
+  // filterFreqs = medianFilter(freqs, filterFreqs, sz);
+  // multiple max filter calls decreases variance
+  filterFreqs = maxFilter(freqs, filterFreqs, sz);
+  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
+  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
+  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
+  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
+  // mean filter calls serve to smooth random large jumps
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+  filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
+
   // timestamp generation algo
   while (i < filterFreqs.length) {
     // get the value of a single sample from the wave file
     // range: -32768 to 32767 for 16 bit audio, but I'm mapping to 0-255 range
     let samVal = filterFreqs[i];
+    // console.log(samVal);
     let trueEnd =
       (filterFreqs[i + 1] < 10 &&
         filterFreqs[i + 2] < 5 &&
@@ -195,7 +195,7 @@ function getStamps(src) {
     //     filterFreqs[i + 3] > 12);
     // trueStart was introduced to help reduce false positives, but 
     // current implementation seems the be ineffective so it will remain scrapped for now
-    if (samVal > thresh /*&& trueStart*/ && start == false) {
+    if (samVal > thresh && /*trueStart &&*/ start == false) {
       // start is set to true when a word hasn't been found yet
       start = true;
       // see sampleTime declaration for math
@@ -206,19 +206,19 @@ function getStamps(src) {
       start == true
     ) {
       // start is set to false when the last audible portion of the word is spoken
-      start = false;
       end_t = sampleTime * i;
+      start = false;
       stamps.set(word, { start: start_t, end: end_t });
+      // word is incremented only if the current word is done being spoken
+      word++;
       // bug investigation
       if (end_t - start_t > 35) {
         stampDiff.set(word, { diff: end_t - start_t });
       }
-      // word is incremented only if the current word is done being spoken
-      word++;
     }
     i++;
   }
-  
+
   // bug investigation
   let diffAvg = 0;
   stampDiff.forEach(word => {
