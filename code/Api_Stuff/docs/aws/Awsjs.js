@@ -2,9 +2,6 @@ const speech = require('@google-cloud/speech');
 
 const client = new speech.SpeechClient();
 
-/**
- * Calls the Speech-to-Text API on a demo audio file.
- */
 async function quickstart() {
 // The path to the remote LINEAR16 file stored in Google Cloud Storage
   const gcsUri = 'gs://cloud-samples-data/speech/brooklyn_bridge.raw';
@@ -45,3 +42,62 @@ async function quickstart() {
 }
 
 quickstart();
+const run = async () => {
+  // Create an Amazon S3 bucket.
+  try {
+    const data = await s3Client.send(
+        new CreateBucketCommand({ Bucket: params.Bucket })
+    );
+    console.log(data);
+    console.log("Successfully created a bucket called ", data.Location);
+    return data; // For unit tests.
+  } catch (err) {
+    console.log("Error", err);
+  }
+  // Create an object and upload it to the Amazon S3 bucket.
+  try {
+    const results = await s3Client.send(new PutObjectCommand(params));
+    console.log(
+        "Successfully created " +
+        params.Key +
+        " and uploaded it to " +
+        params.Bucket +
+        "/" +
+        params.Key
+    );
+    return results; // For unit tests.
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+run();
+
+
+// Import the required AWS SDK clients and commands for Node.js
+import { StartTranscriptionJobCommand } from "@aws-sdk/client-transcribe";
+import { transcribeClient } from "./libs/transcribeClient.js";
+
+// Set the parameters
+export const params = {
+  TranscriptionJobName: "JOB_NAME",
+  LanguageCode: "LANGUAGE_CODE", // For example, 'en-US'
+  MediaFormat: "SOURCE_FILE_FORMAT", // For example, 'wav'
+  Media: {
+    MediaFileUri: "SOURCE_LOCATION",
+    // For example, "https://transcribe-demo.s3-REGION.amazonaws.com/hello_world.wav"
+  },
+  OutputBucketName: "OUTPUT_BUCKET_NAME"
+};
+
+export const run = async () => {
+  try {
+    const data = await transcribeClient.send(
+      new StartTranscriptionJobCommand(params)
+    );
+    console.log("Success - put", data);
+    return data; // For unit tests.
+  } catch (err) {
+    console.log("Error", err);
+  }
+};
+run();
