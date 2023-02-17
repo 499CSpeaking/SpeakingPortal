@@ -3,6 +3,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // library requirements
 var fs = require("fs");
 var wavefile_1 = require("wavefile");
+// median filter
+function medianFilter(freqs, filterFreqs, sz) {
+    // define neighborhood
+    // create temp array for neighborhood values
+    // for i to sz
+    // set pivot to be value at freqs[i]
+    // set neighborhood center element [2] to pivot
+    // check for OOB values
+    // set rest of neighborhood values
+    // handle OOB values
+    // sort neighborhood values from smallest to largest
+    // use .sort(function(a, b){return a-b})
+    // set output[i] to new center element of neighborhood
+    // end for
+    // return output array
+}
 // Max Filter
 function maxFilter(freqs, filterFreqs, sz) {
     var neighSz = 5;
