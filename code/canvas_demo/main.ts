@@ -164,7 +164,7 @@ async function main() {
             //body texture
             body = await loadImage(BODY_TEXTURE_PATH)
         } catch(e) {
-            throw new Error(`couldn't load the body texture located at ${BODY_TEXTURE_PATH}: ${(e as Error).message}`)
+            throw new Error(`could not load the body texture located at ${BODY_TEXTURE_PATH}: ${(e as Error).message}`)
         }
 
         // body scale
