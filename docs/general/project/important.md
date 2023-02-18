@@ -574,3 +574,120 @@ owowowo more newlines \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \
 
 
 AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh
+
+
+ok gotta test something
+I guess gitstats doesn't count empty lines
+so
+
+Do you like green eggs and ham?
+
+I do not like them, Sam-I-am.
+I do not like green eggs and ham!
+
+Would you like them here or there?
+
+I would not like them here or there.
+I would not like them anywhere.
+
+I do so like green eggs and ham!
+Thank you! Thank you,
+Sam-I-am!
+
+
+here have another one
+
+
+
+One fish
+Two fish
+Red fish
+Blue fish.
+Black fish
+Blue fish
+Old fish
+New fish.
+This one has a little star.
+This one has a little car.
+
+Say! What a lot
+Of fish there are.
+Yes. Some are red. And some are blue.
+Some are old. And some are new.
+Some are sad.
+And some are glad.
+And some are very, very bad.
+Why are they
+Sad and glad and bad?
+I do not know.
+Go ask your dad.
+Some are thin.
+And some are fat.
+The fat one has
+A yellow hat.
+From there to here, from here to there,
+Funny things
+Are everywhere.
+
+Here are some
+Who like to run.
+They run for fun
+In the hot, hot sun.
+Oh me! Oh my!
+Oh me! Oh my!
+What a lot
+Of funny things go by.
+Some have two feet
+And some have four.
+Some have six feet
+And some have more.
+Where do they come from? I can’t say.
+But I bet they have come a long, long way.
+We see them come.
+We see them go.
+Some are fast.
+And some are slow.
+Some are high
+And some are low.
+Not one of them
+Is like another.
+Don’t ask us why.
+Go ask your mother.
+Say!
+Look at his fingers!
+One, two, three...
+How many fingers
+Do I see?
+One, two, three, four,
+Five, six, seven,
+Eight, nine, ten.
+He has eleven!
+Eleven!
+This is something new.
+I wish I had
+Eleven, too! 
+
+one more to be safe
+
+Then our mother came in
+And she said to us two,
+“Did you have any fun?
+Tell me. What did you do?”
+
+And Sally and I did not
+know what to say.
+Should we tell her
+The things that went on
+there that day?
+
+Well... what would YOU do
+If your mother asked you?
+
+.......
+
+Look at me!
+Look at me!
+Look at me NOW!
+It is fun to have fun
+But you have
+to know how.
