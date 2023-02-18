@@ -164,7 +164,7 @@ async function main() {
             //body texture
             body = await loadImage(BODY_TEXTURE_PATH)
         } catch(e) {
-            throw new Error(`couldn't load the body texture located at ${BODY_TEXTURE_PATH}: ${(e as Error).message}`)
+            throw new Error(`could not load the body texture located at ${BODY_TEXTURE_PATH}: ${(e as Error).message}`)
         }
 
         // body scale
@@ -467,6 +467,7 @@ async function main() {
     // append audio to the video
     execSync(`ffmpeg -y -i out.mp4 -i ${AUDIO_PATH} -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4 -hide_banner -loglevel error`)
     console.log('out_with_audio.mp4 has been generated!');
+    
 }
 
 main()
