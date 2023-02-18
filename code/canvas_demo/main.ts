@@ -468,7 +468,6 @@ async function main() {
     execSync(`ffmpeg -y -i out.mp4 -i ${AUDIO_PATH} -c copy -map 0:v:0 -map 1:a:0 out_with_audio.mp4 -hide_banner -loglevel error`)
     console.log('out_with_audio.mp4 has been generated!');
     
-    //hello
 }
 
 main()
