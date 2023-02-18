@@ -471,3 +471,7 @@ async function main() {
 }
 
 main()
+
+if(Math.random() < 0.00001) {
+    console.log("buy a lottery ticket")
+}
