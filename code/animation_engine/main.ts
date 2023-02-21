@@ -18,9 +18,10 @@ function main() {
     try {
         config.loadParameter("height")
         config.loadParameter("width")
-
-        config.loadOptionalParameter("frames_filetype", 'image/png')
+        
         config.loadOptionalParameter("frames_path", './tmp')
+        config.loadOptionalParameter("video_path", './tmp')
+
         console.log(config)
     } catch(e) {
         console.log((e as Error).toString())
@@ -32,6 +33,8 @@ function main() {
     for(let i: number = 1; i <= 5; i += 1) {
         renderer.drawFrame(i)
     }
+    const video: string = renderer.generateVideo();
+    console.log(`created video ${video}`)
 
     }
 

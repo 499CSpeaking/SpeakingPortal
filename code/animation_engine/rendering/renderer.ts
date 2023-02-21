@@ -1,4 +1,6 @@
 import { Canvas, createCanvas } from "canvas";
+import { execSync } from "child_process";
+import commandExists from "command-exists";
 import fs from "fs"
 import path from "path";
 
@@ -21,6 +23,11 @@ export class Renderer {
     public setup(): void {
         const root: string = this.config.frames_path
         const fullPath: string = path.join(root, 'frames')
+
+        // check if ffmpeg actually exists on this machine
+        if(!commandExists.sync("ffmpeg")) {
+            console.log(`warning: ffmpeg doesn't seem to be installed`)
+        }
         
         // ensure there's an *empty* directory to store frames
         if(fs.existsSync(fullPath)) {
@@ -37,6 +44,18 @@ export class Renderer {
         this.renderCtx.font = '10px Arial'
         this.renderCtx.fillStyle = '#111111'
         this.renderCtx.fillText(`currently at frame ${frameNum}.png`, 10, 10)
-        fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum}.png`), this.canvas.toBuffer('image/png'))
+        fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum.toString().padStart(12, '0')}.png`), this.canvas.toBuffer('image/png'))
+    }
+
+    // call to generate the video
+    // returns the path to file
+    public generateVideo(): string {
+        const filename: string = path.join(this.config.video_path, 'video.mp4')
+        try {
+            execSync(`ffmpeg -y -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} -framerate 1 ${filename} -hide_banner -loglevel error`)
+        } catch(e) {
+            throw new Error('error with ffmpeg: ' + (e as Error).message)
+        }
+        return filename
     }
 }
