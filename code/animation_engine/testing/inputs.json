@@ -8,5 +8,7 @@
     "height": 100,
 
     "frames_path": "./tmp",
-    "video_path": "./tmp"
+    "video_path": "./tmp",
+
+    "transcript_path": "./testing/transcript.json"
 }

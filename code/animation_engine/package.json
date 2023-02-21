@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@flatten-js/interval-tree": "^1.0.20",
     "@types/command-exists": "^1.2.0",
     "@types/node": "^18.13.0",
     "canvas": "^2.11.0",

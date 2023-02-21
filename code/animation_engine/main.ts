@@ -1,6 +1,7 @@
 import { exit } from "process";
 import { FileInputParser } from "./input/file_input";
 import { Renderer } from "./rendering/renderer";
+import { PhonemeMapping } from "./transcript/parse_mappings";
 
 function main() {
     // parse all the inputs
@@ -18,6 +19,8 @@ function main() {
     try {
         config.loadParameter("height")
         config.loadParameter("width")
+
+        config.loadParameter("transcript_path")
         
         config.loadOptionalParameter("frames_path", './tmp')
         config.loadOptionalParameter("video_path", './tmp')
@@ -28,13 +31,18 @@ function main() {
         exit();
     }
 
-    const renderer: Renderer = new Renderer(config)
-    renderer.setup()
-    for(let i: number = 1; i <= 5; i += 1) {
-        renderer.drawFrame(i)
+    // const renderer: Renderer = new Renderer(config)
+    // renderer.setup()
+    // for(let i: number = 1; i <= 5; i += 1) {
+    //     renderer.drawFrame(i)
+    // }
+    // const video: string = renderer.generateVideo();
+    // console.log(`created video ${video}`)
+
+    const mapping = new PhonemeMapping(config);
+    for(let s = 0; s < 10; s += 0.1) {
+        console.log(`${s}: ${mapping.getAtTime(s)}`)
     }
-    const video: string = renderer.generateVideo();
-    console.log(`created video ${video}`)
 
     }
 
