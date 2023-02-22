@@ -8,4 +8,5 @@ export abstract class InputParser {
     abstract getParameterOptional(key: string): string | undefined
 
     abstract getImage(path: string): Image
+    abstract getFile(path: string): Buffer
 }

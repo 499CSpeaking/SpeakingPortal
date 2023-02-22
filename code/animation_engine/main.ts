@@ -15,12 +15,15 @@ function main() {
         const value = inputParser.getParameterOptional(parameter)
         config[parameter] = value ?? def
     }
+    config.loadFile = (name: string, pathLocation: string) => {
+        config[name] = inputParser.getFile(inputParser.getParameter(pathLocation))
+    }
 
     try {
         config.loadParameter("height")
         config.loadParameter("width")
 
-        config.loadParameter("transcript_path")
+        config.loadFile("transcript", "transcript_path")
         
         config.loadOptionalParameter("frames_path", './tmp')
         config.loadOptionalParameter("video_path", './tmp')
@@ -31,19 +34,15 @@ function main() {
         exit();
     }
 
-    // const renderer: Renderer = new Renderer(config)
-    // renderer.setup()
-    // for(let i: number = 1; i <= 5; i += 1) {
-    //     renderer.drawFrame(i)
-    // }
-    // const video: string = renderer.generateVideo();
-    // console.log(`created video ${video}`)
-
     const mapping = new PhonemeMapping(config);
-    for(let s = 0; s < 10; s += 0.1) {
-        console.log(`${s}: ${mapping.getAtTime(s)}`)
-    }
 
+    const renderer: Renderer = new Renderer(config)
+    renderer.setup()
+    for(let i: number = 1; i <= 250; i += 1) {
+        renderer.drawFrame(mapping, i, i/25)
+    }
+    const video: string = renderer.generateVideo();
+    console.log(`created video ${video}`)
     }
 
 main()

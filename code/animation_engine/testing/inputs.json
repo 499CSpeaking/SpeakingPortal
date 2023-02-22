@@ -4,8 +4,8 @@
     "c": "third",
     "d": "forth",
 
-    "width": 100,
-    "height": 100,
+    "width": 250,
+    "height": 250,
 
     "frames_path": "./tmp",
     "video_path": "./tmp",

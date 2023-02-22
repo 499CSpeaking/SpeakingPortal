@@ -3,6 +3,7 @@ import { execSync } from "child_process";
 import commandExists from "command-exists";
 import fs from "fs"
 import path from "path";
+import { PhonemeMapping } from "../transcript/parse_mappings";
 
 // everything to do with drawing frames and creating videos
 
@@ -38,12 +39,12 @@ export class Renderer {
         }
     }
 
-    public drawFrame(frameNum: number): void {
+    public drawFrame(mappings: PhonemeMapping, frameNum: number, seconds: number): void {
         this.renderCtx.fillStyle = '#555555'
         this.renderCtx.fillRect(0, 0, this.config.width, this.config.height)
         this.renderCtx.font = '10px Arial'
         this.renderCtx.fillStyle = '#111111'
-        this.renderCtx.fillText(`currently at frame ${frameNum}.png`, 10, 10)
+        this.renderCtx.fillText(`currently at frame ${frameNum}.png\n${mappings.getAtTime(seconds)}`, 10, 10)
         fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum.toString().padStart(12, '0')}.png`), this.canvas.toBuffer('image/png'))
     }
 
@@ -52,7 +53,7 @@ export class Renderer {
     public generateVideo(): string {
         const filename: string = path.join(this.config.video_path, 'video.mp4')
         try {
-            execSync(`ffmpeg -y -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} -framerate 1 ${filename} -hide_banner -loglevel error`)
+            execSync(`ffmpeg -y -r 25 -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${filename} -hide_banner -loglevel error`)
         } catch(e) {
             throw new Error('error with ffmpeg: ' + (e as Error).message)
         }
