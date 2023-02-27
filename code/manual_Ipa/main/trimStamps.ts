@@ -1,29 +1,41 @@
 // library requirements
 
 // algo to strip smaller stamps from list
-function trimStamps(stamps, wordCount) {
+function trimStamps(stamps: Map<any, any>, wordCount: number): Map<any, any> {
+    console.log("Starting Trimmer...");
     // set max number of values to be deleted
-    let maxDel = stamps.size-wordCount;
+    let maxDel = stamps.size - wordCount;
+    console.log("Num to Delete: ", maxDel);
     let i = 0;
-    // find values to be deleted
-    for (let key of stamps.keys()) {
-        // end condition - if we have deleted enough stamps
-        if (i == maxDel){
-            break;
+
+    // trimmed array to hold values
+    let trimmedStamps: Map<any, any> = new Map();
+
+    // delete extra stamps
+    stamps.forEach(function (stamp, word) {
+        if (i < maxDel) {
+            console.log("Checking Key: ", word);
+            let start = stamp.start;
+            let end = stamp.end;
+            let diff = end - start;
+
+            if (diff <= 100) {
+                console.log("Deleting: ", word);
+                stamps.delete(word);
+                i++;
+            }
         }
-        // get difference between start and end to determine if it is too small
-        let start = stamps.get(key).start;
-        let end = stamps.get(key).end;
-        let diff = end-start;
-        // delete the stamp from the list 
-        if (diff <= 100) {
-            stamps.delete(key);
-            i++;
-        }
-    }
+    });
+
+    // add properly numbered values to new array
+    let j = 0
+    stamps.forEach(function (stamp, word) {
+        trimmedStamps.set(j, stamp);
+        j++;
+    });
 
     // return trimmed stamps
-    return stamps;
+    return trimmedStamps;
 }
 
 module.exports = trimStamps;
