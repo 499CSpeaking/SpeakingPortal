@@ -1,8 +1,5 @@
 // library requirements
 import * as fs from "fs";
-import * as path from "path";
-import fetch from "node-fetch";
-import * as readline from "readline";
 import { WaveFile } from "wavefile";
 
 // median filter
@@ -165,12 +162,8 @@ function getStamps(src) {
   let filterFreqs = new Uint8Array(sz);
   // apply filters
   // filterFreqs = medianFilter(freqs, filterFreqs, sz);
-  // multiple max filter calls decreases variance
+  // not using median filters due to inefficacy
   filterFreqs = maxFilter(freqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
-  // filterFreqs = maxFilter(filterFreqs, filterFreqs, sz);
   // mean filter calls serve to smooth random large jumps
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
   filterFreqs = meanFilter(filterFreqs, filterFreqs, sz);
@@ -236,4 +229,18 @@ function getStamps(src) {
   return stamps;
 }
 
+/* Deprecation notes
+System has now been deprecated for the following issues:
+Algorithm cannot distinguish between silence and speech
+- My belief is that this is due to the fact that Frequency is not being used (Amplitude is being used currently)
+- I was unable to find proper FFT algorithms, as such converting the amplitude data to frequency data was not possible
+Stamp inaccuracy is very high
+- This issue stems from the fact that frequency data could not be used
+- Additionally, this system runs purely on numbers, and cannot actually recognize speech
+
+Ideas Behind Creation:
+The system was created to work as a faster, yet slightly inaccuracte forced aligner that would compete with gentle.
+I felt that it would be great if we could have something like that to show for this project, as opposed to using an 
+existing forced aligner, but ultimately it has ended up failing.
+*/
 module.exports = getStamps;
