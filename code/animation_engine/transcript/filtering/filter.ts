@@ -14,5 +14,6 @@ export abstract class ArrayFilter {
         this.kernelSize = kernelSize
     }
 
+    //function that performs filtering
     abstract filter(arr: Array<number>): Array<number>
 }
