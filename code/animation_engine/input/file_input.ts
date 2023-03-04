@@ -32,4 +32,7 @@ export class FileInputParser extends InputParser {
         throw new Error('Method not implemented.');
     }
     
+    getFile(path: string): Buffer {
+        return fs.readFileSync(path)
+    }
 }
