@@ -4,6 +4,8 @@ export class GaussianFilter extends ArrayFilter {
     private variance: number
     private kernel: Array<number>
 
+    // variance is best around 2
+    // performance suffers if kernelSize is too 
     constructor(kernelSize: number, variance: number) {
         super(kernelSize)
         this.variance = variance
