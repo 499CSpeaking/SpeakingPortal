@@ -15,9 +15,9 @@ export class PhonemeMapping {
     }
 
     // get phoneme spoken at specific time
-    public getAtTime(seconds: number): string {
+    public getAtTime(seconds: number): string | undefined {
         const phoneme = this.intervalTree.search([seconds, seconds])
-        return phoneme.length > 0 ? phoneme[0] : 'idle'
+        return phoneme.length > 0 ? phoneme[0] : undefined
     }
 
     private parseFile(config: any): IntervalTree<string> {
@@ -39,13 +39,24 @@ export class PhonemeMapping {
             for(let phonemeIdx = 0; phonemeIdx < word.phones.length; phonemeIdx += 1) {
                 const phoneme: any = word.phones[phonemeIdx]
 
-                tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], word.word + " " + phoneme.phone)
+                tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0])
                 cumulativeOffset += phoneme.duration
 
-                console.log([[cumulativeOffset, cumulativeOffset + phoneme.duration], word.word, phoneme.phone])
+                //console.log([[cumulativeOffset, cumulativeOffset + phoneme.duration], word.word, phoneme.phone])
             }
         }
 
         return tree;
+    }
+
+    // gets the set of all phonemes spoken in this transcript
+    public presentPhonemes(): Set<string> {
+        const set = new Set<string>();
+        this.intervalTree.forEach((key, val) => {
+            //console.log([key, val])
+            set.add(val)
+        })
+
+        return set
     }
 }
