@@ -1,17 +1,18 @@
 {
-    "a": "first",
-    "b": "second",
-    "c": "third",
-    "d": "forth",
-
     "width": 250,
     "height": 250,
 
-    "phoneme_samples_per_second": 10,
+    "phoneme_samples_per_second": 27,
     "frames_per_second": 27,
+
+    "filter_kernel_size": 7,
+    "filter_kernel_variance": 2,
+
+    "phoneme_idle_threshold": 1,
 
     "frames_path": "./tmp",
     "video_path": "./tmp",
 
-    "transcript_path": "./testing/transcript.json"
+    "transcript_path": "./testing/transcript.json",
+    "audio_path": "./testing/audio.mp3"
 }

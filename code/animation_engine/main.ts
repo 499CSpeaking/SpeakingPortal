@@ -3,10 +3,10 @@ import { FileInputParser } from "./input/file_input";
 import { Renderer } from "./rendering/renderer";
 import { PhonemeMapping } from "./transcript/parse_mappings";
 import { PhonemeOccurrences } from "./transcript/phoneme_occurrences";
-import { GaussianFilter } from "./transcript/filtering/gaussian";
-import { ArrayFilter } from "./transcript/filtering/filter";
+import getVideoDurationInSeconds from "get-video-duration";
 
-function main() {
+
+async function main() {
     // parse all the inputs
     const inputParser: FileInputParser = new FileInputParser('./testing/inputs.json')
 
@@ -27,14 +27,21 @@ function main() {
         config.loadParameter("width")
 
         config.loadFile("transcript", "transcript_path")
+        config.loadFile("audio", "audio_path")
         
         config.loadOptionalParameter("frames_path", './tmp')
         config.loadOptionalParameter("video_path", './tmp')
 
+        config.loadOptionalParameter("filter_kernel_size", 7)
+        config.loadOptionalParameter("filter_kernel_variance", 2)
+
+        config.loadOptionalParameter("phoneme_idle_threshold", 0.1)
+
         config.loadOptionalParameter("phoneme_samples_per_second", 10)
         config.loadOptionalParameter("frames_per_second", 27)
 
-        config.placeholder_video_length = 4
+        config.loadParameter("audio_path")
+        config.video_length = await getVideoDurationInSeconds(config.audio_path)
 
         console.log(config)
     } catch(e) {
@@ -43,22 +50,17 @@ function main() {
     }
 
     const mapping = new PhonemeMapping(config);
-    const a = mapping.presentPhonemes()
-    console.log(a)
-
     const phonemeOccurrences = new PhonemeOccurrences(config, mapping)
 
     const renderer: Renderer = new Renderer(config)
     renderer.setup()
-    for(let i: number = 1; i <= config.placeholder_video_length * config.frames_per_second; i += 1) {
-        renderer.drawFrame(mapping, i, i / config.frames_per_second)
+    for(let i: number = 1; i <= config.video_length * config.frames_per_second; i += 1) {
+        const text: string = `${phonemeOccurrences.getDominantPhonemeAt(i / config.frames_per_second) ?? 'idle'}`
+        renderer.drawFrame(text, i, i / config.frames_per_second)
     }
-    //const video: string = renderer.generateVideo();
-    //console.log(`created video ${video}`)
-
-    const filter: ArrayFilter = new GaussianFilter(7, 2)
-    const filtered = filter.filter([0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0])
-    console.log(filtered.map(val => val.toFixed(2)))
+    const video: string = renderer.generateVideo();
+    
+    console.log(`created video ${video}`)
     }
 
 main()

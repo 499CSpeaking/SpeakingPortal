@@ -14,6 +14,7 @@
     "@types/node": "^18.13.0",
     "canvas": "^2.11.0",
     "command-exists": "^1.2.9",
+    "get-video-duration": "^4.1.0",
     "node": "^19.6.0",
     "typescript": "^4.9.5"
   },
