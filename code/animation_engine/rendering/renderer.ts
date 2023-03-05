@@ -4,6 +4,7 @@ import commandExists from "command-exists";
 import fs from "fs"
 import path from "path";
 import { PhonemeMapping } from "../transcript/parse_mappings";
+import { PhonemeOccurrences } from "../transcript/phoneme_occurrences";
 
 // everything to do with drawing frames and creating videos
 
@@ -39,12 +40,12 @@ export class Renderer {
         }
     }
 
-    public drawFrame(mappings: PhonemeMapping, frameNum: number, seconds: number): void {
-        this.renderCtx.fillStyle = '#555555'
+    public drawFrame(text: string, frameNum: number, seconds: number): void {
+        this.renderCtx.fillStyle = '#999999'
         this.renderCtx.fillRect(0, 0, this.config.width, this.config.height)
         this.renderCtx.font = '10px Arial'
         this.renderCtx.fillStyle = '#111111'
-        this.renderCtx.fillText(`currently at frame ${frameNum}.png\n${mappings.getAtTime(seconds)}`, 10, 10)
+        this.renderCtx.fillText(`currently at frame ${frameNum}.png\n${text}`, 10, 10)
         fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum.toString().padStart(12, '0')}.png`), this.canvas.toBuffer('image/png'))
     }
 
@@ -52,8 +53,14 @@ export class Renderer {
     // returns the path to file
     public generateVideo(): string {
         const filename: string = path.join(this.config.video_path, 'video.mp4')
+        const tmpFilename: string = path.join(this.config.frames_path, 'temp_video.mp4')
         try {
-            execSync(`ffmpeg -y -r 25 -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${filename} -hide_banner -loglevel error`)
+            // ffmpeg is used to generate the video
+            // append frame images together
+            execSync(`ffmpeg -y -r ${this.config.frames_per_second} -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${tmpFilename} -hide_banner -loglevel error`)
+
+            // append audio to video file
+            execSync(`ffmpeg -y -i ${tmpFilename} -i ${this.config.audio_path} -c copy -map 0:v:0 -map 1:a:0 ${filename} -hide_banner -loglevel error`)
         } catch(e) {
             throw new Error('error with ffmpeg: ' + (e as Error).message)
         }

@@ -41,8 +41,6 @@ export class PhonemeMapping {
 
                 tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0])
                 cumulativeOffset += phoneme.duration
-
-                //console.log([[cumulativeOffset, cumulativeOffset + phoneme.duration], word.word, phoneme.phone])
             }
         }
 
@@ -53,7 +51,6 @@ export class PhonemeMapping {
     public presentPhonemes(): Set<string> {
         const set = new Set<string>();
         this.intervalTree.forEach((key, val) => {
-            //console.log([key, val])
             set.add(val)
         })
 
