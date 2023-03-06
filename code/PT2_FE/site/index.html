@@ -26,20 +26,40 @@
         </div>
         <div class="row">
             <div class="col-sm-3">
-                <label for="lang">Select Language:</label>
-                <select name="lang" id="lang" required>
-                    <option value="en">English</option>
-                    <option value="fr">French</option>
+                <label for="aligner">Select Aligner:</label>
+                <select name="aligner" id="aligner" required>
+                    <option value="gentle">Gentle</option>
+                    <option value="google">Google</option>
+                    <option value="microsoft">Microsoft</option>
+                    <option value="amazon">Amazon</option>
+                    <option value="ibm">IBM</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label for="voiceKey">Select Voice:</label>
+                <select name="voiceKey" id="voiceKey" required>
+                    <option value="en-US_AllisonVoice">Allison</option>
+                    <option value="Microsoft Server Speech Text to Speech Voice (en-US, AnaNeural)">Ana</option>
+                    <option value="Joey-Neural">Joey</option>
+                    <option value="eun-US-Wavenet-B">Tommy</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <button id="send">Generate</button>
             </div>
         </div>
+        <br>
         <div class="row">
-            <div class="col-lg-12">
-                <h3>Output Here:</h3>
-                <pre><p id="out"></p></pre>
+            <div class="col-lg-6 embed-responsive embed-responsive-16by9">
+                <h3>Video Here:</h3>
+                <video class="embed-responsive-item" id="player" controls>
+                    <source src="" type="video/mp4">
+                    Your browser doesn't support video
+                </video>
+            </div>
+            <div class="col-sm-3">
+                <h3>Status: </h3>
+                <p id="out"></p>
             </div>
         </div>
     </div>

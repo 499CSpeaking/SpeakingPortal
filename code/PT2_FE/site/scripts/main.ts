@@ -26,14 +26,6 @@ button.onclick = async function getOut() {
     log_status("text input exceeds the character limit!");
     return;
   }
-  let wordCount = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g, "").split(" ").length;
-
-  // generate phonemes
-  log_status("Starting...");
-  log_status("Getting Phonemes...");
-  let phonemes = new Map();
-  phonemes = getPhones(input);
-  log_status("Phoneme Detection Complete!");
 
   // get audio from kukarella
   log_status("Getting Audio from Kukarella...");
@@ -46,40 +38,7 @@ button.onclick = async function getOut() {
     );
     return;
   }
-
-  // send audio to server for processing
-  log_status("Sending audio to the server for further processing...");
-  let stamps = new Map();
-  try {
-    // send audio file to server and get result of timestamps
-    stamps = getTime(file, wordCount);
-  } catch (e) {
-    log_status(
-      `An error occurred while sending the audio to server or while processing! Error Message: ${e.message}`
-    );
-  }
 };
-
-// function to send user input to the server for phoneme generation, and to retrieve the phoneme data
-function getPhones(input): any {
-  let userInput = input.toLowerCase();
-  // send input to server and get response
-  fetch("http://localhost:4000/api", {
-    method: "POST",
-    body: JSON.stringify({ input: userInput }),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      let respo = data.output;
-      let html$ = "";
-      for (var key in respo) {
-        html$ += "<p>" + key + ", " + respo.get(key) + "</p>";
-      }
-      log_status(html$);
-      return respo;
-    });
-}
 
 // function to retrieve audio from kukarella's api based on user inputted text
 async function get_kuk_aud(text) {
