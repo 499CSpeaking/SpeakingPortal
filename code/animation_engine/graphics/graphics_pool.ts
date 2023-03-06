@@ -37,4 +37,13 @@ export class GraphicsPool {
         }
         throw new Error(`image "${imageName}" not found. Perhaps it wasn't loaded in "${this.directoryPath}"?`)
     }
+
+    public allNames(): Set<string> {
+        let set: Set<string> = new Set<string>()
+        for(const name of this.images!) {
+            set.add(name[0])
+        }
+
+        return set
+    }
 }

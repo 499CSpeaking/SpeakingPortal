@@ -14,6 +14,7 @@
     "video_path": "./tmp",
 
     "graphics_path": "./testing/graphics",
+    "graphics_config_path": "./testing/graphics.json",
 
     "transcript_path": "./testing/transcript.json",
     "audio_path": "./testing/audio.mp3"

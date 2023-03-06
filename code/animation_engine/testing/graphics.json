@@ -1,7 +1,47 @@
 {
     "body": "graphics/body.png",
     
-    "lips": {
-        
+    "mouths": {
+        "idle": "mouth_idle.svg",
+
+        "d": "mouth_raised_tongue.svg",
+        "ih": "mouth_slightly_rounded.svg",
+        "r": "mouth_transition.svg",
+        "jh": "mouth_raised_tongue.svg",
+        "j": "mouth_raised_tongue.svg",
+        "ey": "mouth_slightly_rounded.svg",
+        "k": "mouth_raised_tongue.svg",
+        "ay": "mouth_open.svg",
+        "a": "mouth_open.svg",
+        "hh": "mouth_slightly_rounded.svg",
+        "ae": "mouth_slightly_open.svg",
+        "e": "mouth_slightly_open.svg",
+        "v": "mouth_teeth_lip.svg",
+        "m": "mouth_closed.svg",
+        "s": "mouth_raised_tongue.svg",
+        "t": "mouth_transition_2.svg",
+        "y": "mouth_slightly_open.svg",
+        "uw": "mouth_puckered_lips.svg",
+        "b": "mouth_closed.svg",
+        "eh": "mouth_slightly_rounded.svg",
+        "f": "mouth_teeth_lip.svg",
+        "n": "mouth_raised_tongue.svg",
+        "w": "mouth_puckered_lips.svg",
+        "iy": "mouth_open.svg",
+        "ah": "mouth_open_wide.svg",
+        "ch": "mouth_slightly_open.svg",
+        "c": "mouth_slightly_open.svg",
+        "p": "mouth_closed.svg",
+        "g": "mouth_raised_tongue.svg",
+        "ow": "mouth_puckered_lips.svg",
+        "o": "mouth_puckered_lips.svg",
+        "er": "mouth_slightly_open.svg",
+        "aa": "mouth_open_wide.svg",
+        "uh": "mouth_transition_2.svg",
+        "u": "mouth_transition_2.svg",
+        "l": "mouth_transition_2.svg",
+        "z": "mouth_slightly_open.svg",
+        "th": "mouth_raised_tongue.svg",
+        "i": "mouth_slightly_open.svg"
     }
 }
