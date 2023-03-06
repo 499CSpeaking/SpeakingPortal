@@ -13,6 +13,8 @@
     "frames_path": "./tmp",
     "video_path": "./tmp",
 
+    "graphics_path": "./testing/graphics",
+
     "transcript_path": "./testing/transcript.json",
     "audio_path": "./testing/audio.mp3"
 }
