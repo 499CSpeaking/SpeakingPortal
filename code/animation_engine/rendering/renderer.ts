@@ -52,7 +52,7 @@ export class Renderer {
         this.renderCtx.fillRect(0, 0, this.config.width, this.config.height)
         this.renderCtx.font = '10px Arial'
         this.renderCtx.fillStyle = '#111111'
-        this.renderCtx.fillText(`currently at frame ${frameNum}.png`, 10, 10)
+        this.renderCtx.fillText(`currently at frame ${frameNum}`, 10, 10)
 
         /*
             Here we attempt to get the mouth texture of the dominantly spoken phoneme at this time.
@@ -64,14 +64,64 @@ export class Renderer {
         if(!imageName) {
             throw new Error(`phoneme "${phoneme}" isn't recognized by the phoneme-image converter`)
         }
-
         const mouth: Image = this.graphics.get(imageName)
 
+        /*
+            Much of this code below is a quick hardcode for the demo. I will improve upon it later 
+        */
+
+        const body: Image = this.graphics.get("body.png")
+        const bodyScale = 0.2
+        this.renderCtx.drawImage(
+            body, 
+            this.config.width/2 - bodyScale*body.width/2,
+            this.config.height/2 - bodyScale*body.height/2,
+            body.width * bodyScale,
+            body.height * bodyScale,
+        )
+
+        const mouthScale = 0.3
+        const mouthY = -26
         this.renderCtx.drawImage(
             mouth,
-            this.config.width/2,
-            this.config.height/2
+            this.config.width/2 - mouthScale*mouth.width/2,
+            this.config.height/2 + mouthY,
+            mouthScale*mouth.width,
+            mouthScale*mouth.height * (0.95 + dominance/10)
         )
+
+        const leftEye: Image[] = [this.graphics.get("eye_left_open.svg"), this.graphics.get("eye_left_half.svg"), this.graphics.get("eye_left_closed.svg")]
+        const rightEye: Image[] = [this.graphics.get("eye_right_open.svg"), this.graphics.get("eye_right_half.svg"), this.graphics.get("eye_right_closed.svg")]
+        const eyeScale = 0.26
+        const eyeY = -50
+        const eyeOffsetFromCenter = 15
+
+        this.renderCtx.drawImage(
+            leftEye[0],
+            this.config.width/2 - eyeScale*leftEye[0].width/2 + eyeOffsetFromCenter,
+            this.config.height/2 - eyeScale*leftEye[0].width/2 + eyeY,
+            eyeScale*leftEye[0].width,
+            eyeScale*leftEye[0].height
+        )
+        this.renderCtx.drawImage(
+            rightEye[0],
+            this.config.width/2 - eyeScale*rightEye[0].width/2 - eyeOffsetFromCenter,
+            this.config.height/2 - eyeScale*rightEye[0].width/2 + eyeY,
+            eyeScale*rightEye[0].width,
+            eyeScale*rightEye[0].height
+        )
+
+        const glasses: Image = this.graphics.get("glasses.svg")
+        const glassesScale = 0.2
+        const glassesY = -45
+        this.renderCtx.drawImage(
+            glasses,
+            this.config.width/2 - glassesScale*glasses.width/2,
+            this.config.height/2 - glassesScale*glasses.height/2 + glassesY,
+            glassesScale*glasses.width,
+            glassesScale*glasses.height
+        )
+
 
         fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum.toString().padStart(12, '0')}.png`), this.canvas.toBuffer('image/png'))
     }
