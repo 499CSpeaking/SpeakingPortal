@@ -49,7 +49,7 @@ function clear_output() {
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var input, wordCount, phonemes, file, e_1, stamps;
+        var input, file, e_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -63,13 +63,6 @@ button.onclick = function getOut() {
                         log_status("text input exceeds the character limit!");
                         return [2 /*return*/];
                     }
-                    wordCount = input.replace(/[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]/g, "").split(" ").length;
-                    // generate phonemes
-                    log_status("Starting...");
-                    log_status("Getting Phonemes...");
-                    phonemes = new Map();
-                    phonemes = getPhones(input);
-                    log_status("Phoneme Detection Complete!");
                     // get audio from kukarella
                     log_status("Getting Audio from Kukarella...");
                     _b.label = 1;
@@ -83,42 +76,11 @@ button.onclick = function getOut() {
                     e_1 = _b.sent();
                     log_status("An error occurred while getting the audio from Kukarella! Error Message: ".concat(e_1.message));
                     return [2 /*return*/];
-                case 4:
-                    // send audio to server for processing
-                    log_status("Sending audio to the server for further processing...");
-                    stamps = new Map();
-                    try {
-                        // send audio file to server and get result of timestamps
-                        stamps = getTime(file, wordCount);
-                    }
-                    catch (e) {
-                        log_status("An error occurred while sending the audio to server or while processing! Error Message: ".concat(e.message));
-                    }
-                    return [2 /*return*/];
+                case 4: return [2 /*return*/];
             }
         });
     });
 };
-// function to send user input to the server for phoneme generation, and to retrieve the phoneme data
-function getPhones(input) {
-    var userInput = input.toLowerCase();
-    // send input to server and get response
-    fetch("http://localhost:4000/api", {
-        method: "POST",
-        body: JSON.stringify({ input: userInput }),
-        headers: { "Content-type": "application/json; charset=UTF-8" },
-    })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-        var respo = data.output;
-        var html$ = "";
-        for (var key in respo) {
-            html$ += "<p>" + key + ", " + respo.get(key) + "</p>";
-        }
-        log_status(html$);
-        return respo;
-    });
-}
 // function to retrieve audio from kukarella's api based on user inputted text
 function get_kuk_aud(text) {
     return __awaiter(this, void 0, void 0, function () {
