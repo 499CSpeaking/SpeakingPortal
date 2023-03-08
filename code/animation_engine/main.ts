@@ -8,20 +8,25 @@ import { GraphicsPool } from "./graphics/graphics_pool";
 import { PhonemeImageconverter } from "./graphics/phoneme_to_image";
 
 
-export async function run(inputFilePath: string): Promise<string> {
+export async function run(inputFilePath: string, config: any): Promise<string> {
     // parse all the inputs
     const inputParser: FileInputParser = new FileInputParser(inputFilePath)
 
-    const config: any = new Object();
     config.loadParameter = (parameter: string) => {
-        config[parameter] = inputParser.getParameter(parameter)
+        if(!config[parameter]) {
+            config[parameter] = inputParser.getParameter(parameter)
+        }
     }
     config.loadOptionalParameter = (parameter: string, def: any) => {
         const value = inputParser.getParameterOptional(parameter)
-        config[parameter] = value ?? def
+        if(!config[parameter]) {
+            config[parameter] = value ?? def
+        }
     }
     config.loadFile = (name: string, pathLocation: string) => {
-        config[name] = inputParser.getFile(inputParser.getParameter(pathLocation))
+        if(!config[name]) {
+            config[name] = inputParser.getFile(inputParser.getParameter(pathLocation))
+        }
     }
 
     try {
@@ -74,5 +79,5 @@ export async function run(inputFilePath: string): Promise<string> {
 }
 
 if(require.main == module) {
-    run('./testing/inputs.json')
+    run('./testing/inputs.json', new Object())
 }
