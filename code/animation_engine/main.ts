@@ -8,9 +8,9 @@ import { GraphicsPool } from "./graphics/graphics_pool";
 import { PhonemeImageconverter } from "./graphics/phoneme_to_image";
 
 
-async function main() {
+export async function run(inputFilePath: string): Promise<string> {
     // parse all the inputs
-    const inputParser: FileInputParser = new FileInputParser('./testing/inputs.json')
+    const inputParser: FileInputParser = new FileInputParser(inputFilePath)
 
     const config: any = new Object();
     config.loadParameter = (parameter: string) => {
@@ -70,7 +70,9 @@ async function main() {
     }
     const video: string = renderer.generateVideo();
 
-    // console.log(`created video ${video}`)
-    }
+    return video
+}
 
-main()
+if(require.main == module) {
+    run('./testing/inputs.json')
+}

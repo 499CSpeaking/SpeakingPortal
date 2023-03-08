@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node main.js",
+    "demo": "node demo.js",
     "phoneme_mapping": "node helper_scripts/phoneme_mapper.js"
   },
   "author": "",
