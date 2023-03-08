@@ -10,7 +10,7 @@ import { execSync } from "child_process";
 // this code is messy and shit. It's good for a demo though
 
 //modify this
-const inputString: string = "Hello there, how are you? I am good, thank you. What is the meaning of life? I don't know, do you? What is existance?"
+const inputString: string = "hello this is a prompt running off the demo"
 
 async function start() {
     // get audio from kukarella
@@ -20,9 +20,15 @@ async function start() {
         console.log(`getting phoneme mapping w/ text="${inputString}", audio=@${audioPath}`)
         getTranscript(inputString, audioPath, async (audioPath, transcriptPath) => {
             console.log('generating the video now')
-             const out: string = await run("./demo_files/inputs.json")
-             console.log('done! Video is located at ' + out)
-             exit()
+            /*
+                Notice how I pass parameters into run(...)
+            */
+            const config: any = new Object()
+            //config.phoneme_samples_per_second = 22
+            //config.key = ...
+            const out: string = await run("./demo_files/inputs.json", config)
+            console.log('done! Video is located at ' + out)
+            exit()
         })
     })
 }

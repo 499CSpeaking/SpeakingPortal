@@ -18,7 +18,7 @@ const child_process_1 = require("child_process");
 // on the host machine
 // this code is messy and shit. It's good for a demo though
 //modify this
-const inputString = "Hello there, how are you? I am good, thank you. What is the meaning of life? I don't know, do you? What is existance?";
+const inputString = "hello this is a prompt running off the demo";
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
         // get audio from kukarella
@@ -28,7 +28,13 @@ function start() {
             console.log(`getting phoneme mapping w/ text="${inputString}", audio=@${audioPath}`);
             getTranscript(inputString, audioPath, (audioPath, transcriptPath) => __awaiter(this, void 0, void 0, function* () {
                 console.log('generating the video now');
-                const out = yield (0, main_1.run)("./demo_files/inputs.json");
+                /*
+                    Notice how I pass parameters into run(...)
+                */
+                const config = new Object();
+                //config.phoneme_samples_per_second = 22
+                //config.key = ...
+                const out = yield (0, main_1.run)("./demo_files/inputs.json", config);
                 console.log('done! Video is located at ' + out);
                 (0, process_1.exit)();
             }));

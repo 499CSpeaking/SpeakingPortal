@@ -21,21 +21,26 @@ const phoneme_occurrences_1 = require("./transcript/phoneme_occurrences");
 const get_video_duration_1 = __importDefault(require("get-video-duration"));
 const graphics_pool_1 = require("./graphics/graphics_pool");
 const phoneme_to_image_1 = require("./graphics/phoneme_to_image");
-function run(inputFilePath) {
+function run(inputFilePath, config) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         // parse all the inputs
         const inputParser = new file_input_1.FileInputParser(inputFilePath);
-        const config = new Object();
         config.loadParameter = (parameter) => {
-            config[parameter] = inputParser.getParameter(parameter);
+            if (!config[parameter]) {
+                config[parameter] = inputParser.getParameter(parameter);
+            }
         };
         config.loadOptionalParameter = (parameter, def) => {
             const value = inputParser.getParameterOptional(parameter);
-            config[parameter] = value !== null && value !== void 0 ? value : def;
+            if (!config[parameter]) {
+                config[parameter] = value !== null && value !== void 0 ? value : def;
+            }
         };
         config.loadFile = (name, pathLocation) => {
-            config[name] = inputParser.getFile(inputParser.getParameter(pathLocation));
+            if (!config[name]) {
+                config[name] = inputParser.getFile(inputParser.getParameter(pathLocation));
+            }
         };
         try {
             config.loadParameter("height");
@@ -76,5 +81,5 @@ function run(inputFilePath) {
 }
 exports.run = run;
 if (require.main == module) {
-    run('./testing/inputs.json');
+    run('./testing/inputs.json', new Object());
 }
