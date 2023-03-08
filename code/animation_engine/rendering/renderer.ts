@@ -1,5 +1,5 @@
 import { Canvas, createCanvas, Image } from "canvas";
-import { execSync } from "child_process";
+import { exec, execSync } from "child_process";
 import commandExists from "command-exists";
 import fs from "fs"
 import path from "path";
@@ -87,7 +87,7 @@ export class Renderer {
             this.config.width/2 - mouthScale*mouth.width/2,
             this.config.height/2 + mouthY,
             mouthScale*mouth.width,
-            mouthScale*mouth.height * (0.95 + dominance/10)
+            mouthScale*mouth.height * (0.975 + dominance/5)
         )
 
         const leftEye: Image[] = [this.graphics.get("eye_left_open.svg"), this.graphics.get("eye_left_half.svg"), this.graphics.get("eye_left_closed.svg")]
@@ -136,8 +136,12 @@ export class Renderer {
             // append frame images together
             execSync(`ffmpeg -y -r ${this.config.frames_per_second} -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${tmpFilename} -hide_banner -loglevel error`)
 
+            // In case we have a .wav file (we likely do) instead of a .mp3, convert it to mp3
+            const mp3AudioPath: string = (this.config.audio_path as string).split(".")[0] + '.mp3'
+            execSync(`ffmpeg -y -i ${this.config.audio_path} -acodec libmp3lame ${mp3AudioPath} -hide_banner -loglevel error`)
+
             // append audio to video file
-            execSync(`ffmpeg -y -i ${tmpFilename} -i ${this.config.audio_path} -c copy -map 0:v:0 -map 1:a:0 ${filename} -hide_banner -loglevel error`)
+            execSync(`ffmpeg -y -i ${tmpFilename} -i ${mp3AudioPath} -c copy -map 0:v:0 -map 1:a:0 ${filename} -hide_banner -loglevel error`)
         } catch(e) {
             throw new Error('error with ffmpeg: ' + (e as Error).message)
         }

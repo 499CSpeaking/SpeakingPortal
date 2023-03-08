@@ -42,6 +42,9 @@
         "l": "mouth_transition_2.svg",
         "z": "mouth_slightly_open.svg",
         "th": "mouth_raised_tongue.svg",
-        "i": "mouth_slightly_open.svg"
+        "i": "mouth_slightly_open.svg",
+        
+        "h": "mouth_slightly_open.svg"
+        
     }
 }
