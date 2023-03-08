@@ -1,6 +1,6 @@
 import { argv, exit } from "process";
 import { run } from "./main";
-import { createWriteStream, writeFileSync } from "fs";
+import { createWriteStream, readFileSync, writeFileSync } from "fs";
 import { get } from "https";
 import { execSync } from "child_process";
 

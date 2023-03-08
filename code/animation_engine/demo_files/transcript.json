@@ -16,11 +16,11 @@
           "phone": "eh_I"
         },
         {
-          "duration": 0.09,
+          "duration": 0.1,
           "phone": "l_I"
         },
         {
-          "duration": 0.12,
+          "duration": 0.11,
           "phone": "ow_E"
         }
       ],
@@ -73,11 +73,11 @@
     {
       "alignedWord": "are",
       "case": "success",
-      "end": 1.24,
+      "end": 1.23,
       "endOffset": 20,
       "phones": [
         {
-          "duration": 0.06,
+          "duration": 0.05,
           "phone": "aa_B"
         },
         {
@@ -96,7 +96,7 @@
       "endOffset": 24,
       "phones": [
         {
-          "duration": 0.08,
+          "duration": 0.09,
           "phone": "y_B"
         },
         {
@@ -104,7 +104,7 @@
           "phone": "uw_E"
         }
       ],
-      "start": 1.24,
+      "start": 1.23,
       "startOffset": 21,
       "word": "you"
     },
@@ -115,11 +115,11 @@
       "endOffset": 27,
       "phones": [
         {
-          "duration": 0.17,
+          "duration": 0.18,
           "phone": "ay_S"
         }
       ],
-      "start": 1.94,
+      "start": 1.93,
       "startOffset": 26,
       "word": "I"
     },
@@ -145,19 +145,19 @@
     {
       "alignedWord": "good",
       "case": "success",
-      "end": 2.57,
+      "end": 2.56,
       "endOffset": 35,
       "phones": [
         {
-          "duration": 0.06,
+          "duration": 0.07,
           "phone": "g_B"
         },
         {
-          "duration": 0.13,
+          "duration": 0.12,
           "phone": "uh_I"
         },
         {
-          "duration": 0.13,
+          "duration": 0.12,
           "phone": "d_E"
         }
       ],
@@ -168,15 +168,15 @@
     {
       "alignedWord": "thank",
       "case": "success",
-      "end": 2.9499999999999997,
+      "end": 2.95,
       "endOffset": 42,
       "phones": [
         {
-          "duration": 0.08,
+          "duration": 0.1,
           "phone": "th_B"
         },
         {
-          "duration": 0.12,
+          "duration": 0.11,
           "phone": "ae_I"
         },
         {
@@ -188,14 +188,14 @@
           "phone": "k_E"
         }
       ],
-      "start": 2.61,
+      "start": 2.6,
       "startOffset": 37,
       "word": "thank"
     },
     {
       "alignedWord": "you",
       "case": "success",
-      "end": 3.2300000000000004,
+      "end": 3.22,
       "endOffset": 46,
       "phones": [
         {
@@ -203,7 +203,7 @@
           "phone": "y_B"
         },
         {
-          "duration": 0.2,
+          "duration": 0.19,
           "phone": "uw_E"
         }
       ],
@@ -218,11 +218,11 @@
       "endOffset": 52,
       "phones": [
         {
-          "duration": 0.11,
+          "duration": 0.1,
           "phone": "w_B"
         },
         {
-          "duration": 0.07,
+          "duration": 0.08,
           "phone": "ah_I"
         },
         {
@@ -237,7 +237,7 @@
     {
       "alignedWord": "is",
       "case": "success",
-      "end": 3.8899999999999997,
+      "end": 3.9,
       "endOffset": 55,
       "phones": [
         {
@@ -245,7 +245,7 @@
           "phone": "ih_B"
         },
         {
-          "duration": 0.03,
+          "duration": 0.04,
           "phone": "z_E"
         }
       ],
@@ -260,7 +260,7 @@
       "endOffset": 59,
       "phones": [
         {
-          "duration": 0.06,
+          "duration": 0.05,
           "phone": "dh_B"
         },
         {
@@ -268,14 +268,14 @@
           "phone": "ah_E"
         }
       ],
-      "start": 3.9,
+      "start": 3.91,
       "startOffset": 56,
       "word": "the"
     },
     {
       "alignedWord": "meaning",
       "case": "success",
-      "end": 4.319999999999999,
+      "end": 4.31,
       "endOffset": 67,
       "phones": [
         {
@@ -295,7 +295,7 @@
           "phone": "ih_I"
         },
         {
-          "duration": 0.06,
+          "duration": 0.05,
           "phone": "ng_E"
         }
       ],
@@ -306,11 +306,11 @@
     {
       "alignedWord": "of",
       "case": "success",
-      "end": 4.45,
+      "end": 4.449999999999999,
       "endOffset": 70,
       "phones": [
         {
-          "duration": 0.04,
+          "duration": 0.05,
           "phone": "ah_B"
         },
         {
@@ -318,7 +318,7 @@
           "phone": "v_E"
         }
       ],
-      "start": 4.32,
+      "start": 4.31,
       "startOffset": 68,
       "word": "of"
     },
@@ -348,15 +348,15 @@
     {
       "alignedWord": "i",
       "case": "success",
-      "end": 5.3999999999999995,
+      "end": 5.4,
       "endOffset": 78,
       "phones": [
         {
-          "duration": 0.14,
+          "duration": 0.15,
           "phone": "ay_S"
         }
       ],
-      "start": 5.26,
+      "start": 5.25,
       "startOffset": 77,
       "word": "I"
     },
@@ -424,7 +424,7 @@
     {
       "alignedWord": "you",
       "case": "success",
-      "end": 6.529999999999999,
+      "end": 6.52,
       "endOffset": 97,
       "phones": [
         {
@@ -432,7 +432,7 @@
           "phone": "y_B"
         },
         {
-          "duration": 0.16,
+          "duration": 0.15,
           "phone": "uw_E"
         }
       ],
@@ -443,7 +443,7 @@
     {
       "alignedWord": "what",
       "case": "success",
-      "end": 7.11,
+      "end": 7.12,
       "endOffset": 103,
       "phones": [
         {
@@ -451,7 +451,7 @@
           "phone": "w_B"
         },
         {
-          "duration": 0.07,
+          "duration": 0.08,
           "phone": "ah_I"
         },
         {
@@ -470,7 +470,7 @@
       "endOffset": 106,
       "phones": [
         {
-          "duration": 0.06,
+          "duration": 0.05,
           "phone": "ih_B"
         },
         {
@@ -478,18 +478,18 @@
           "phone": "z_E"
         }
       ],
-      "start": 7.11,
+      "start": 7.12,
       "startOffset": 104,
       "word": "is"
     },
     {
       "alignedWord": "<unk>",
       "case": "success",
-      "end": 7.94,
+      "end": 7.930000000000001,
       "endOffset": 116,
       "phones": [
         {
-          "duration": 0.71,
+          "duration": 0.7,
           "phone": "oov_S"
         }
       ],
