@@ -45,6 +45,13 @@
                 </select>
             </div>
             <div class="col-sm-3">
+                <label for="avatar">Select Avatar:</label>
+                <select name="avatar" id="avatar" required>
+                    <option value="inputs.json">Boy</option>
+                    <option value="inputs_barb.json">Girl</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
                 <button id="send">Generate</button>
             </div>
         </div>
@@ -53,11 +60,11 @@
             <div class="col-lg-6 embed-responsive embed-responsive-16by9">
                 <h3>Video Here:</h3>
                 <video class="embed-responsive-item" id="player" controls>
-                    <source src="" type="video/mp4">
+                    <source src="videos/" type="video/mp4">
                     Your browser doesn't support video
                 </video>
             </div>
-            <div class="col-sm-3">
+            <div class="col-lg-6">
                 <h3>Status: </h3>
                 <p id="out"></p>
             </div>
