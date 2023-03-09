@@ -49,7 +49,7 @@ function clear_output() {
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var input, aligner, voiceKey, avatar;
+        var input, aligner, voiceKey, avatar, audioPath, transcriptPath;
         var _this = this;
         return __generator(this, function (_b) {
             clear_output();
@@ -79,11 +79,31 @@ button.onclick = function getOut() {
                 }
             }); }); })
                 .then(function (data) {
-                var audioPath = data.audioPath;
+                audioPath = data.audioPath;
                 log_status("Generated audio in server location: " + audioPath);
+            })
+                .then(function () {
+                // get transcript from aligner
+                log_status("Getting Transcript from " + aligner + "...");
+                var payload = {
+                    aligner: aligner,
+                    audioPath: audioPath,
+                    inputString: input,
+                };
+                fetch("http://localhost:4000/align", {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: { "Content-Type": "application/json; charset=UTF-8" },
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                    transcriptPath = data.transcriptPath;
+                    log_status("Generated transcript in server location: " + transcriptPath);
+                })
+                    .then(function () {
+                    log_status("Generating Animation...");
+                });
             });
-            // get transcript from aligner
-            log_status("Getting Transcript from " + aligner);
             return [2 /*return*/];
         });
     });

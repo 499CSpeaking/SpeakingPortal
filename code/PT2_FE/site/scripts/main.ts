@@ -32,6 +32,7 @@ button.onclick = async function getOut() {
   let voiceKey = document.getElementById("voiceKey").value;
   let avatar = document.getElementById("avatar").value;
 
+  let audioPath, transcriptPath;
   // get audio from kukarella
   log_status("Getting Audio from Kukarella...");
   fetch("http://localhost:4000/kuk", {
@@ -41,12 +42,31 @@ button.onclick = async function getOut() {
   })
     .then(async (res) => await res.json())
     .then((data) => {
-      let audioPath = data.audioPath;
-      log_status("Generated audio in server location: "+audioPath);
-    });
-
-  // get transcript from aligner
-  log_status("Getting Transcript from "+aligner);
+      audioPath = data.audioPath;
+      log_status("Generated audio in server location: " + audioPath);
+    })
+    .then(() => {
+      // get transcript from aligner
+      log_status("Getting Transcript from " + aligner + "...");
+      let payload = {
+        aligner: aligner,
+        audioPath: audioPath,
+        inputString: input,
+      }
+      fetch("http://localhost:4000/align", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          transcriptPath = data.transcriptPath;
+          log_status("Generated transcript in server location: " + transcriptPath);
+        })
+        .then(() => {
+          log_status("Generating Animation...");
+        })
+    })
 
 };
 

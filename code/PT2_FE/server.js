@@ -41,6 +41,7 @@ var express = require("express");
 var server = express();
 var body_parser = require("body-parser");
 var https_1 = require("https");
+var child_process_1 = require("child_process");
 var fs_1 = require("fs");
 server.use(body_parser.json());
 server.use(body_parser.urlencoded({
@@ -93,6 +94,38 @@ server.post("/kuk/", function (req, res) { return __awaiter(void 0, void 0, void
         }
     });
 }); });
+// get transcript from aligner
+server.post("/align/", function (req, res) {
+    var transcriptPath = 'demo_files/transcript.json';
+    var aligner = req.body.aligner;
+    switch (aligner) {
+        case 'gentle':
+            console.log("Using ".concat(aligner, " to Align"));
+            var text = req.body.inputString;
+            var audioPath = req.body.audioPath;
+            var curlCommand = "curl -F \"audio=@".concat(audioPath, "\" -F \"transcript=").concat(text, "\" \"http://localhost:32768/transcriptions?async=false\"");
+            var output = (0, child_process_1.execSync)(curlCommand).toString();
+            (0, fs_1.writeFileSync)(transcriptPath, output);
+            console.log("Transcript Location: ".concat(transcriptPath));
+            res.json({ transcriptPath: transcriptPath });
+            break;
+        case 'microsoft':
+            console.log("Using ".concat(aligner, " to Align"));
+            break;
+        case 'google':
+            console.log("Using ".concat(aligner, " to Align"));
+            break;
+        case 'amazon':
+            console.log("Using ".concat(aligner, " to Align"));
+            break;
+        case 'ibm':
+            console.log("Using ".concat(aligner, " to Align"));
+            break;
+        default:
+            console.log("Aligner error");
+            break;
+    }
+});
 // post server start
 server.listen(4000, function () {
     console.log("server running...");
