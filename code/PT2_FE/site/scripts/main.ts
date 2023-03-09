@@ -27,79 +27,48 @@ button.onclick = async function getOut() {
     return;
   }
 
+  // get other input data
+  let aligner = document.getElementById("aligner").value;
+  let voiceKey = document.getElementById("voiceKey").value;
+  let avatar = document.getElementById("avatar").value;
+
+  let audioPath, transcriptPath;
   // get audio from kukarella
   log_status("Getting Audio from Kukarella...");
-  let file;
-  try {
-    file = await get_kuk_aud(input);
-  } catch (e) {
-    log_status(
-      `An error occurred while getting the audio from Kukarella! Error Message: ${e.message}`
-    );
-    return;
-  }
-};
-
-// function to retrieve audio from kukarella's api based on user inputted text
-async function get_kuk_aud(text) {
-  const api_url = "https://api.kukarella.com/texttospeech/convertTTSPreview";
-
-  const payload = {
-    text: text,
-    voiceKey: "en-US_AllisonV3Voice",
-  };
-
-  const api_respo = await fetch(api_url, {
+  fetch("http://localhost:4000/kuk", {
     method: "POST",
-    body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const audio_url = (await api_respo.json()).data.url;
-  let url_message =
-    "Audio has been retrieved. You can download it <a href=" +
-    audio_url +
-    ">HERE</a>";
-  log_status(url_message);
-
-  const audio_resp = await fetch(audio_url);
-  const audio_resp_blob = await audio_resp.blob();
-
-  return new File([audio_resp_blob], "arbitrary_filename");
-}
-
-// function to send audio to server and get timestamps for each word
-function getTime(audio, wordCount) {
-  const form_data = new FormData();
-  form_data.append("file", audio);
-  form_data.append("wordCount", wordCount);
-  let err = false;
-  fetch("http://localhost:4000/api/time", {
-    method: "POST",
-    body: form_data,
-    headers: { enctype: "multipart/form-data" },
+    body: JSON.stringify({ inputString: input, voiceKey: voiceKey }),
+    headers: { "Content-Type": "application/json; charset=UTF-8" },
   })
-    .then((res) => {
-      if (res.status != 200) {
-        err = true;
-      }
-      return res.text();
+    .then(async (res) => await res.json())
+    .then((data) => {
+      audioPath = data.audioPath;
+      log_status("Generated audio in server location: " + audioPath);
     })
-    .then((res) => {
-      if (!err) {
-        log_status("Processing Complete!<br>");
-      } else {
-        throw new Error(res);
+    .then(() => {
+      // get transcript from aligner
+      log_status("Getting Transcript from " + aligner + "...");
+      let payload = {
+        aligner: aligner,
+        audioPath: audioPath,
+        inputString: input,
       }
+      fetch("http://localhost:4000/align", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          transcriptPath = data.transcriptPath;
+          log_status("Generated transcript in server location: " + transcriptPath);
+        })
+        .then(() => {
+          log_status("Generating Animation...");
+        })
     })
-    .catch((err) => {
-      log_status(
-        `An error occurred while processing! Error Message: ${err.message}`
-      );
-    });
-  }
+
+};
 
 // check and display the number of characters the user has typed
 document.getElementById("char_count").innerHTML = `0/${char_lim}`;

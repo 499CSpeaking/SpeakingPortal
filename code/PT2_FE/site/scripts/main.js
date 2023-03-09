@@ -49,106 +49,65 @@ function clear_output() {
 button.onclick = function getOut() {
     var _a;
     return __awaiter(this, void 0, void 0, function () {
-        var input, file, e_1;
+        var input, aligner, voiceKey, avatar, audioPath, transcriptPath;
+        var _this = this;
         return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    clear_output();
-                    input = (_a = document.getElementById("userInput")) === null || _a === void 0 ? void 0 : _a.value;
-                    if (!input || input == "") {
-                        log_status("text input cannot be empty!");
-                        return [2 /*return*/];
-                    }
-                    if (input.length > char_lim) {
-                        log_status("text input exceeds the character limit!");
-                        return [2 /*return*/];
-                    }
-                    // get audio from kukarella
-                    log_status("Getting Audio from Kukarella...");
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, get_kuk_aud(input)];
-                case 2:
-                    file = _b.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    e_1 = _b.sent();
-                    log_status("An error occurred while getting the audio from Kukarella! Error Message: ".concat(e_1.message));
-                    return [2 /*return*/];
-                case 4: return [2 /*return*/];
+            clear_output();
+            input = (_a = document.getElementById("userInput")) === null || _a === void 0 ? void 0 : _a.value;
+            if (!input || input == "") {
+                log_status("text input cannot be empty!");
+                return [2 /*return*/];
             }
+            if (input.length > char_lim) {
+                log_status("text input exceeds the character limit!");
+                return [2 /*return*/];
+            }
+            aligner = document.getElementById("aligner").value;
+            voiceKey = document.getElementById("voiceKey").value;
+            avatar = document.getElementById("avatar").value;
+            // get audio from kukarella
+            log_status("Getting Audio from Kukarella...");
+            fetch("http://localhost:4000/kuk", {
+                method: "POST",
+                body: JSON.stringify({ inputString: input, voiceKey: voiceKey }),
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            })
+                .then(function (res) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, res.json()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            }); }); })
+                .then(function (data) {
+                audioPath = data.audioPath;
+                log_status("Generated audio in server location: " + audioPath);
+            })
+                .then(function () {
+                // get transcript from aligner
+                log_status("Getting Transcript from " + aligner + "...");
+                var payload = {
+                    aligner: aligner,
+                    audioPath: audioPath,
+                    inputString: input,
+                };
+                fetch("http://localhost:4000/align", {
+                    method: "POST",
+                    body: JSON.stringify(payload),
+                    headers: { "Content-Type": "application/json; charset=UTF-8" },
+                })
+                    .then(function (res) { return res.json(); })
+                    .then(function (data) {
+                    transcriptPath = data.transcriptPath;
+                    log_status("Generated transcript in server location: " + transcriptPath);
+                })
+                    .then(function () {
+                    log_status("Generating Animation...");
+                });
+            });
+            return [2 /*return*/];
         });
     });
 };
-// function to retrieve audio from kukarella's api based on user inputted text
-function get_kuk_aud(text) {
-    return __awaiter(this, void 0, void 0, function () {
-        var api_url, payload, api_respo, audio_url, url_message, audio_resp, audio_resp_blob;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    api_url = "https://api.kukarella.com/texttospeech/convertTTSPreview";
-                    payload = {
-                        text: text,
-                        voiceKey: "en-US_AllisonV3Voice",
-                    };
-                    return [4 /*yield*/, fetch(api_url, {
-                            method: "POST",
-                            body: JSON.stringify(payload),
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        })];
-                case 1:
-                    api_respo = _a.sent();
-                    return [4 /*yield*/, api_respo.json()];
-                case 2:
-                    audio_url = (_a.sent()).data.url;
-                    url_message = "Audio has been retrieved. You can download it <a href=" +
-                        audio_url +
-                        ">HERE</a>";
-                    log_status(url_message);
-                    return [4 /*yield*/, fetch(audio_url)];
-                case 3:
-                    audio_resp = _a.sent();
-                    return [4 /*yield*/, audio_resp.blob()];
-                case 4:
-                    audio_resp_blob = _a.sent();
-                    return [2 /*return*/, new File([audio_resp_blob], "arbitrary_filename")];
-            }
-        });
-    });
-}
-// function to send audio to server and get timestamps for each word
-function getTime(audio, wordCount) {
-    var form_data = new FormData();
-    form_data.append("file", audio);
-    form_data.append("wordCount", wordCount);
-    var err = false;
-    fetch("http://localhost:4000/api/time", {
-        method: "POST",
-        body: form_data,
-        headers: { enctype: "multipart/form-data" },
-    })
-        .then(function (res) {
-        if (res.status != 200) {
-            err = true;
-        }
-        return res.text();
-    })
-        .then(function (res) {
-        if (!err) {
-            log_status("Processing Complete!<br>");
-        }
-        else {
-            throw new Error(res);
-        }
-    })
-        .catch(function (err) {
-        log_status("An error occurred while processing! Error Message: ".concat(err.message));
-    });
-}
 // check and display the number of characters the user has typed
 document.getElementById("char_count").innerHTML = "0/".concat(char_lim);
 document.getElementById("userInput").addEventListener("input", function () {
