@@ -4,7 +4,7 @@
   "description": "Speaking Portal",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "phoneme_mapping": "node helper_scripts/phoneme_mapper.js"
   },
   "devDependencies": {
