@@ -24,3 +24,15 @@ speechToText.recognize(recognizeParams)
   .catch(err => {
     console.log('error:', err);
   });
+
+  const SpeechToTextV1 = require('ibm-watson/speech-to-text/v1');
+const { CloudPakForDataAuthenticator } = require('ibm-watson/auth');
+
+const speecdhToText = new SpeechToTextV1({
+  authenticator: new CloudPakForDataAuthenticator({
+    username: '{username}',
+    password: '{password}',
+    url: 'https://{cpd_cluster_host}{:port}/icp4d-api/v1/authorize',
+  }),
+  serviceUrl: '{url}',
+});
