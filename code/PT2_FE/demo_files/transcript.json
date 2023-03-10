@@ -1,18 +1,18 @@
 {
-  "transcript": "testing input",
+  "transcript": "test three",
   "words": [
     {
-      "alignedWord": "testing",
+      "alignedWord": "test",
       "case": "success",
-      "end": 0.45,
-      "endOffset": 7,
+      "end": 0.46,
+      "endOffset": 4,
       "phones": [
         {
-          "duration": 0.08,
+          "duration": 0.06,
           "phone": "t_B"
         },
         {
-          "duration": 0.07,
+          "duration": 0.11,
           "phone": "eh_I"
         },
         {
@@ -20,52 +20,36 @@
           "phone": "s_I"
         },
         {
-          "duration": 0.07,
-          "phone": "t_I"
-        },
-        {
-          "duration": 0.04,
-          "phone": "ih_I"
-        },
-        {
-          "duration": 0.09,
-          "phone": "ng_E"
-        }
-      ],
-      "start": 0.0,
-      "startOffset": 0,
-      "word": "testing"
-    },
-    {
-      "alignedWord": "input",
-      "case": "success",
-      "end": 0.91,
-      "endOffset": 13,
-      "phones": [
-        {
-          "duration": 0.08,
-          "phone": "ih_B"
-        },
-        {
-          "duration": 0.09,
-          "phone": "n_I"
-        },
-        {
-          "duration": 0.06,
-          "phone": "p_I"
-        },
-        {
-          "duration": 0.12,
-          "phone": "uh_I"
-        },
-        {
-          "duration": 0.11,
+          "duration": 0.05,
           "phone": "t_E"
         }
       ],
-      "start": 0.45,
-      "startOffset": 8,
-      "word": "input"
+      "start": 0.14,
+      "startOffset": 0,
+      "word": "test"
+    },
+    {
+      "alignedWord": "three",
+      "case": "success",
+      "end": 0.84,
+      "endOffset": 10,
+      "phones": [
+        {
+          "duration": 0.13,
+          "phone": "th_B"
+        },
+        {
+          "duration": 0.13,
+          "phone": "r_I"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_E"
+        }
+      ],
+      "start": 0.47,
+      "startOffset": 5,
+      "word": "three"
     }
   ]
 }

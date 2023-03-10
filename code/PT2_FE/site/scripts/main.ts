@@ -32,7 +32,7 @@ button.onclick = async function getOut() {
   let voiceKey = document.getElementById("voiceKey").value;
   let avatar = document.getElementById("avatar").value;
 
-  let audioPath, transcriptPath;
+  let audioPath, transcriptPath, videoPath;
   // get audio from kukarella
   log_status("Getting Audio from Kukarella...");
   fetch("http://localhost:4000/kuk", {
@@ -65,6 +65,28 @@ button.onclick = async function getOut() {
         })
         .then(() => {
           log_status("Generating Animation...");
+          fetch("http://localhost:4000/animate", {
+            method: "POST",
+            body: JSON.stringify({avatar: avatar}),
+            headers: {"Content-Type": "application/json; charset=UTF-8"},
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            videoPath = data.videoPath;
+            log_status("Generated video in server location: "+videoPath);
+            const videoElement = document.createElement("video");
+            videoElement.src = "/video";
+            //videoElement.id = "video";
+            videoElement.controls = true;
+            videoElement.muted = false;
+            videoElement.autoplay = true;
+            videoElement.classList.add("embed-responsive-item");
+            if (document.getElementById("video") != null) {
+              document.getElementById("video")?.remove();
+            }
+            document.getElementById("videoPlayer")?.appendChild(videoElement);
+            log_status("The video should be viewable on the left. Enjoy!");
+          })
         })
     })
 
