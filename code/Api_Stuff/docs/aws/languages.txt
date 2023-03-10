@@ -1,0 +1,39 @@
+Afrikaans 	af-ZA 	 	 	 	 	 	
+Arabic Gulf 	ar-AE 	 	 	 	 	 	
+Arabic Modern Standard 	ar-SA 	 	 	 	 	 	
+Chinese Simplified 	zh-CN 	  	 	 	 	 	
+Chinese Traditional 	zh-TW 	 	 	 	 	 	
+Danish 	da-DK 	 	 	 	 	 	
+Dutch 	nl-NL 	 	 	 	 	 	
+English Australian 	en-AU 	  	  	  	  	 	 
+English British 	en-GB 	  	  	  	  	 	 
+English Indian 	en-IN 	 	 	 	 	 	
+English Irish 	en-IE 	 	 	 	 	 	
+English New Zealand 	en-NZ 	 	 	 	 	 	
+English Scottish 	en-AB 	 	 	 	 	 	
+English South African 	en-ZA 	 	 	 	 	 	
+English US 	en-US 	  	  	  	  	  	 
+English Welsh 	en-WL 	 	 	 	 	 	
+French 	fr-FR 	  	 	  	 	 	 
+French Canadian 	fr-CA 	  	 	  	 	 	 
+Farsi 	fa-IR 	 	 	 	 	 	
+German 	de-DE 	  	  	  	  	 	 
+German Swiss 	de-CH 	 	 	 	 	 	
+Hebrew 	he-IL 	 	 	 	 	 	
+Hindi Indian 	hi-IN 	  	 	  	 	 	
+Indonesian 	id-ID 	 	 	 	 	 	
+Italian 	it-IT 	  	 	  	 	 	 
+Japanese 	ja-JP 	  	 	 	  	 	
+Korean 	ko-KR 	  	 	 	 	 	
+Malay 	ms-MY 	 	 	 	 	 	
+Portuguese 	pt-PT 	 	 	 	 	 	
+Portuguese Brazilian 	pt-BR 	  	 	  	 	 	 
+Russian 	ru-RU 	 	 	 	 	 	
+Spanish 	es-ES 	 	 	 	 	 	
+Spanish US 	es-US 	  	 	  	  	 	 
+Swedish 	sv-SE 	 	 	 	 	 	
+Tamil 	ta-IN 	 	 	 	 	 	
+Telugu 	te-IN 	 	 	 	 	 	
+Thai 	th-TH 	  	 	  	 	 	
+Turkish 	tr-TR 	 	 	 	 	 	
+Vietnamese 	vi-VN 	 	 	 	 	
