@@ -62,7 +62,7 @@ class Renderer {
         this.renderCtx.drawImage(body, this.config.width / 2 - bodyScale * body.width / 2, this.config.height / 2 - bodyScale * body.height / 2, body.width * bodyScale, body.height * bodyScale);
         const mouthScale = 0.3;
         const mouthY = -26;
-        this.renderCtx.drawImage(mouth, this.config.width / 2 - mouthScale * mouth.width / 2, this.config.height / 2 + mouthY, mouthScale * mouth.width, mouthScale * mouth.height * (0.975 + dominance / 5));
+        this.renderCtx.drawImage(mouth, this.config.width / 2 - mouthScale * mouth.width / 2, this.config.height / 2 + mouthY, mouthScale * mouth.width, mouthScale * mouth.height * (0.975 + dominance / 50));
         const leftEye = [this.graphics.get("eye_left_open.svg"), this.graphics.get("eye_left_half.svg"), this.graphics.get("eye_left_closed.svg")];
         const rightEye = [this.graphics.get("eye_right_open.svg"), this.graphics.get("eye_right_half.svg"), this.graphics.get("eye_right_closed.svg")];
         const eyeScale = 0.26;

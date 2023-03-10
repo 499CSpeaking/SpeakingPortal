@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  frontend:
+    image: peertesting2_frontend
+    network_mode: "host"
+    ports:
+      - 4000:4000
+  
+  gentle:
+    image: lowerquality/gentle
+    ports:
+      - 32768:8765
