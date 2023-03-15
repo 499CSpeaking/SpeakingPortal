@@ -1,18 +1,18 @@
 {
-  "transcript": "test three",
+  "transcript": "testing",
   "words": [
     {
-      "alignedWord": "test",
+      "alignedWord": "testing",
       "case": "success",
-      "end": 0.46,
-      "endOffset": 4,
+      "end": 0.62,
+      "endOffset": 7,
       "phones": [
         {
-          "duration": 0.06,
+          "duration": 0.08,
           "phone": "t_B"
         },
         {
-          "duration": 0.11,
+          "duration": 0.07,
           "phone": "eh_I"
         },
         {
@@ -20,36 +20,21 @@
           "phone": "s_I"
         },
         {
-          "duration": 0.05,
-          "phone": "t_E"
+          "duration": 0.07,
+          "phone": "t_I"
+        },
+        {
+          "duration": 0.13,
+          "phone": "ih_I"
+        },
+        {
+          "duration": 0.17,
+          "phone": "ng_E"
         }
       ],
-      "start": 0.14,
+      "start": 0.0,
       "startOffset": 0,
-      "word": "test"
-    },
-    {
-      "alignedWord": "three",
-      "case": "success",
-      "end": 0.84,
-      "endOffset": 10,
-      "phones": [
-        {
-          "duration": 0.13,
-          "phone": "th_B"
-        },
-        {
-          "duration": 0.13,
-          "phone": "r_I"
-        },
-        {
-          "duration": 0.11,
-          "phone": "iy_E"
-        }
-      ],
-      "start": 0.47,
-      "startOffset": 5,
-      "word": "three"
+      "word": "testing"
     }
   ]
 }
