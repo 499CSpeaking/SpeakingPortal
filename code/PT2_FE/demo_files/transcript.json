@@ -1,40 +1,124 @@
 {
-  "transcript": "testing",
+  "transcript": "hello my mouth is fixed",
   "words": [
     {
-      "alignedWord": "testing",
+      "alignedWord": "hello",
       "case": "success",
-      "end": 0.62,
-      "endOffset": 7,
+      "end": 0.41000000000000003,
+      "endOffset": 5,
       "phones": [
         {
-          "duration": 0.08,
-          "phone": "t_B"
+          "duration": 0.11,
+          "phone": "hh_B"
         },
         {
-          "duration": 0.07,
+          "duration": 0.05,
           "phone": "eh_I"
         },
         {
-          "duration": 0.1,
-          "phone": "s_I"
-        },
-        {
-          "duration": 0.07,
-          "phone": "t_I"
+          "duration": 0.11,
+          "phone": "l_I"
         },
         {
           "duration": 0.13,
+          "phone": "ow_E"
+        }
+      ],
+      "start": 0.01,
+      "startOffset": 0,
+      "word": "hello"
+    },
+    {
+      "alignedWord": "my",
+      "case": "success",
+      "end": 0.61,
+      "endOffset": 8,
+      "phones": [
+        {
+          "duration": 0.08,
+          "phone": "m_B"
+        },
+        {
+          "duration": 0.12,
+          "phone": "ay_E"
+        }
+      ],
+      "start": 0.41,
+      "startOffset": 6,
+      "word": "my"
+    },
+    {
+      "alignedWord": "mouth",
+      "case": "success",
+      "end": 1.01,
+      "endOffset": 14,
+      "phones": [
+        {
+          "duration": 0.12,
+          "phone": "m_B"
+        },
+        {
+          "duration": 0.19,
+          "phone": "aw_I"
+        },
+        {
+          "duration": 0.09,
+          "phone": "th_E"
+        }
+      ],
+      "start": 0.61,
+      "startOffset": 9,
+      "word": "mouth"
+    },
+    {
+      "alignedWord": "is",
+      "case": "success",
+      "end": 1.18,
+      "endOffset": 17,
+      "phones": [
+        {
+          "duration": 0.07,
+          "phone": "ih_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "z_E"
+        }
+      ],
+      "start": 1.01,
+      "startOffset": 15,
+      "word": "is"
+    },
+    {
+      "alignedWord": "fixed",
+      "case": "success",
+      "end": 1.6199999999999999,
+      "endOffset": 23,
+      "phones": [
+        {
+          "duration": 0.11,
+          "phone": "f_B"
+        },
+        {
+          "duration": 0.16,
           "phone": "ih_I"
         },
         {
-          "duration": 0.17,
-          "phone": "ng_E"
+          "duration": 0.09,
+          "phone": "k_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "s_I"
+        },
+        {
+          "duration": 0.01,
+          "phone": "t_E"
         }
       ],
-      "start": 0.0,
-      "startOffset": 0,
-      "word": "testing"
+      "start": 1.18,
+      "startOffset": 18,
+      "word": "fixed"
     }
   ]
 }
