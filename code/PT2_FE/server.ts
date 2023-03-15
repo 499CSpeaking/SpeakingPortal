@@ -104,7 +104,7 @@ server.post("/animate/", async (req, res) => {
   const config: any = new Object();
   const avatar: string = req.body.avatar;
   console.log(`Animating with avatar: ${avatar}`);
-  await run(`./demo_files/${avatar}`, config)
+  await run(`./testing/${avatar}`, config)
   .then((out) => {
     let videoPath = out;
     console.log(`Video stored in server location: ${videoPath}`);
