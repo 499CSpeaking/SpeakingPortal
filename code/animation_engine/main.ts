@@ -59,14 +59,18 @@ export async function run(inputFilePath: string, config: any): Promise<string> {
         exit();
     }
 
+    // this is the phoneme mapping, it maps phonemes
     const mapping = new PhonemeMapping(config);
     const phonemeOccurrences = new PhonemeOccurrences(config, mapping)
 
+    // graphics pool, which pools graphics
     const graphics = new GraphicsPool(config.graphics_path)
     await graphics.init()
 
+    // this object converts phonemes to images (not directly though)
     const phonemeImageconverter = new PhonemeImageconverter(config)
 
+    // this object renders
     const renderer: Renderer = new Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter)
     renderer.setup()
     for(let i: number = 1; i <= config.video_length * config.frames_per_second; i += 1) {
