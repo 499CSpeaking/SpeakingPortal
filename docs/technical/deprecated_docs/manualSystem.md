@@ -101,3 +101,13 @@
     - avatar selection section
     - voice selection section
     - video displayed after generation
+
+# Major Update
+- this system has now been deprecated
+- reasons for deprecation
+  - high level of inaccuracy
+  - large output differences with gentle output
+- while this system was being developed experimentally, I believe with a better algorithm, it would be possible to use it universally as an aligner for most langauges
+- the idea was to create an aligner that used spikes in amplitude to determine whether speech was being detected, but my implementation couldn't distinguish between silence and 
+speech, which resulted in a high level of inaccuracy
+- the code will remain as part of our deprecated code, and it can be used to process audio and get phonemes from an input, just in case future devs want to make a novel system for this problem
