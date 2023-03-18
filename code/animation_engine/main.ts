@@ -60,7 +60,7 @@ export async function run(inputFilePath: string, config: any): Promise<string> {
     }
 
     // this is the phoneme mapping, it maps phonemes
-    const mapping = new PhonemeMapping(config);
+    const mapping = new PhonemeMapping(config)
     const phonemeOccurrences = new PhonemeOccurrences(config, mapping)
 
     // graphics pool, which pools graphics
