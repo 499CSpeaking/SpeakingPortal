@@ -84,7 +84,7 @@
     {
       "alignedWord": "are",
       "case": "success",
-      "end": 1.53,
+      "end": 1.54,
       "endOffset": 29,
       "phones": [
         {
@@ -92,7 +92,7 @@
           "phone": "aa_B"
         },
         {
-          "duration": 0.03,
+          "duration": 0.04,
           "phone": "r_E"
         }
       ],
@@ -107,11 +107,11 @@
       "endOffset": 39,
       "phones": [
         {
-          "duration": 0.4,
+          "duration": 0.39,
           "phone": "oov_S"
         }
       ],
-      "start": 1.53,
+      "start": 1.54,
       "startOffset": 30,
       "word": "youououou"
     }

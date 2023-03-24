@@ -129,15 +129,16 @@ export class Renderer {
     // call to generate the video
     // returns the path to file
     public generateVideo(): string {
-        const filename: string = path.join(this.config.video_path, 'video.mp4')
-        const tmpFilename: string = path.join(this.config.frames_path, 'temp_video.mp4')
+        const filename: string = path.join(this.config.video_path, 'out.mp4')
+        const tmpFilename: string = path.join(this.config.frames_path, 'video.mp4')
         try {
             // ffmpeg is used to generate the video
             // append frame images together
             execSync(`ffmpeg -y -r ${this.config.frames_per_second} -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${tmpFilename} -hide_banner -loglevel error`)
 
             // In case we have a .wav file (we likely do) instead of a .mp3, convert it to mp3
-            const mp3AudioPath: string = (this.config.audio_path as string).split(".")[0] + '.mp3'
+            const mp3AudioPath: string = (this.config.audio_path as string).replace(".wav", ".mp3")
+            console.log([this.config.audio_path, mp3AudioPath])
             execSync(`ffmpeg -y -i ${this.config.audio_path} -acodec libmp3lame ${mp3AudioPath} -hide_banner -loglevel error`)
 
             // append audio to video file

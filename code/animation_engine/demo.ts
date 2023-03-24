@@ -52,7 +52,7 @@ async function getAudio(inputString: string, callback: (text: string, audioPath:
     const audio_url: string = (await api_response.json()).data.url
 
     get(audio_url, (res) => {
-        const path = "demo_files/audio.wav"
+        const path = "demo_files/tmp/audio.wav"
         const writeStream = createWriteStream(path)
      
         res.pipe(writeStream)
@@ -69,9 +69,9 @@ function getTranscript(text: string, audioPath: string, callback: (audioPath: st
     //have to 
     const curlCommand: string = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:8080/transcriptions?async=false"`
     const output: string = execSync(curlCommand).toString()
-    writeFileSync('demo_files/transcript.json', output)
+    writeFileSync('demo_files/tmp/transcript.json', output)
     
-    callback(audioPath, 'demo_files/transcript.json')
+    callback(audioPath, 'demo_files/tmp/transcript.json')
 }
 
 start()
