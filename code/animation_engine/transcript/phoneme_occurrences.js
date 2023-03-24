@@ -13,6 +13,7 @@ class PhonemeOccurrences {
         this.config = config;
         this.arraySize = Math.ceil(config.phoneme_samples_per_second * config.video_length);
         this.occurrences = this.initOccurrences(mappings);
+        this.maxDominance = this.getMaxDominance(this.occurrences);
     }
     // populate the occurrences array
     initOccurrences(mappings) {
@@ -37,6 +38,17 @@ class PhonemeOccurrences {
         }
         return phonemeOccurrences;
     }
+    // get the highest occurrence amount of any phoneme
+    // we need it to normalize occurrence values later
+    getMaxDominance(occurrences) {
+        let max = 0;
+        for (let phoneme of this.occurrences.keys()) {
+            for (let measurement of this.occurrences.get(phoneme)) {
+                max = Math.max(max, measurement);
+            }
+        }
+        return max;
+    }
     // get the phoneme that has the highest "speaking score" at a particular instance in time
     getDominantPhonemeAt(seconds) {
         let sampleAt = Math.round(seconds * this.config.phoneme_samples_per_second);
@@ -58,7 +70,8 @@ class PhonemeOccurrences {
             // phonemes which are excessively small are considered non-present
             return undefined;
         }
-        return [phoneme, maxAmount];
+        // don't forget to normalize the dominance within [0, 1]
+        return [phoneme, maxAmount / this.maxDominance];
     }
 }
 exports.PhonemeOccurrences = PhonemeOccurrences;

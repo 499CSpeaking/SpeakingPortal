@@ -18,7 +18,7 @@ const child_process_1 = require("child_process");
 // on the host machine
 // this code is messy and shit. It's good for a demo though
 //modify this
-const inputString = "hello this is a prompt running off the demo";
+const inputString = "yoooo mister whiiiite how are youououou";
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
         // get audio from kukarella
