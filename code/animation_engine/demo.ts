@@ -10,7 +10,7 @@ import { execSync } from "child_process";
 // this code is messy and shit. It's good for a demo though
 
 //modify this
-const inputString: string = "hello this is a prompt running off the demo"
+const inputString: string = "yoooo mister whiiiite how are youououou"
 
 async function start() {
     // get audio from kukarella

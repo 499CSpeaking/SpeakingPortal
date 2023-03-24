@@ -87,7 +87,7 @@ export class Renderer {
             this.config.width/2 - mouthScale*mouth.width/2,
             this.config.height/2 + mouthY,
             mouthScale*mouth.width,
-            mouthScale*mouth.height * (0.975 + dominance/5)
+            mouthScale*mouth.height * (0.90 + dominance*0.2)
         )
 
         const leftEye: Image[] = [this.graphics.get("eye_left_open.svg"), this.graphics.get("eye_left_half.svg"), this.graphics.get("eye_left_closed.svg")]

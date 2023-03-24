@@ -64,11 +64,15 @@ function run(inputFilePath, config) {
             console.log(e.toString());
             (0, process_1.exit)();
         }
+        // this is the phoneme mapping, it maps phonemes
         const mapping = new parse_mappings_1.PhonemeMapping(config);
         const phonemeOccurrences = new phoneme_occurrences_1.PhonemeOccurrences(config, mapping);
+        // graphics pool, which pools graphics
         const graphics = new graphics_pool_1.GraphicsPool(config.graphics_path);
         yield graphics.init();
+        // this object converts phonemes to images (not directly though)
         const phonemeImageconverter = new phoneme_to_image_1.PhonemeImageconverter(config);
+        // this object renders
         const renderer = new renderer_1.Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter);
         renderer.setup();
         for (let i = 1; i <= config.video_length * config.frames_per_second; i += 1) {
