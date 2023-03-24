@@ -79,14 +79,15 @@ class Renderer {
     // call to generate the video
     // returns the path to file
     generateVideo() {
-        const filename = path_1.default.join(this.config.video_path, 'video.mp4');
-        const tmpFilename = path_1.default.join(this.config.frames_path, 'temp_video.mp4');
+        const filename = path_1.default.join(this.config.video_path, 'out.mp4');
+        const tmpFilename = path_1.default.join(this.config.frames_path, 'video.mp4');
         try {
             // ffmpeg is used to generate the video
             // append frame images together
             (0, child_process_1.execSync)(`ffmpeg -y -r ${this.config.frames_per_second} -i ${path_1.default.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${tmpFilename} -hide_banner -loglevel error`);
             // In case we have a .wav file (we likely do) instead of a .mp3, convert it to mp3
-            const mp3AudioPath = this.config.audio_path.split(".")[0] + '.mp3';
+            const mp3AudioPath = this.config.audio_path.replace(".wav", ".mp3");
+            console.log([this.config.audio_path, mp3AudioPath]);
             (0, child_process_1.execSync)(`ffmpeg -y -i ${this.config.audio_path} -acodec libmp3lame ${mp3AudioPath} -hide_banner -loglevel error`);
             // append audio to video file
             (0, child_process_1.execSync)(`ffmpeg -y -i ${tmpFilename} -i ${mp3AudioPath} -c copy -map 0:v:0 -map 1:a:0 ${filename} -hide_banner -loglevel error`);

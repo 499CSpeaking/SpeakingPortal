@@ -57,7 +57,7 @@ function getAudio(inputString, callback) {
         });
         const audio_url = (yield api_response.json()).data.url;
         (0, https_1.get)(audio_url, (res) => {
-            const path = "demo_files/audio.wav";
+            const path = "demo_files/tmp/audio.wav";
             const writeStream = (0, fs_1.createWriteStream)(path);
             res.pipe(writeStream);
             writeStream.on("finish", () => {
@@ -72,7 +72,7 @@ function getTranscript(text, audioPath, callback) {
     //have to 
     const curlCommand = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:8080/transcriptions?async=false"`;
     const output = (0, child_process_1.execSync)(curlCommand).toString();
-    (0, fs_1.writeFileSync)('demo_files/transcript.json', output);
-    callback(audioPath, 'demo_files/transcript.json');
+    (0, fs_1.writeFileSync)('demo_files/tmp/transcript.json', output);
+    callback(audioPath, 'demo_files/tmp/transcript.json');
 }
 start();
