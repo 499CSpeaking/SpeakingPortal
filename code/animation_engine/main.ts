@@ -78,7 +78,7 @@ export async function run(inputFilePath: string, config: any): Promise<string> {
     await avatarContext.init()
 
     // this object renders
-    const renderer: Renderer = new Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter)
+    const renderer: Renderer = new Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter, avatarContext)
     renderer.setup()
     for(let i: number = 1; i <= config.video_length * config.frames_per_second; i += 1) {
         const text: string = `${phonemeOccurrences.getDominantPhonemeAt(i / config.frames_per_second) ?? 'idle'}`

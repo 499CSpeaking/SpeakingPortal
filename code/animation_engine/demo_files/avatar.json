@@ -1,10 +1,10 @@
 {
     "body": "body.png",
-    "body_pos": [0, -26],
-    "body_scale": 0.3,
+    "body_pos": [0, 0],
+    "body_scale": 0.2,
 
     "mouth_pos": [0, -26],
-    "mouth_scale": "0.3",
+    "mouth_scale": 0.3,
 
     "left_eye": [
         "eye_left_open.svg",
@@ -18,7 +18,7 @@
     ],
 
     "eye_pos": [0, -50],
-    "distance_between_eyes": 15,
+    "distance_between_eyes": 30,
     "eye_scale": 0.26,
 
     "static_assets": [

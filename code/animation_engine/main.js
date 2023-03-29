@@ -77,7 +77,7 @@ function run(inputFilePath, config) {
         const avatarContext = new avatar_context_1.AvatarContext(config);
         yield avatarContext.init();
         // this object renders
-        const renderer = new renderer_1.Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter);
+        const renderer = new renderer_1.Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter, avatarContext);
         renderer.setup();
         for (let i = 1; i <= config.video_length * config.frames_per_second; i += 1) {
             const text = `${(_a = phonemeOccurrences.getDominantPhonemeAt(i / config.frames_per_second)) !== null && _a !== void 0 ? _a : 'idle'}`;

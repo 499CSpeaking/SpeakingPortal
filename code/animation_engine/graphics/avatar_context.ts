@@ -45,6 +45,9 @@ export class AvatarContext {
 
         this.eyeLeft = context_obj.left_eye
         this.eyeRight = context_obj.right_eye
+        this.eyePos = context_obj.eye_pos
+        this.eyeScale = context_obj.eye_scale
+        this.eyeDistanceBetween = context_obj.distance_between_eyes
 
         this.body = context_obj.body
         this.bodyPos = context_obj.body_pos
@@ -54,6 +57,7 @@ export class AvatarContext {
         this.mouthScale = context_obj.mouth_scale
 
         // load static assets
+        this.staticAssets = new Array<StaticAsset>()
         context_obj.static_assets.forEach((item: any) => {
             const staticAsset: StaticAsset = {
                 name: item.asset,
@@ -67,10 +71,28 @@ export class AvatarContext {
         console.log(this)
 
     }
+    
+    // functions for accessing the data
+
+    // returns [x,y] position and scale of mouth
+    public mouthData(): [number[], number] {
+        return [this.mouthPos!, this.mouthScale!]
+    }
+
+    // returns left + right texture name, position, distance between eyes, and scale
+    public eyeData(): [string, string, number[], number, number] {
+        return [this.eyeLeft![0], this.eyeRight![0], this.eyePos!, this.eyeDistanceBetween!, this.eyeScale!]
+    }
+
+    // returns texture, position and scale of body
+    public bodyData(): [string, number[], number] {
+        return [this.body!, this.bodyPos!, this.bodyScale!]
+    }
+
+    public getStaticAssets(): StaticAsset[] {
+        return this.staticAssets!
+    } 
 }
-
-// functions for accessing the data
-
 
 // internal container for storing static assets
 interface StaticAsset {
