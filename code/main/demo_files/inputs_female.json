@@ -1,0 +1,23 @@
+{
+    "width": 250,
+    "height": 250,
+
+    "phoneme_samples_per_second": 27,
+    "frames_per_second": 27,
+
+    "filter_kernel_size": 7,
+    "filter_kernel_variance": 2,
+
+    "phoneme_idle_threshold": 1,
+
+    "frames_path": "./demo_files/tmp",
+    "video_path": "./demo_files/tmp",
+
+    "graphics_path": "./testing/graphics",
+    "graphics_config_path": "./testing/graphics.json",
+
+    "transcript_path": "./demo_files/transcript.json",
+    "audio_path": "./demo_files/audio.wav",
+
+    "avatar_context_path": "./demo_files/avatar.json"
+}
