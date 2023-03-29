@@ -6,6 +6,7 @@ import path from "path";
 import { PhonemeOccurrences } from "../transcript/phoneme_occurrences";
 import { GraphicsPool } from "../graphics/graphics_pool";
 import { PhonemeImageconverter } from "../graphics/phoneme_to_image";
+import { AvatarContext } from "../graphics/avatar_context";
 
 // everything to do with drawing frames and creating videos
 
@@ -16,12 +17,15 @@ export class Renderer {
     private readonly graphics: GraphicsPool
     private readonly phonemes: PhonemeOccurrences
     private readonly phonemeImageConverter: PhonemeImageconverter
+    private readonly avatarContext: AvatarContext
 
-    constructor(config: any, graphics: GraphicsPool, phonemes: PhonemeOccurrences, phonemeImageConverter: PhonemeImageconverter) {
+    constructor(config: any, 
+        graphics: GraphicsPool, phonemes: PhonemeOccurrences, phonemeImageConverter: PhonemeImageconverter, avatarContext: AvatarContext) {
         this.config = config
         this.graphics = graphics
         this.phonemes = phonemes
         this.phonemeImageConverter = phonemeImageConverter
+        this.avatarContext = avatarContext
 
         // set up rendering context
         this.canvas = createCanvas(config.width, config.height)

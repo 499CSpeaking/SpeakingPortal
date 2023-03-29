@@ -1,0 +1,31 @@
+{
+    "body": "body.png",
+    "body_pos": [0, -26],
+    "body_scale": 0.3,
+
+    "mouth_pos": [0, -26],
+    "mouth_scale": "0.3",
+
+    "left_eye": [
+        "eye_left_open.svg",
+        "eye_left_half.svg",
+        "eye_left_closed.svg"
+    ],
+    "right_eye": [
+        "eye_right_open.svg",
+        "eye_right_half.svg",
+        "eye_right_closed.svg"
+    ],
+
+    "eye_pos": [0, -50],
+    "distance_between_eyes": 15,
+    "eye_scale": 0.26,
+
+    "static_assets": [
+        {
+            "asset": "glasses.svg",
+            "pos": [0, -45],
+            "scale": 0.2
+        }
+    ]
+}

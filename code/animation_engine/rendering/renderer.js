@@ -11,11 +11,12 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 // everything to do with drawing frames and creating videos
 class Renderer {
-    constructor(config, graphics, phonemes, phonemeImageConverter) {
+    constructor(config, graphics, phonemes, phonemeImageConverter, avatarContext) {
         this.config = config;
         this.graphics = graphics;
         this.phonemes = phonemes;
         this.phonemeImageConverter = phonemeImageConverter;
+        this.avatarContext = avatarContext;
         // set up rendering context
         this.canvas = (0, canvas_1.createCanvas)(config.width, config.height);
         this.renderCtx = this.canvas.getContext('2d');

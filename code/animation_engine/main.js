@@ -21,6 +21,7 @@ const phoneme_occurrences_1 = require("./transcript/phoneme_occurrences");
 const get_video_duration_1 = __importDefault(require("get-video-duration"));
 const graphics_pool_1 = require("./graphics/graphics_pool");
 const phoneme_to_image_1 = require("./graphics/phoneme_to_image");
+const avatar_context_1 = require("./graphics/avatar_context");
 function run(inputFilePath, config) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -57,6 +58,7 @@ function run(inputFilePath, config) {
             config.loadParameter("graphics_path");
             config.loadParameter("graphics_config_path");
             config.loadParameter("audio_path");
+            config.loadParameter("avatar_context_path");
             config.video_length = yield (0, get_video_duration_1.default)(config.audio_path);
             console.log(config);
         }
@@ -72,6 +74,8 @@ function run(inputFilePath, config) {
         yield graphics.init();
         // this object converts phonemes to images (not directly though)
         const phonemeImageconverter = new phoneme_to_image_1.PhonemeImageconverter(config);
+        const avatarContext = new avatar_context_1.AvatarContext(config);
+        yield avatarContext.init();
         // this object renders
         const renderer = new renderer_1.Renderer(config, graphics, phonemeOccurrences, phonemeImageconverter);
         renderer.setup();
