@@ -6,6 +6,7 @@ import path from "path";
 import { PhonemeOccurrences } from "../transcript/phoneme_occurrences";
 import { GraphicsPool } from "../graphics/graphics_pool";
 import { PhonemeImageconverter } from "../graphics/phoneme_to_image";
+import { AvatarContext } from "../graphics/avatar_context";
 
 // everything to do with drawing frames and creating videos
 
@@ -16,12 +17,15 @@ export class Renderer {
     private readonly graphics: GraphicsPool
     private readonly phonemes: PhonemeOccurrences
     private readonly phonemeImageConverter: PhonemeImageconverter
+    private readonly avatarContext: AvatarContext
 
-    constructor(config: any, graphics: GraphicsPool, phonemes: PhonemeOccurrences, phonemeImageConverter: PhonemeImageconverter) {
+    constructor(config: any, 
+        graphics: GraphicsPool, phonemes: PhonemeOccurrences, phonemeImageConverter: PhonemeImageconverter, avatarContext: AvatarContext) {
         this.config = config
         this.graphics = graphics
         this.phonemes = phonemes
         this.phonemeImageConverter = phonemeImageConverter
+        this.avatarContext = avatarContext
 
         // set up rendering context
         this.canvas = createCanvas(config.width, config.height)
@@ -66,61 +70,72 @@ export class Renderer {
         }
         const mouth: Image = this.graphics.get(imageName)
 
-        /*
-            Much of this code below is a quick hardcode for the demo. I will improve upon it later 
-        */
-
-        const body: Image = this.graphics.get("body.png")
-        const bodyScale = 0.2
+        // body
+        const [bodyDescriptor, bodyPos, bodyScale] = this.avatarContext.bodyData()
+        const body: Image = this.graphics.get(bodyDescriptor)
         this.renderCtx.drawImage(
             body, 
-            this.config.width/2 - bodyScale*body.width/2,
-            this.config.height/2 - bodyScale*body.height/2,
+            this.config.width/2 - bodyScale*body.width/2 + bodyPos[0],
+            this.config.height/2 - bodyScale*body.height/2 + bodyPos[1],
             body.width * bodyScale,
             body.height * bodyScale,
         )
 
-        const mouthScale = 0.3
-        const mouthY = -26
+        // mouth
+        const [mouthPos, mouthScale] = this.avatarContext.mouthData();
         this.renderCtx.drawImage(
             mouth,
-            this.config.width/2 - mouthScale*mouth.width/2,
-            this.config.height/2 + mouthY,
+            this.config.width/2 - mouthScale*mouth.width/2 + mouthPos[0],
+            this.config.height/2 + mouthPos[1],
             mouthScale*mouth.width,
             mouthScale*mouth.height * (0.90 + dominance*0.2)
         )
 
-        const leftEye: Image[] = [this.graphics.get("eye_left_open.svg"), this.graphics.get("eye_left_half.svg"), this.graphics.get("eye_left_closed.svg")]
-        const rightEye: Image[] = [this.graphics.get("eye_right_open.svg"), this.graphics.get("eye_right_half.svg"), this.graphics.get("eye_right_closed.svg")]
-        const eyeScale = 0.26
-        const eyeY = -50
-        const eyeOffsetFromCenter = 15
+        // eyes
+        const [leftEyeDescriptor, rightEyeDescriptor, eyePos, eyeDistanceBetween, eyeScale] = this.avatarContext.eyeData()
+        const leftEye: Image = this.graphics.get(leftEyeDescriptor)
+        const rightEye: Image = this.graphics.get(rightEyeDescriptor)
 
+        // left eye
         this.renderCtx.drawImage(
-            leftEye[0],
-            this.config.width/2 - eyeScale*leftEye[0].width/2 + eyeOffsetFromCenter,
-            this.config.height/2 - eyeScale*leftEye[0].width/2 + eyeY,
-            eyeScale*leftEye[0].width,
-            eyeScale*leftEye[0].height
+            leftEye,
+            this.config.width/2 - eyeScale*leftEye.width/2 + eyePos[0] + eyeDistanceBetween/2,
+            this.config.height/2 - eyeScale*leftEye.width/2 + eyePos[1],
+            eyeScale*leftEye.width,
+            eyeScale*leftEye.height
         )
+        //right eye
         this.renderCtx.drawImage(
-            rightEye[0],
-            this.config.width/2 - eyeScale*rightEye[0].width/2 - eyeOffsetFromCenter,
-            this.config.height/2 - eyeScale*rightEye[0].width/2 + eyeY,
-            eyeScale*rightEye[0].width,
-            eyeScale*rightEye[0].height
+            rightEye,
+            this.config.width/2 - eyeScale*rightEye.width/2 + eyePos[0] - eyeDistanceBetween/2,
+            this.config.height/2 - eyeScale*rightEye.width/2 + eyePos[1],
+            eyeScale*rightEye.width,
+            eyeScale*rightEye.height
         )
 
-        const glasses: Image = this.graphics.get("glasses.svg")
-        const glassesScale = 0.2
-        const glassesY = -45
-        this.renderCtx.drawImage(
-            glasses,
-            this.config.width/2 - glassesScale*glasses.width/2,
-            this.config.height/2 - glassesScale*glasses.height/2 + glassesY,
-            glassesScale*glasses.width,
-            glassesScale*glasses.height
-        )
+        // const glasses: Image = this.graphics.get("glasses.svg")
+        // const glassesScale = 0.2
+        // const glassesY = -45
+        // this.renderCtx.drawImage(
+        //     glasses,
+        //     this.config.width/2 - glassesScale*glasses.width/2,
+        //     this.config.height/2 - glassesScale*glasses.height/2 + glassesY,
+        //     glassesScale*glasses.width,
+        //     glassesScale*glasses.height
+        // )
+
+        // draw all the static assets
+        this.avatarContext.getStaticAssets().forEach(asset => {
+            const texture: Image = this.graphics.get(asset.name)
+
+            this.renderCtx.drawImage(
+                texture,
+                this.config.width/2 - asset.scale*texture.width/2 + asset.pos[0],
+                this.config.height/2 - asset.scale*texture.height/2 + asset.pos[1],
+                asset.scale*texture.width,
+                asset.scale*texture.height
+            )
+        });
 
 
         fs.writeFileSync(path.join(this.config.frames_path, 'frames', `frame_${frameNum.toString().padStart(12, '0')}.png`), this.canvas.toBuffer('image/png'))

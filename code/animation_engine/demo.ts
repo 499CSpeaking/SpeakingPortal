@@ -10,7 +10,7 @@ import { execSync } from "child_process";
 // this code is messy and shit. It's good for a demo though
 
 //modify this
-const inputString: string = "yoooo mister whiiiite how are youououou"
+const inputString: string = "Hello, I am currently testing the avatar context feature."
 
 async function start() {
     // get audio from kukarella

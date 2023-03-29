@@ -17,5 +17,7 @@
     "graphics_config_path": "./testing/graphics.json",
 
     "transcript_path": "./demo_files/tmp/transcript.json",
-    "audio_path": "./demo_files/tmp/audio.wav"
+    "audio_path": "./demo_files/tmp/audio.wav",
+
+    "avatar_context_path": "./demo_files/avatar.json"
 }
