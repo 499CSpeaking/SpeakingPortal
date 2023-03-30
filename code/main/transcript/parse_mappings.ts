@@ -9,7 +9,7 @@ import { workerData } from "worker_threads";
 
 export class PhonemeMapping {
     private intervalTree: IntervalTree<string>; // data structure that stores mappings
-    
+
     constructor(config: any) {
         this.intervalTree = this.parseFile(config)
     }
@@ -22,25 +22,26 @@ export class PhonemeMapping {
 
     private parseFile(config: any): IntervalTree<string> {
         const tree = new IntervalTree<string>()
-        
+
         // the transcript is a JSON file
         const transcript = JSON.parse(config.transcript.toString())
-        
         /*
             note: the exact format of the transcript folder is flexible, as this is a relatively
             easy thing to modify.
 
             parse the phonemes into a more usable data structure
         */
-        for(let wordIdx = 0; wordIdx < transcript.words.length; wordIdx += 1) {
+        for (let wordIdx = 0; wordIdx < transcript.words.length; wordIdx += 1) {
             const word: any = transcript.words[wordIdx]
-            
-            let cumulativeOffset = word.start
-            for(let phonemeIdx = 0; phonemeIdx < word.phones.length; phonemeIdx += 1) {
-                const phoneme: any = word.phones[phonemeIdx]
 
-                tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0])
-                cumulativeOffset += phoneme.duration
+            if (word.case == "success") {
+                let cumulativeOffset = word.start
+                for (let phonemeIdx = 0; phonemeIdx < word.phones.length; phonemeIdx += 1) {
+                    const phoneme: any = word.phones[phonemeIdx]
+
+                    tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0])
+                    cumulativeOffset += phoneme.duration
+                }
             }
         }
 

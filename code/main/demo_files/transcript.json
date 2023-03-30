@@ -1,10 +1,10 @@
 {
-  "transcript": "testing our input",
+  "transcript": "testing input",
   "words": [
     {
       "alignedWord": "testing",
       "case": "success",
-      "end": 0.47,
+      "end": 0.45,
       "endOffset": 7,
       "phones": [
         {
@@ -12,11 +12,11 @@
           "phone": "t_B"
         },
         {
-          "duration": 0.08,
+          "duration": 0.07,
           "phone": "eh_I"
         },
         {
-          "duration": 0.09,
+          "duration": 0.1,
           "phone": "s_I"
         },
         {
@@ -24,11 +24,11 @@
           "phone": "t_I"
         },
         {
-          "duration": 0.07,
+          "duration": 0.04,
           "phone": "ih_I"
         },
         {
-          "duration": 0.08,
+          "duration": 0.09,
           "phone": "ng_E"
         }
       ],
@@ -37,32 +37,13 @@
       "word": "testing"
     },
     {
-      "alignedWord": "our",
-      "case": "success",
-      "end": 0.61,
-      "endOffset": 11,
-      "phones": [
-        {
-          "duration": 0.06,
-          "phone": "aa_B"
-        },
-        {
-          "duration": 0.08,
-          "phone": "r_E"
-        }
-      ],
-      "start": 0.47,
-      "startOffset": 8,
-      "word": "our"
-    },
-    {
       "alignedWord": "input",
       "case": "success",
-      "end": 0.99,
-      "endOffset": 17,
+      "end": 0.91,
+      "endOffset": 13,
       "phones": [
         {
-          "duration": 0.1,
+          "duration": 0.08,
           "phone": "ih_B"
         },
         {
@@ -70,20 +51,20 @@
           "phone": "n_I"
         },
         {
-          "duration": 0.07,
+          "duration": 0.06,
           "phone": "p_I"
         },
         {
-          "duration": 0.11,
+          "duration": 0.12,
           "phone": "uh_I"
         },
         {
-          "duration": 0.01,
+          "duration": 0.11,
           "phone": "t_E"
         }
       ],
-      "start": 0.61,
-      "startOffset": 12,
+      "start": 0.45,
+      "startOffset": 8,
       "word": "input"
     }
   ]

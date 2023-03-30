@@ -92,14 +92,14 @@ server.post("/align/", (req, res) => {
 // get transcript from aligner
 server.post("/alignLT/", (req, res) => {
     const transcriptPath = 'demo_files/transcriptLT.json';
-    const aligner = req.body.aligner;
+    const aligner = 'gentle';
     switch (aligner) {
         case 'gentle':
             console.log(`Using ${aligner} to Align`);
-            const text = (0, fs_1.readFileSync)('demo_files/textLT.txt', { encoding: 'utf-8', flag: 'r' });
-            ;
+            //const text: string = readFileSync('demo_files/textLT.txt', {encoding: 'utf-8', flag: 'r'});;
+            const text = 'demo_files/textLT.txt';
             const audioPath = 'demo_files/audioLT.wav';
-            const curlCommand = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:32768/transcriptions?async=false"`;
+            const curlCommand = `curl -F "audio=@${audioPath}" -F "transcript=@${text}" "http://localhost:32768/transcriptions?async=false"`;
             const output = (0, child_process_1.execSync)(curlCommand).toString();
             (0, fs_1.writeFileSync)(transcriptPath, output);
             console.log(`Transcript Location: ${transcriptPath}`);
@@ -138,7 +138,7 @@ server.post("/animate/", (req, res) => __awaiter(void 0, void 0, void 0, functio
 server.get("/video/", (req, res) => {
     const range = req.headers.range;
     // get video info
-    const videoPath = "./demo_files/tmp/video.mp4";
+    const videoPath = "./demo_files/tmp/out.mp4";
     const videoSize = (0, fs_1.statSync)(videoPath).size;
     // parse range in bytes
     const CHUNK_SZ = 1000; // 1KB chunk
