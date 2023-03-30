@@ -30,11 +30,13 @@ class PhonemeMapping {
         */
         for (let wordIdx = 0; wordIdx < transcript.words.length; wordIdx += 1) {
             const word = transcript.words[wordIdx];
-            let cumulativeOffset = word.start;
-            for (let phonemeIdx = 0; phonemeIdx < word.phones.length; phonemeIdx += 1) {
-                const phoneme = word.phones[phonemeIdx];
-                tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0]);
-                cumulativeOffset += phoneme.duration;
+            if (word.case == "success") {
+                let cumulativeOffset = word.start;
+                for (let phonemeIdx = 0; phonemeIdx < word.phones.length; phonemeIdx += 1) {
+                    const phoneme = word.phones[phonemeIdx];
+                    tree.insert([cumulativeOffset, cumulativeOffset + phoneme.duration], phoneme.phone.split('_')[0]);
+                    cumulativeOffset += phoneme.duration;
+                }
             }
         }
         return tree;

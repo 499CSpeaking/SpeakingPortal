@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // max character limit checking
 const char_lim = 300;
 let button = document.getElementById("send");
+let buttonLT = document.getElementById("modeLT");
 // print messages to user on the web
 function log_status(message) {
     document.getElementById("out").innerHTML += `${message}<br>`;
@@ -94,6 +95,63 @@ button.onclick = function getOut() {
                     (_b = document.getElementById("videoPlayer")) === null || _b === void 0 ? void 0 : _b.appendChild(videoElement);
                     log_status("The video should be viewable on the left. Enjoy!");
                 });
+            });
+        });
+    });
+};
+// main function to get final output to user
+buttonLT.onclick = function getLT() {
+    return __awaiter(this, void 0, void 0, function* () {
+        clear_output();
+        let transcriptPath, videoPath, start, end, total;
+        // get transcript from aligner
+        log_status("Starting Performance Mode...");
+        let payload = {};
+        log_status("Aligning...");
+        start = Date.now();
+        fetch("http://localhost:4000/alignLT", {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: { "Content-Type": "application/json; charset=UTF-8" },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+            end = Date.now();
+            total = end - start;
+            transcriptPath = data.transcriptPath;
+            log_status("Generated transcript in server location: " + transcriptPath);
+            log_status("Aligner Time: " + total + " ms | " + total / 1000 + " s");
+        })
+            .then(() => {
+            log_status("Generating Animation...");
+            start = Date.now();
+            fetch("http://localhost:4000/animate", {
+                method: "POST",
+                body: JSON.stringify({ avatar: 'inputs_LT.json' }),
+                headers: { "Content-Type": "application/json; charset=UTF-8" },
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                var _a, _b;
+                end = Date.now();
+                let total2 = end - start;
+                total += total2;
+                videoPath = data.videoPath;
+                log_status("Generated video in server location: " + videoPath);
+                log_status("Animation Time: " + total2 + " ms | " + total2 / 1000 + " s");
+                log_status("Total Runtime: " + total + " ms | " + total / 1000 + " s");
+                const videoElement = document.createElement("video");
+                videoElement.src = "/video";
+                //videoElement.id = "video";
+                videoElement.controls = true;
+                videoElement.muted = false;
+                videoElement.autoplay = true;
+                videoElement.classList.add("embed-responsive-item");
+                if (document.getElementById("video") != null) {
+                    (_a = document.getElementById("video")) === null || _a === void 0 ? void 0 : _a.remove();
+                }
+                (_b = document.getElementById("videoPlayer")) === null || _b === void 0 ? void 0 : _b.appendChild(videoElement);
+                log_status("The video should be viewable on the left. Enjoy!");
             });
         });
     });
