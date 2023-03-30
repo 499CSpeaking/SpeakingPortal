@@ -99,6 +99,45 @@ server.post("/align/", (req, res) => {
   }
 });
 
+// get transcript from aligner
+server.post("/alignLT/", (req, res) => {
+  const transcriptPath = 'demo_files/transcriptLT.json';
+  const aligner: string = req.body.aligner;
+  switch (aligner) {
+    case 'gentle':
+      console.log(`Using ${aligner} to Align`);
+      const text: string = readFileSync('demo_files/textLT.txt', {encoding: 'utf-8', flag: 'r'});;
+      const audioPath: string = 'demo_files/audioLT.wav';
+
+      const curlCommand: string = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:32768/transcriptions?async=false"`;
+      const output: string = execSync(curlCommand).toString();
+      writeFileSync(transcriptPath, output);
+      console.log(`Transcript Location: ${transcriptPath}`);
+      res.json({ transcriptPath: transcriptPath });
+      break;
+
+    case 'microsoft':
+      console.log(`Using ${aligner} to Align`);
+      break;
+
+    case 'google':
+      console.log(`Using ${aligner} to Align`);
+      break;
+
+    case 'amazon':
+      console.log(`Using ${aligner} to Align`);
+      break;
+
+    case 'ibm':
+      console.log(`Using ${aligner} to Align`);
+      break;
+
+    default:
+      console.log("Aligner error");
+      break;
+  }
+});
+
 // generate animation
 server.post("/animate/", async (req, res) => {
   const config: any = new Object();
