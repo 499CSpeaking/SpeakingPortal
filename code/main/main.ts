@@ -55,6 +55,9 @@ export async function run(inputFilePath: string, config: any): Promise<string> {
 
         config.loadParameter("avatar_context_path")
 
+        config.loadOptionalParameter("blink_speed", 40)
+        config.loadOptionalParameter("blink_period", 2)
+
         config.video_length = await getVideoDurationInSeconds(config.audio_path)
 
         console.log(config)

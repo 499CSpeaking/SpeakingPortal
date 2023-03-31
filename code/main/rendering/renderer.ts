@@ -92,7 +92,7 @@ export class Renderer {
         )
 
         // eyes
-        const [leftEyeDescriptor, rightEyeDescriptor, eyePos, eyeDistanceBetween, eyeScale] = this.avatarContext.eyeData()
+        const [leftEyeDescriptor, rightEyeDescriptor, eyePos, eyeDistanceBetween, eyeScale] = this.avatarContext.eyeData(seconds)
         const leftEye: Image = this.graphics.get(leftEyeDescriptor)
         const rightEye: Image = this.graphics.get(rightEyeDescriptor)
 

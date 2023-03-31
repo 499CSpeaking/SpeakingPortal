@@ -63,7 +63,7 @@ class Renderer {
         const [mouthPos, mouthScale] = this.avatarContext.mouthData();
         this.renderCtx.drawImage(mouth, this.config.width / 2 - mouthScale * mouth.width / 2 + mouthPos[0], this.config.height / 2 + mouthPos[1], mouthScale * mouth.width, mouthScale * mouth.height * (0.90 + dominance * 0.2));
         // eyes
-        const [leftEyeDescriptor, rightEyeDescriptor, eyePos, eyeDistanceBetween, eyeScale] = this.avatarContext.eyeData();
+        const [leftEyeDescriptor, rightEyeDescriptor, eyePos, eyeDistanceBetween, eyeScale] = this.avatarContext.eyeData(seconds);
         const leftEye = this.graphics.get(leftEyeDescriptor);
         const rightEye = this.graphics.get(rightEyeDescriptor);
         // left eye

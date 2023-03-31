@@ -59,6 +59,8 @@ function run(inputFilePath, config) {
             config.loadParameter("graphics_config_path");
             config.loadParameter("audio_path");
             config.loadParameter("avatar_context_path");
+            config.loadOptionalParameter("blink_speed", 40);
+            config.loadOptionalParameter("blink_period", 2);
             config.video_length = yield (0, get_video_duration_1.default)(config.audio_path);
             console.log(config);
         }
