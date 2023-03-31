@@ -1,0 +1,60 @@
+ 	Arabic (Modern Standard)
+ 	German
+ 	English (Received Pronunciation)
+ 	English (General American)
+ 	Esperanto
+ 	Spanish (Spain)
+ 	Spanish (Mexico)
+ 	Persian
+ 	Finnish
+ 	French (France)
+ 	French (Québec)
+ 	Icelandic
+ 	Japanese
+ 	Jamaican Creole
+ 	Khmer
+ 	Korean
+ 	Malay (Malaysian and Indonesian)
+ 	Norwegian Bokmål
+ 	Dutch
+ 	Odia
+ 	Romanian
+ 	Swedish
+ 	Swahili
+ 	Isan
+ 	Vietnamese (Central)
+ 	Vietnamese (Northern)
+ 	Vietnamese (Southern)
+ 	Cantonese
+ 	Mandarin
+
+
+     ar
+     de
+     en_UK
+     en_US
+     eo
+     es_ES
+     es_MX
+     fa
+     fi
+     fr_FR
+     fr_QC
+     is
+     ja
+     jam
+     km
+     ko
+     ma
+     nb
+     nl
+     or
+     ro
+     sv
+     sw
+     tts
+     vi_C
+     vi_N
+     vi_S
+     yue
+     zh

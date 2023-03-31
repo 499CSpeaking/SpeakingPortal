@@ -36,6 +36,7 @@ button.onclick = function getOut() {
         }
         // get other input data
         let aligner = document.getElementById("aligner").value;
+        let language = document.getElementById("language").value;
         let voiceKey = document.getElementById("voiceKey").value;
         let avatar = document.getElementById("avatar").value;
         let audioPath, transcriptPath, videoPath;
@@ -56,8 +57,9 @@ button.onclick = function getOut() {
             log_status("Getting Transcript from " + aligner + "...");
             let payload = {
                 aligner: aligner,
-                audioPath: audioPath,
                 inputString: input,
+                audioPath: audioPath,
+                language: language,
             };
             fetch("http://localhost:4000/align", {
                 method: "POST",
