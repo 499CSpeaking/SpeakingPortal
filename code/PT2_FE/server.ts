@@ -85,9 +85,11 @@ server.post("/align/", async (req: { body: { aligner: string; inputString: strin
 
     case 'google':
       console.log(`Using ${aligner} to Align`);
+      
       var audioPath: string = req.body.audioPath;
 
       console.log(`Language: ${language}`);
+
       switch (language) {
         case 'English':
           language = 'en-US';
