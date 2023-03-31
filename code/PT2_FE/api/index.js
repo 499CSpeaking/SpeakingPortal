@@ -67,6 +67,7 @@ function language(name, languageCode) {
                 const tempWords = yield Promise.all(alternative.words.map((item, wordIndex) => __awaiter(this, void 0, void 0, function* () {
                     const s = parseInt(item.startTime.seconds) + item.startTime.nanos / 1000000000;
                     const e = parseInt(item.endTime.seconds) + item.endTime.nanos / 1000000000;
+                    console.log(item.word);
                     const phones = yield phoneticsSync(item.word, languageCode, s, e);
                     const word = {
                         alignedWord: item.word,
@@ -82,7 +83,7 @@ function language(name, languageCode) {
                 })));
                 outputJson.words = outputJson.words.concat(tempWords);
             })));
-            fs_1.default.writeFileSync('output.json', JSON.stringify(outputJson, null, 2));
+            fs_1.default.writeFileSync('./demo_files/transcript.json', JSON.stringify(outputJson, null, 2));
         }));
     });
 }
@@ -97,6 +98,8 @@ function phoneticsSync(word, languageCode, wordStartTime, wordEndTime) {
             const arpabetPhoneArray = ipaToArpabetWithExtraSymbols(phone);
             arpabetPhoneArray.forEach((arpabetPhone, index) => {
                 const duration = averageDuration;
+                // upper case the phone
+                arpabetPhone = arpabetPhone.toUpperCase();
                 phones.push({
                     duration,
                     phone: arpabetPhone,
@@ -144,52 +147,56 @@ function getPhonetics(sentence, languageCode) {
 }
 function ipaToArpabetWithExtraSymbols(ipa) {
     const arpabetConversions = {
-        'ɔ': 'AO',
-        'ɑ': 'AA',
-        'i': 'IY',
-        'u': 'UW',
-        'e': 'EH',
-        'ɛ': 'EH',
-        'ɪ': 'IH',
-        'ʊ': 'UH',
-        'ʌ': 'AH',
-        'ə': 'AX',
-        'æ': 'AE',
-        'eɪ': 'EY',
-        'aɪ': 'AY',
-        'oʊ': 'OW',
-        'aʊ': 'AW',
-        'ɔɪ': 'OY',
-        'p': 'P',
-        'b': 'B',
-        't': 'T',
-        'd': 'D',
-        'k': 'K',
-        'g': 'G',
-        'tʃ': 'CH',
-        'dʒ': 'JH',
-        'f': 'F',
-        'v': 'V',
-        'θ': 'TH',
-        'ð': 'DH',
-        's': 'S',
-        'z': 'Z',
-        'ʃ': 'SH',
-        'ʒ': 'ZH',
-        'h': 'HH',
-        'm': 'M',
-        'n': 'N',
-        'ŋ': 'NG',
-        'l': 'L',
-        'r': 'R',
-        'ɜr': 'ER',
-        'ər': 'AXR',
-        'w': 'W',
-        'j': 'Y',
-        'ɝ': 'UR',
-        'ɚ': 'UR',
-        'ɹ': 'R',
-        'ɫ': 'L',
+        //amoɾ
+        "ɔ": "o",
+        "ɑ": "aa",
+        "i": "i",
+        "u": "u",
+        "e": "e",
+        "ɛ": "eh",
+        "ɪ": "ih",
+        "ʊ": "uh",
+        "ʌ": "v",
+        "ə": "er",
+        "æ": "ae",
+        "eɪ": "ey",
+        "aɪ": "ay",
+        "oʊ": "ow",
+        "aʊ": "aw",
+        "ɔɪ": "oy",
+        "p": "p",
+        "b": "b",
+        "t": "t",
+        "d": "d",
+        "k": "k",
+        "g": "g",
+        "tʃ": "ch",
+        "dʒ": "jh",
+        "f": "f",
+        "v": "v",
+        "θ": "th",
+        "ð": "dh",
+        "s": "s",
+        "z": "z",
+        "ʃ": "sh",
+        "ʒ": "zh",
+        "h": "h",
+        "m": "m",
+        "n": "n",
+        "ŋ": "ng",
+        "l": "l",
+        "r": "r",
+        "ɜr": "er",
+        "ər": "er",
+        "w": "w",
+        "j": "y",
+        "ɝ": "er",
+        "ɚ": "er",
+        "ɹ": "r",
+        "ɫ": "l",
+        "a": "a",
+        "o": "o",
+        "ɾ": "r",
     };
     const ipaSymbols = Object.keys(arpabetConversions);
     const ipaRegex = new RegExp(ipaSymbols.join('|'), 'g');

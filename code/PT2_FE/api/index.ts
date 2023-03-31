@@ -15,15 +15,15 @@ const { Storage } = require('@google-cloud/storage');
 // Creates a client
 const storage = new Storage(gcloudopt);
 
-export async function uploadFile(filepath:string,languagetype:string) {
+export async function uploadFile(filepath: string, languagetype: string) {
   // The ID of your GCS bucket
-const bucketName = 'kukarellaspeech';
+  const bucketName = 'kukarellaspeech';
   // parse file name from filepath
   const fileName: string = filepath.split('/').pop() as string;
   const options = { destination: fileName };
   await storage.bucket(bucketName).upload(filepath, options);
   console.log(`${filepath} uploaded to ${bucketName}`);
- await language(fileName, languagetype);
+  await language(fileName, languagetype);
 }
 
 async function language(name: string, languageCode: string) {
@@ -58,6 +58,7 @@ async function language(name: string, languageCode: string) {
       const tempWords: Word[] = await Promise.all(alternative.words.map(async (item: { word: any; startTime: { seconds: string; nanos: number; }; endTime: { seconds: string; nanos: number; }; }, wordIndex: number) => {
         const s = parseInt(item.startTime.seconds) + item.startTime.nanos / 1000000000;
         const e = parseInt(item.endTime.seconds) + item.endTime.nanos / 1000000000;
+        console.log(item.word);
         const phones = await phoneticsSync(item.word, languageCode, s, e);
         const word: Word = {
           alignedWord: item.word,
@@ -69,15 +70,18 @@ async function language(name: string, languageCode: string) {
           startOffset: outputJson.transcript.indexOf(item.word),
           word: item.word,
         };
-
         return word;
       }));
 
       outputJson.words = outputJson.words.concat(tempWords);
     }));
-    fs.writeFileSync('output.json', JSON.stringify(outputJson, null, 2));
+    fs.writeFileSync('./demo_files/transcript.json', JSON.stringify(outputJson, null, 2));
   });
+
 }
+
+
+
 async function phoneticsSync(word: string, languageCode: string, wordStartTime: number, wordEndTime: number): Promise<Phone[]> {
   const phonetics = await getPhonetics(word, languageCode);
   const wordDuration = wordEndTime - wordStartTime;
@@ -91,6 +95,8 @@ async function phoneticsSync(word: string, languageCode: string, wordStartTime: 
 
     arpabetPhoneArray.forEach((arpabetPhone: string, index: number) => {
       const duration = averageDuration;
+      // upper case the phone
+      arpabetPhone = arpabetPhone.toUpperCase();
       phones.push({
         duration,
         phone: arpabetPhone,
@@ -167,52 +173,55 @@ function getPhonetics(sentence: string, languageCode: string): Promise<string[]>
 function ipaToArpabetWithExtraSymbols(ipa: string): string[] {
   const arpabetConversions: { [key: string]: string } = {
     //amoɾ
-    'ɔ': 'AO',
-    'ɑ': 'AA',
-    'i': 'IY',
-    'u': 'UW',
-    'e': 'EH',
-    'ɛ': 'EH',
-    'ɪ': 'IH',
-    'ʊ': 'UH',
-    'ʌ': 'AH',
-    'ə': 'AX',
-    'æ': 'AE',
-    'eɪ': 'EY',
-    'aɪ': 'AY',
-    'oʊ': 'OW',
-    'aʊ': 'AW',
-    'ɔɪ': 'OY',
-    'p': 'P',
-    'b': 'B',
-    't': 'T',
-    'd': 'D',
-    'k': 'K',
-    'g': 'G',
-    'tʃ': 'CH',
-    'dʒ': 'JH',
-    'f': 'F',
-    'v': 'V',
-    'θ': 'TH',
-    'ð': 'DH',
-    's': 'S',
-    'z': 'Z',
-    'ʃ': 'SH',
-    'ʒ': 'ZH',
-    'h': 'HH',
-    'm': 'M',
-    'n': 'N',
-    'ŋ': 'NG',
-    'l': 'L',
-    'r': 'R',
-    'ɜr': 'ER',
-    'ər': 'AXR',
-    'w': 'W',
-    'j': 'Y',
-    'ɝ': 'UR',
-    'ɚ': 'UR',
-    'ɹ': 'R',
-    'ɫ': 'L',
+    "ɔ": "o",
+    "ɑ": "aa",
+    "i": "i",
+    "u": "u",
+    "e": "e",
+    "ɛ": "eh",
+    "ɪ": "ih",
+    "ʊ": "uh",
+    "ʌ": "v",
+    "ə": "er",
+    "æ": "ae",
+    "eɪ": "ey",
+    "aɪ": "ay",
+    "oʊ": "ow",
+    "aʊ": "aw",
+    "ɔɪ": "oy",
+    "p": "p",
+    "b": "b",
+    "t": "t",
+    "d": "d",
+    "k": "k",
+    "g": "g",
+    "tʃ": "ch",
+    "dʒ": "jh",
+    "f": "f",
+    "v": "v",
+    "θ": "th",
+    "ð": "dh",
+    "s": "s",
+    "z": "z",
+    "ʃ": "sh",
+    "ʒ": "zh",
+    "h": "h",
+    "m": "m",
+    "n": "n",
+    "ŋ": "ng",
+    "l": "l",
+    "r": "r",
+    "ɜr": "er",
+    "ər": "er",
+    "w": "w",
+    "j": "y",
+    "ɝ": "er",
+    "ɚ": "er",
+    "ɹ": "r",
+    "ɫ": "l",
+    "a": "a",
+    "o": "o",
+    "ɾ": "r",
   };
 
   const ipaSymbols = Object.keys(arpabetConversions);

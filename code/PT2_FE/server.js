@@ -75,7 +75,7 @@ server.post("/align/", (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.json({ transcriptPath: transcriptPath });
             break;
         case 'microsoft':
-            console.log(`Using ${aligner} to Align WOO lets`);
+            console.log(`Using ${aligner} to Align`);
             break;
         case 'google':
             console.log(`Using ${aligner} to Align`);
@@ -94,7 +94,8 @@ server.post("/align/", (req, res) => __awaiter(void 0, void 0, void 0, function*
             }
             console.log(`Language: ${language}`);
             yield (0, api_1.uploadFile)(audioPath, language);
-            var gpath = "./output.json";
+            var gpath = "demo_files/transcript.json";
+            // wait 2 seconds for google to process
             res.json({ transcriptPath: gpath });
             break;
         case 'amazon':

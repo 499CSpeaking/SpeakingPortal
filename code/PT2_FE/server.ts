@@ -80,14 +80,13 @@ server.post("/align/", async (req: { body: { aligner: string; inputString: strin
       break;
 
     case 'microsoft':
-      console.log(`Using ${aligner} to Align WOO lets`);
+      console.log(`Using ${aligner} to Align`);
       break;
 
     case 'google':
       console.log(`Using ${aligner} to Align`);
       var audioPath: string = req.body.audioPath;
 
-      
       console.log(`Language: ${language}`);
       switch (language) {
         case 'English':
@@ -103,7 +102,8 @@ server.post("/align/", async (req: { body: { aligner: string; inputString: strin
       console.log(`Language: ${language}`);
   
       await uploadFile(audioPath, language);
-      var gpath = "./output.json";
+      var gpath = "demo_files/transcript.json";
+      // wait 2 seconds for google to process
       res.json({ transcriptPath: gpath });
       break;
 
