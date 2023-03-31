@@ -80,8 +80,17 @@ export class AvatarContext {
     }
 
     // returns left + right texture name, position, distance between eyes, and scale
-    public eyeData(): [string, string, number[], number, number] {
-        return [this.eyeLeft![0], this.eyeRight![0], this.eyePos!, this.eyeDistanceBetween!, this.eyeScale!]
+    // parameter "time" represents the current time of the video in seconds
+    public eyeData(time: number): [string, string, number[], number, number] {
+
+        // a cyclic function to represent how "closed" the eyes are, or how far into a blink it is.
+        // 0 = open eyes, 1 = closed eyes
+        const blinkSpeed: number = this.config.blink_speed // similar to "variance" in a gaussian distribution
+        const blinkPeriod: number = this.config.blink_period // take the inverse of this to get the blink frequency
+        const x: number = time % blinkPeriod - blinkPeriod/2
+        const eyeIdx: number = Math.round(Math.exp(-blinkSpeed*blinkSpeed*x*x) * (this.eyeLeft!.length-1));
+    
+        return [this.eyeLeft![eyeIdx], this.eyeRight![eyeIdx], this.eyePos!, this.eyeDistanceBetween!, this.eyeScale!]
     }
 
     // returns texture, position and scale of body

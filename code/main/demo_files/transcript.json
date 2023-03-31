@@ -1,39 +1,707 @@
 {
-  "transcript": "oh yeah",
+  "transcript": "beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans beans",
   "words": [
     {
-      "alignedWord": "oh",
+      "alignedWord": "beans",
       "case": "success",
-      "end": 0.36,
-      "endOffset": 2,
+      "end": 0.43,
+      "endOffset": 5,
       "phones": [
         {
-          "duration": 0.21,
-          "phone": "ow_S"
-        }
-      ],
-      "start": 0.15,
-      "startOffset": 0,
-      "word": "oh"
-    },
-    {
-      "alignedWord": "yeah",
-      "case": "success",
-      "end": 0.76,
-      "endOffset": 7,
-      "phones": [
-        {
-          "duration": 0.17,
-          "phone": "y_B"
+          "duration": 0.14,
+          "phone": "b_B"
         },
         {
-          "duration": 0.23,
-          "phone": "ae_E"
+          "duration": 0.13,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.09,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
         }
       ],
-      "start": 0.36,
-      "startOffset": 3,
-      "word": "yeah"
+      "start": 0.0,
+      "startOffset": 0,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 0.81,
+      "endOffset": 11,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.14,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.08,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 0.43,
+      "startOffset": 6,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 1.18,
+      "endOffset": 17,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 0.86,
+      "startOffset": 12,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 1.56,
+      "endOffset": 23,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.08,
+          "phone": "z_E"
+        }
+      ],
+      "start": 1.23,
+      "startOffset": 18,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 1.9300000000000002,
+      "endOffset": 29,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 1.6,
+      "startOffset": 24,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 2.3,
+      "endOffset": 35,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 1.97,
+      "startOffset": 30,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 2.67,
+      "endOffset": 41,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 2.35,
+      "startOffset": 36,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 3.04,
+      "endOffset": 47,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 2.72,
+      "startOffset": 42,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 3.4099999999999997,
+      "endOffset": 53,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 3.09,
+      "startOffset": 48,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 3.79,
+      "endOffset": 59,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 3.46,
+      "startOffset": 54,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 4.16,
+      "endOffset": 65,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 3.83,
+      "startOffset": 60,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 4.53,
+      "endOffset": 71,
+      "phones": [
+        {
+          "duration": 0.08,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 4.21,
+      "startOffset": 66,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 4.9,
+      "endOffset": 77,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 4.58,
+      "startOffset": 72,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 5.2700000000000005,
+      "endOffset": 83,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.05,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 4.95,
+      "startOffset": 78,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 5.640000000000001,
+      "endOffset": 89,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 5.32,
+      "startOffset": 84,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 6.0200000000000005,
+      "endOffset": 95,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 5.69,
+      "startOffset": 90,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 6.390000000000001,
+      "endOffset": 101,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 6.07,
+      "startOffset": 96,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 6.760000000000001,
+      "endOffset": 107,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 6.44,
+      "startOffset": 102,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 7.13,
+      "endOffset": 113,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 6.81,
+      "startOffset": 108,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 7.5,
+      "endOffset": 119,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "z_E"
+        }
+      ],
+      "start": 7.18,
+      "startOffset": 114,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 7.88,
+      "endOffset": 125,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 7.55,
+      "startOffset": 120,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 8.25,
+      "endOffset": 131,
+      "phones": [
+        {
+          "duration": 0.08,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 7.93,
+      "startOffset": 126,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 8.620000000000001,
+      "endOffset": 137,
+      "phones": [
+        {
+          "duration": 0.08,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 8.3,
+      "startOffset": 132,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 8.99,
+      "endOffset": 143,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.1,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.06,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "z_E"
+        }
+      ],
+      "start": 8.67,
+      "startOffset": 138,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 9.409999999999998,
+      "endOffset": 149,
+      "phones": [
+        {
+          "duration": 0.09,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.11,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.07,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.1,
+          "phone": "z_E"
+        }
+      ],
+      "start": 9.04,
+      "startOffset": 144,
+      "word": "beans"
+    },
+    {
+      "alignedWord": "beans",
+      "case": "success",
+      "end": 9.89,
+      "endOffset": 155,
+      "phones": [
+        {
+          "duration": 0.07,
+          "phone": "b_B"
+        },
+        {
+          "duration": 0.22,
+          "phone": "iy_I"
+        },
+        {
+          "duration": 0.08,
+          "phone": "n_I"
+        },
+        {
+          "duration": 0.11,
+          "phone": "z_E"
+        }
+      ],
+      "start": 9.41,
+      "startOffset": 150,
+      "word": "beans"
     }
   ]
 }
