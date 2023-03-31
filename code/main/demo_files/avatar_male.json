@@ -1,0 +1,25 @@
+{
+    "body": "body.png",
+    "body_pos": [0, 0],
+    "body_scale": 0.13,
+
+    "mouth_pos": [0, -12],
+    "mouth_scale": 0.19,
+
+    "left_eye": [
+        "eye_left_open.svg",
+        "eye_left_half.svg",
+        "eye_left_closed.svg"
+    ],
+    "right_eye": [
+        "eye_right_open.svg",
+        "eye_right_half.svg",
+        "eye_right_closed.svg"
+    ],
+
+    "eye_pos": [0, -40],
+    "distance_between_eyes": 30,
+    "eye_scale": 0.12,
+
+    "static_assets": []
+}

@@ -1,71 +1,39 @@
 {
-  "transcript": "testing input",
+  "transcript": "oh yeah",
   "words": [
     {
-      "alignedWord": "testing",
+      "alignedWord": "oh",
       "case": "success",
-      "end": 0.45,
+      "end": 0.36,
+      "endOffset": 2,
+      "phones": [
+        {
+          "duration": 0.21,
+          "phone": "ow_S"
+        }
+      ],
+      "start": 0.15,
+      "startOffset": 0,
+      "word": "oh"
+    },
+    {
+      "alignedWord": "yeah",
+      "case": "success",
+      "end": 0.76,
       "endOffset": 7,
       "phones": [
         {
-          "duration": 0.08,
-          "phone": "t_B"
+          "duration": 0.17,
+          "phone": "y_B"
         },
         {
-          "duration": 0.07,
-          "phone": "eh_I"
-        },
-        {
-          "duration": 0.1,
-          "phone": "s_I"
-        },
-        {
-          "duration": 0.07,
-          "phone": "t_I"
-        },
-        {
-          "duration": 0.04,
-          "phone": "ih_I"
-        },
-        {
-          "duration": 0.09,
-          "phone": "ng_E"
+          "duration": 0.23,
+          "phone": "ae_E"
         }
       ],
-      "start": 0.0,
-      "startOffset": 0,
-      "word": "testing"
-    },
-    {
-      "alignedWord": "input",
-      "case": "success",
-      "end": 0.91,
-      "endOffset": 13,
-      "phones": [
-        {
-          "duration": 0.08,
-          "phone": "ih_B"
-        },
-        {
-          "duration": 0.09,
-          "phone": "n_I"
-        },
-        {
-          "duration": 0.06,
-          "phone": "p_I"
-        },
-        {
-          "duration": 0.12,
-          "phone": "uh_I"
-        },
-        {
-          "duration": 0.11,
-          "phone": "t_E"
-        }
-      ],
-      "start": 0.45,
-      "startOffset": 8,
-      "word": "input"
+      "start": 0.36,
+      "startOffset": 3,
+      "word": "yeah"
     }
   ]
 }

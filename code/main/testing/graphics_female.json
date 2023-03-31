@@ -1,5 +1,5 @@
 {
-    "body": "graphics/body.png",
+    "body": "graphics_female/body.png",
     
     "mouths": {
         "idle": "mouth_idle.svg",
