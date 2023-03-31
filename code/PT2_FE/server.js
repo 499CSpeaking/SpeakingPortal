@@ -17,6 +17,7 @@ const https_1 = require("https");
 const child_process_1 = require("child_process");
 const fs_1 = require("fs");
 const main_1 = require("./main");
+const api_1 = require("./api");
 server.use(body_parser.json());
 server.use(body_parser.urlencoded({
     extended: true,
@@ -58,25 +59,43 @@ server.post("/kuk/", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 }));
 // get transcript from aligner
-server.post("/align/", (req, res) => {
+server.post("/align/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const transcriptPath = 'demo_files/transcript.json';
     const aligner = req.body.aligner;
+    var language = req.body.language;
     switch (aligner) {
         case 'gentle':
             console.log(`Using ${aligner} to Align`);
-            const text = req.body.inputString;
-            const audioPath = req.body.audioPath;
-            const curlCommand = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:32768/transcriptions?async=false"`;
-            const output = (0, child_process_1.execSync)(curlCommand).toString();
+            var text = req.body.inputString;
+            var audioPath = req.body.audioPath;
+            var curlCommand = `curl -F "audio=@${audioPath}" -F "transcript=${text}" "http://localhost:32768/transcriptions?async=false"`;
+            var output = (0, child_process_1.execSync)(curlCommand).toString();
             (0, fs_1.writeFileSync)(transcriptPath, output);
             console.log(`Transcript Location: ${transcriptPath}`);
             res.json({ transcriptPath: transcriptPath });
             break;
         case 'microsoft':
-            console.log(`Using ${aligner} to Align`);
+            console.log(`Using ${aligner} to Align WOO lets`);
             break;
         case 'google':
             console.log(`Using ${aligner} to Align`);
+            var audioPath = req.body.audioPath;
+            console.log(`Language: ${language}`);
+            switch (language) {
+                case 'English':
+                    language = 'en-US';
+                    break;
+                case 'Spanish':
+                    language = 'es-ES';
+                    break;
+                case 'French':
+                    language = 'fr-FR';
+                    break;
+            }
+            console.log(`Language: ${language}`);
+            yield (0, api_1.uploadFile)(audioPath, language);
+            var gpath = "./output.json";
+            res.json({ transcriptPath: gpath });
             break;
         case 'amazon':
             console.log(`Using ${aligner} to Align`);
@@ -88,7 +107,7 @@ server.post("/align/", (req, res) => {
             console.log("Aligner error");
             break;
     }
-});
+}));
 // generate animation
 server.post("/animate/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const config = new Object();

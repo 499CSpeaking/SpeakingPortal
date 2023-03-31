@@ -25,6 +25,8 @@
     "node": "^19.6.0",
     "node-fetch": "^3.2.10",
     "nodemon": "^2.0.21",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "@google-cloud/speech": "^5.4.0",
+    "@google-cloud/storage": "^6.9.5"
   }
 }
