@@ -52,7 +52,7 @@ export class Renderer {
     }
 
     public drawFrame(frameNum: number, seconds: number): void {
-        this.renderCtx.fillStyle = '#FFFFFF'
+        this.renderCtx.fillStyle = '#000000'
         this.renderCtx.fillRect(0, 0, this.config.width, this.config.height)
         this.renderCtx.font = '10px Arial'
         this.renderCtx.fillStyle = '#111111'
