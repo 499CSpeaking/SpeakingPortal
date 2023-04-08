@@ -1,55 +1,32 @@
 {
-  "transcript": "Hello there",
+  "transcript": "hello",
   "words": [
     {
       "alignedWord": "hello",
       "case": "success",
-      "end": 0.44,
+      "end": 0.54,
       "endOffset": 5,
       "phones": [
         {
-          "duration": 0.11,
+          "duration": 0.06,
           "phone": "hh_B"
         },
         {
-          "duration": 0.06,
+          "duration": 0.05,
           "phone": "eh_I"
         },
         {
-          "duration": 0.1,
+          "duration": 0.09,
           "phone": "l_I"
         },
         {
-          "duration": 0.16,
+          "duration": 0.33,
           "phone": "ow_E"
         }
       ],
       "start": 0.01,
       "startOffset": 0,
-      "word": "Hello"
-    },
-    {
-      "alignedWord": "there",
-      "case": "success",
-      "end": 0.8200000000000001,
-      "endOffset": 11,
-      "phones": [
-        {
-          "duration": 0.08,
-          "phone": "dh_B"
-        },
-        {
-          "duration": 0.15,
-          "phone": "eh_I"
-        },
-        {
-          "duration": 0.15,
-          "phone": "r_E"
-        }
-      ],
-      "start": 0.44,
-      "startOffset": 6,
-      "word": "there"
+      "word": "hello"
     }
   ]
 }
