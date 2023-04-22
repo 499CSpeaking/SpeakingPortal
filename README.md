@@ -1,5 +1,5 @@
-# SpeakingPortal
-Official project for Speaking Portal
+# Speaking Portal
+Official Project for Speaking Portal
 
 ## Authors
 
