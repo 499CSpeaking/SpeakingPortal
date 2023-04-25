@@ -176,4 +176,36 @@ Please excuse the witless comments. I had to put those in there as filler "code 
 
 ## input/file_input.ts
 
+This is where the `FileInputParser` object is defined. It's purpose is to extract user input from a text source, including key-value configuration pairs as seen previously, and also files. This objects works fine if you're sourcing input data from a file for testing purposes for example, but Kukarella hosts it's software on AWS elastic beanstalk if I'm not mistaken. This approach probably won't work very well in such a different architecture. How to modify the way that the Animation Engine sources it's inputs?
+
+### input/abstract_input.ts
+
+We provided the master class `InputParser` to let Kukarella implement it's own method of sourcing inputs. Note that `inputParser`'s type is of `FileInputParser` when it should be `InputParser`, my bad.
+
+## more on configuration
+
+You can see the functions `config.loadParameter("abc")` and `config.loadOptionalParameter("abc", default_value)` and possibly other similar functions. Look at how these functions are implemented and you will see how the program loads data from the `InputParser`.
+
+## transcript/parse_mappings.ts
+
+This file contains the `PhonemeMapping` class. Notice that in the constructor, we pass in the whole `config` object. Internally, the "`transcript`" configuration, which is sourced from the `transcript_path` parameter is used by the class. Many components in the Animation Engine do something like this.
+
+Anyways, the purpose of this class is to take the transcript file, which is probably generated from the Gentle aligner, and parse it such that specific times can be passed into it and whatever phoneme is spoken at that time will be returned.
+
+## transcript/phoneme_occurrences.ts
+
+This file contains the `PhonemeOccurrences` class. It's pretty technical at this point, but the purpose of this class is to take the freshly parsed phonemes in `PhonemeMapping` and essential give each phoneme a time record of how "loud" they are at that point where 0 = the phoneme is not being spoken at all and 1 = the phoneme is currently being spoken. This list of 1s and 0s are "low-passed" or smoothed/blurred using a gaussian filter. The reason why we have this is because when we render the (phoneme-appropriate) mouth on the avatar, we stretch and squeeze the vertical axis of the mouth to simulate movement, in order to give more animation to static images. This smooth list of values allows us to do that easily.
+
+## graphics/graphics_pool.ts
+
+This is where we define a `GraphicsPool` object. The `GraphicsPool` object, as the name suggests, caches images in memory so that the rendering system can have easy access to images without constant disk I/Os. **You may have to modify this function to work with your architecture!**
+
+## graphics/phoneme_to_image.ts
+
+This file contains the `PhonemeImageconverter` class. Its purpose is to take the phoneme-to-mouth-image mappings stored in `graphics_config_path` and load them in memory.
+
+# graphics/avatar_context.ts
+
+The `AvatarContext` class stores data about the avatar (body texture, eyes, texture positions, etc) and is used by the rendering system. For example, the function 
+
 # Other Important Notes
