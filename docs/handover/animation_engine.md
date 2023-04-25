@@ -204,8 +204,54 @@ This is where we define a `GraphicsPool` object. The `GraphicsPool` object, as t
 
 This file contains the `PhonemeImageconverter` class. Its purpose is to take the phoneme-to-mouth-image mappings stored in `graphics_config_path` and load them in memory.
 
-# graphics/avatar_context.ts
+## graphics/avatar_context.ts
 
-The `AvatarContext` class stores data about the avatar (body texture, eyes, texture positions, etc) and is used by the rendering system. For example, the function 
+The `AvatarContext` class stores data about the avatar (body texture, eyes, texture positions, etc) and is used by the rendering system. For example, the member function `eyeData(time: number): [string, string, number[], number, number]` returns not just the eye positionings + scale, but also the filename of the texture that corresponds to what time in the blinking phase it is.
+
+# rendering/renderer.ts
+
+Now for the fun stuff. The `Renderer` class is actually what renders the video after it has been provided with the previous objects as parameters. The `Renderer` object's functions are called in this order: `setup()`, `drawFrame(frameNum: number, seconds: number)`, and `generateVideo()`. `drawframe` is called once for every frame while the other two functions are called once before and after. `drawFrame`'s parameters are:
+
+- frameNum: what the current frame is
+
+- seconds: the number of seconds since the animation started
 
 # Other Important Notes
+
+## Parallel Operation
+
+Due to how this program saves individual frames in non-volatile storage in (in terms of the static configuration) the same directory every time, it is expected that if the `run` method was ran simultaneously, these frame files would likely conflict and generate unexpected outputs. I recommend using the dynamic configuration explained earlier to give each avatar generation request it's own unique directory space to work in.
+
+## Major Glaring Issue
+
+There is a very big (though probably somewhat simple to fix) issue that involves FFMPEG. The function `generateVideo` of the `Renderer` object works by stitching together the individual frame images into a video using FFMPEG. See this code:
+
+```typescript
+try {
+// ffmpeg is used to generate the video
+// append frame images together
+execSync(`ffmpeg -y -r ${this.config.frames_per_second} -i ${path.join(this.config.frames_path, 'frames', 'frame_%12d.png')} ${tmpFilename} -hide_banner -loglevel error`)
+
+// In case we have a .wav file (we likely do) instead of a .mp3, convert it to mp3
+const mp3AudioPath: string = (this.config.audio_path as string).replace(".wav", ".mp3")
+console.log([this.config.audio_path, mp3AudioPath])
+execSync(`ffmpeg -y -i ${this.config.audio_path} -acodec libmp3lame ${mp3AudioPath} -hide_banner -loglevel error`)
+
+// append audio to video file
+execSync(`ffmpeg -y -i ${tmpFilename} -i ${mp3AudioPath} -c copy -map 0:v:0 -map 1:a:0 ${filename} -hide_banner -loglevel error`)
+} catch(e) {
+throw new Error('error with ffmpeg: ' + (e as Error).message)
+}
+```
+
+In simple terms, this code calls FFMPEG on CLI three times:
+
+1. stitch together frames
+
+2. convert .wav file to .mp3 file
+
+3. append the audio to the video file
+
+*The second step of converting from .wav to .mp3 is not strictly necessary, it's there because the method of appending files together that I found on the internet only works with .mp3 files. It's a hasty solution as I needed it done fast at the time. It can be removed if no longer needed.*
+
+The issue is that the output video is encoded in a specific codec that is not supported on Firefox, therefore it can't play on Firefox. Unfortunately I don't have a whole lot of details, I recommend for whoever has to fix this to just figure out the basics of FFMPEG and re-implement this 3 (or 2) FFMPEG commands. I wish you good luck, and I apologize for dumping this issue on Kukarella's devs.
